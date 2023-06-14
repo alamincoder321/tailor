@@ -1,0 +1,130 @@
+.navbar {
+    box-shadow: 0px 0px 4px #9b9b9b80;
+}
+
+#sidebarToggle {
+    color: #000;
+    cursor: pointer;
+}
+
+.sb-sidenav-dark {
+    background: white;
+    color: #000;
+}
+
+.sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav .sb-sidenav-menu {
+    box-shadow: 1px 0px 0px #62626236;
+}
+
+.sb-sidenav-dark .sb-sidenav-menu .nav-link {
+    color: #000;
+    font-size: 15px;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+.sb-sidenav-dark .sb-sidenav-menu .nav-link:first-child {
+    margin-top: 15px !important;
+}
+
+.nav-link {
+    padding: 4px 1rem !important;
+    transition-duration: 1s;
+}
+
+.sb-sidenav-dark .sb-sidenav-menu .nav-link:hover {
+    color: #000;
+    background: #ffc4c466;
+    transform: translateX(10px);
+    transition-duration: 2s;
+}
+
+.sb-nav-fixed #layoutSidenav #layoutSidenav_content {
+    background: #f1f1f1;
+}
+
+.bg-content{
+    background: white;
+    padding: 8px 15px;
+}
+
+button{
+    padding: 3px 15px !important;
+}
+.btn-silver{
+    background: #e7e7e7;
+    border: 0;
+}
+
+
+
+/* card design css */
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+    border: none;
+    position: relative;
+    margin-bottom: 30px;
+    box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+}
+
+.l-bg-cherry {
+    background: linear-gradient(to right, #493240, #f09) !important;
+    color: #fff;
+}
+
+.l-bg-blue-dark {
+    background: linear-gradient(to right, #373b44, #4286f4) !important;
+    color: #fff;
+}
+
+.l-bg-green-dark {
+    background: linear-gradient(to right, #0a504a, #38ef7d) !important;
+    color: #fff;
+}
+
+.l-bg-orange-dark {
+    background: linear-gradient(to right, #a86008, #ffba56) !important;
+    color: #fff;
+}
+
+.card .card-statistic-3 .card-icon-large .fas,
+.card .card-statistic-3 .card-icon-large .far,
+.card .card-statistic-3 .card-icon-large .fab,
+.card .card-statistic-3 .card-icon-large .fal {
+    font-size: 18px;
+}
+
+.card .card-statistic-3 .card-icon {
+    text-align: center;
+    line-height: 50px;
+    color: #000;
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    opacity: 1.1;
+}
+
+.l-bg-cyan {
+    background: linear-gradient(135deg, #289cf5, #84c0ec) !important;
+    color: #fff;
+}
+
+.l-bg-green {
+    background: linear-gradient(135deg, #23bdb8 0%, #43e794 100%) !important;
+    color: #fff;
+}
+
+.l-bg-orange {
+    background: linear-gradient(to right, #f9900e, #ffba56) !important;
+    color: #fff;
+}
+
+.l-bg-cyan {
+    background: linear-gradient(135deg, #289cf5, #84c0ec) !important;
+    color: #fff;
+}
+
+.form-control{
+    padding: 3px 5px !important;
+}
