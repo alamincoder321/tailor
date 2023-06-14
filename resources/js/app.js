@@ -4,10 +4,13 @@ import { createApp } from 'vue';
 //toast
 import moshaToast from 'mosha-vue-toastify'
 import 'mosha-vue-toastify/dist/style.css'
+//vue good table
+import VueGoodTablePlugin from 'vue-good-table-next'; 
+import 'vue-good-table-next/dist/vue-good-table-next.css'
 
 const app = createApp({});
-app.use(moshaToast)
-
+app.use(moshaToast);
+app.use(VueGoodTablePlugin);
 
 
 

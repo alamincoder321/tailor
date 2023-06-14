@@ -65,7 +65,7 @@ class DesignationController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $data = Designation::where($request->id)->first();
+            $data = Designation::where('id', $request->id)->first();
             $data->delete();
             return response()->json(['status' => true, 'msg' => "পদবী মুছে ফেলা হয়েছে।"]);
         } catch (\Throwable $th) {

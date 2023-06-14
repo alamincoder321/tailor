@@ -65,7 +65,7 @@ class BrandController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $data = Brand::where($request->id)->first();
+            $data = Brand::where('id', $request->id)->first();
             $data->delete();
             return response()->json(['status' => true, 'msg' => "ব্র্যান্ড মুছে ফেলা হয়েছে।"]);
         } catch (\Throwable $th) {

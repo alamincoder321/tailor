@@ -65,7 +65,7 @@ class CategoryController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $data = Category::where($request->id)->first();
+            $data = Category::where('id', $request->id)->first();
             $data->delete();
             return response()->json(['status' => true, 'msg' => "ক্যাটাগরি মুছে ফেলা হয়েছে।"]);
         } catch (\Throwable $th) {

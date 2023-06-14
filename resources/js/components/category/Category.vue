@@ -20,28 +20,22 @@
             </form>
         </div>
         <div class="col-md-6 mt-3 offset-md-3 bg-content" v-if="categories.length > 0">
-            <table class="table table-hover table-sm">
-                <thead>
-                    <tr>
-                        <th>নং</th>
-                        <th>ক্যাটাগরি নাম</th>
-                        <th class="text-center">অ্যাকশন</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in categories" :key="index">
-                        <td v-html="index + 1"></td>
-                        <td v-html="item.name"></td>
-                        <td class="text-center">
-                            <a style="cursor: pointer;" class="me-1" @click="editData(item)"><i style="font-size: 16px;"
-                                    class="fa fa-edit text-primary"></i></a>
-                            <a style="cursor: pointer;" class="me-1" @click="deleteData(item)"><i style="font-size: 16px;"
-                                    class="fa fa-trash text-danger"></i></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- <vue-good-table :columns="columns" :rows="categories" /> -->
+            <vue-good-table :columns="columns" :rows="categories" :fixed-header="false" :pagination-options="{
+                enabled: true,
+                perPage: 10,
+            }" :search-options="{ enabled: true }" :line-numbers="true" styleClass="vgt-table condensed"
+                max-height="550px">
+                <template #table-row="props">
+                    <span class="d-flex" style="justify-content: space-around;" v-if="props.column.field == 'before'">
+                        <a href="" title="edit" @click.prevent="editData(props.row)">
+                            <i class="fas fa-edit text-info"></i>
+                        </a><br>
+                        <a href="" title="delete" @click.prevent="deleteData(props.row.id)">
+                            <i class="fas fa-trash text-danger"></i>
+                        </a>
+                    </span>
+                </template>
+            </vue-good-table>
         </div>
     </div>
 </template>
@@ -52,7 +46,7 @@ export default {
         return {
             columns: [
                 { label: 'Name', field: 'name' },
-                { label: "Action", field: "before" }
+                { label: "Before", field: "before" },
             ],
             category: {
                 id: '',
