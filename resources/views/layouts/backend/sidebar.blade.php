@@ -49,7 +49,7 @@
                 <div class="sb-nav-link-icon"><i class="fa-light fa-layer-group text-black text-xl"></i></div>
                 ব্র্যান্ড
             </a>
-            <a class="nav-link" href="{{url('/')}}">
+            <a class="nav-link" href="{{url('/category')}}">
                 <div class="sb-nav-link-icon"><i class="fa-light fa-receipt text-black text-xl"></i></div>
                 ক্যাটাগরিজ
             </a>

@@ -5,8 +5,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="name">ক্যাটাগরি নামঃ</label>
-                            <input type="text" name="name" v-model="category.name" id="name"
+                            <label for="name">পদবী নামঃ</label>
+                            <input type="text" name="name" v-model="designation.name" id="name"
                                 class="form-control shadow-none" autocomplete="off" />
                         </div>
                     </div>
@@ -19,17 +19,17 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-6 mt-3 offset-md-3 bg-content" v-if="categories.length > 0">
+        <div class="col-md-6 mt-3 offset-md-3 bg-content" v-if="designations.length > 0">
             <table class="table table-hover table-sm">
                 <thead>
                     <tr>
                         <th>নং</th>
-                        <th>ক্যাটাগরি নাম</th>
+                        <th>পদবী নাম</th>
                         <th class="text-center">অ্যাকশন</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, index) in categories" :key="index">
+                    <tr v-for="(item, index) in designations" :key="index">
                         <td v-html="index + 1"></td>
                         <td v-html="item.name"></td>
                         <td class="text-center">
@@ -41,7 +41,7 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- <vue-good-table :columns="columns" :rows="categories" /> -->
+            <!-- <vue-good-table :columns="columns" :rows="designations" /> -->
         </div>
     </div>
 </template>
@@ -54,35 +54,35 @@ export default {
                 { label: 'Name', field: 'name' },
                 { label: "Action", field: "before" }
             ],
-            category: {
+            designation: {
                 id: '',
                 name: '',
             },
-            categories: [],
+            designations: [],
         }
     },
     created() {
-        this.getCategory();
+        this.getDesignation();
     },
     methods: {
-        getCategory() {
-            axios.get('/get-category').then(res => {
-                this.categories = res.data;
+        getDesignation() {
+            axios.get('/get-designation').then(res => {
+                this.designations = res.data;
             })
         },
 
         saveData(event) {
-            if (this.category.name == '') {
-                alert("Category name required");
+            if (this.designation.name == '') {
+                alert("Designation name required");
                 return;
             }
             let formdata = new FormData(event.target);
-            formdata.append('id', this.category.id);
+            formdata.append('id', this.designation.id);
             let url;
-            if (this.category.id == '') {
-                url = '/category'
+            if (this.designation.id == '') {
+                url = '/designation'
             } else {
-                url = '/update-category'
+                url = '/update-designation'
             }
             axios.post(url, formdata).then(res => {
                 if (res.data.status) {
@@ -91,12 +91,12 @@ export default {
                 } else {
                     console.log(res.data.msg);
                 }
-                this.getCategory();
+                this.getDesignation();
             })
         },
 
         editData(item) {
-            this.category = {
+            this.designation = {
                 id: item.id,
                 name: item.name
             }
@@ -104,20 +104,20 @@ export default {
 
         deleteData(id) {
             if (confirm("Are you sure !!")) {
-                axios.post('/delete-category', { id: id }).then(res => {
+                axios.post('/delete-designation', { id: id }).then(res => {
                     if (res.data.status) {
                         this.$moshaToast(res.data.msg,);
                         this.clearData();
                     } else {
                         console.log(res.data.msg);
                     }
-                    this.getCategory();
+                    this.getDesignation();
                 })
             }
         },
 
         clearData() {
-            this.category = {
+            this.designation = {
                 id: '',
                 name: '',
             }

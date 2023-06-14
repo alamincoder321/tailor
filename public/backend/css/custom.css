@@ -128,3 +128,13 @@ button{
 .form-control{
     padding: 3px 5px !important;
 }
+
+.table> :not(:first-child), .dataTable-table> :not(:first-child){
+    border-top: 0;
+}
+.table-sm> :not(caption)>*>* {
+    padding: 1px 4px;
+}
+.table {
+    margin-bottom: 5px;
+}

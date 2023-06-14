@@ -16,6 +16,7 @@
         "vue": "^3.2.37"
     },
     "dependencies": {
+        "mosha-vue-toastify": "^1.0.23",
         "vue-good-table": "^2.21.11"
     }
 }

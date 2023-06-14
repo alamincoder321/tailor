@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Designation;
 use Carbon\Carbon;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CategoryController extends Controller
+class DesignationController extends Controller
 {
     public function __construct()
     {
@@ -16,12 +16,12 @@ class CategoryController extends Controller
 
     public function index()
     {
-        return Category::latest()->get();
+        return Designation::latest()->get();
     }
 
     public function create()
     {
-        return view("pages.category.create");
+        return view("pages.designation.create");
     }
 
     public function store(Request $request)
@@ -33,11 +33,11 @@ class CategoryController extends Controller
             return response()->json(['status' => false, 'msg' => 'validation error', 'errors' => $validator->errors()]);
         }
         try {
-            $data = new Category();
-            $data->name = $request->name;
+            $data             = new Designation();
+            $data->name       = $request->name;
             $data->created_at = Carbon::now();
             $data->save();
-            return response()->json(['status' => true, 'msg' => "ক্যাটাগরি যুক্ত করা হয়েছে।"]);
+            return response()->json(['status' => true, 'msg' => "পদবী যুক্ত করা হয়েছে।"]);
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'msg' => $th->getMessage()]);
         }
@@ -52,11 +52,11 @@ class CategoryController extends Controller
             return response()->json(['status' => false, 'msg' => 'validation error', 'errors' => $validator->errors()]);
         }
         try {
-            $data             = Category::find($request->id);
-            $data->name       = $request->name;
+            $data = Designation::find($request->id);
+            $data->name = $request->name;
             $data->updated_at = Carbon::now();
             $data->update();
-            return response()->json(['status' => true, 'msg' => "ক্যাটাগরি আপডেট করা হয়েছে।"]);
+            return response()->json(['status' => true, 'msg' => "পদবী আপডেট করা হয়েছে।"]);
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'msg' => $th->getMessage()]);
         }
@@ -65,9 +65,9 @@ class CategoryController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $data = Category::where($request->id)->first();
+            $data = Designation::where($request->id)->first();
             $data->delete();
-            return response()->json(['status' => true, 'msg' => "ক্যাটাগরি মুছে ফেলা হয়েছে।"]);
+            return response()->json(['status' => true, 'msg' => "পদবী মুছে ফেলা হয়েছে।"]);
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'msg' => $th->getMessage()]);
         }
