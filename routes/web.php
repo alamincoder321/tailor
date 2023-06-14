@@ -17,6 +17,7 @@ Route::get("/dashboard", [HomeController::class, "index"]);
 Route::get("/brand", [BrandController::class, "create"])->name('brand.create');
 Route::get("/get-brand", [BrandController::class, "index"])->name('brand.index');
 Route::post("/brand", [BrandController::class, "store"])->name('brand.store');
+Route::post("/update-brand", [BrandController::class, "update"])->name('brand.update');
 Route::post("/delete-brand", [BrandController::class, "destroy"])->name('brand.destroy');
 //category route
 Route::get("/category", [CategoryController::class, "create"])->name('category.create');

@@ -45,7 +45,7 @@
                 <div class="sb-nav-link-icon"><i class="fa-light fa-bags-shopping text-black text-xl"></i></div>
                 প্রোডাক্ট
             </a>
-            <a class="nav-link" href="{{url('/')}}">
+            <a class="nav-link" href="{{url('/brand')}}">
                 <div class="sb-nav-link-icon"><i class="fa-light fa-layer-group text-black text-xl"></i></div>
                 ব্র্যান্ড
             </a>
