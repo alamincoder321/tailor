@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\SettingController;
 
 Route::get("/", [LoginController::class, "showLoginForm"]);
 Route::post("/login", [LoginController::class, "login"]);
@@ -13,6 +14,10 @@ Route::get("/logout", [LoginController::class, "logout"])->name("logout");
 
 //dashboard route
 Route::get("/dashboard", [HomeController::class, "index"]);
+//setting route
+Route::get("/setting", [SettingController::class, "create"])->name('setting.create');
+Route::get("/get-setting", [SettingController::class, "index"])->name('setting.index');
+Route::post("/setting", [SettingController::class, "update"])->name('setting.update');
 //brand route
 Route::get("/brand", [BrandController::class, "create"])->name('brand.create');
 Route::get("/get-brand", [BrandController::class, "index"])->name('brand.index');

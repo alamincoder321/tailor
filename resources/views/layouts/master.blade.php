@@ -14,6 +14,32 @@
     <link rel="stylesheet" href="{{asset('font-awesome/css/all.css')}}" />
 
     @vite('resources/css/app.css')
+    <style>
+        .ImageBackground .imageShow {
+            display: block;
+            height: 120px;
+            width: 125px;
+            margin-top: 5px;
+            border: 1px solid #747474;
+            box-sizing: border-box;
+        }
+
+        .ImageBackground input {
+            display: none;
+        }
+
+        .ImageBackground label {
+            background: #817575;
+            width: 125px;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            font-family: monospace;
+            text-transform: uppercase;
+            margin-top: 10px;
+            border: 3px solid darkgrey;
+        }
+    </style>
 </head>
 
 <body class="sb-nav-fixed">
