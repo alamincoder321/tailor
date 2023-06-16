@@ -5,7 +5,7 @@
                 <div class="sb-nav-link-icon"><i class="fa-light fa-house text-black text-xl"></i></div>
                 হোম
             </a>
-            <a class="nav-link" href="{{url('/')}}">
+            <a class="nav-link" href="{{url('/employee')}}">
                 <div class="sb-nav-link-icon"><i class="fa-light fa-user-helmet-safety text-black text-xl"></i></div>
                 এমপ্লয়ী
             </a>

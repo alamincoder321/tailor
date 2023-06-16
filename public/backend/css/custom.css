@@ -129,6 +129,11 @@ button{
     padding: 3px 5px !important;
 }
 
+.form-select{
+    padding: 3px 5px !important;
+}
+
+
 .table> :not(:first-child), .dataTable-table> :not(:first-child){
     border-top: 0;
 }

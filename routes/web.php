@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SettingController;
 
 Route::get("/", [LoginController::class, "showLoginForm"]);
@@ -36,3 +37,9 @@ Route::get("/get-designation", [DesignationController::class, "index"])->name('d
 Route::post("/designation", [DesignationController::class, "store"])->name('designation.store');
 Route::post("/update-designation", [DesignationController::class, "update"])->name('designation.update');
 Route::post("/delete-designation", [DesignationController::class, "destroy"])->name('designation.destroy');
+//employee route
+Route::get("/employee/{id?}", [EmployeeController::class, "create"])->name('employee.create');
+Route::get("/get-employee", [EmployeeController::class, "index"])->name('employee.index');
+Route::post("/employee", [EmployeeController::class, "store"])->name('employee.store');
+Route::post("/update-employee", [EmployeeController::class, "update"])->name('employee.update');
+Route::post("/delete-employee", [EmployeeController::class, "destroy"])->name('employee.destroy');
