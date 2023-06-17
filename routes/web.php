@@ -39,7 +39,8 @@ Route::post("/update-designation", [DesignationController::class, "update"])->na
 Route::post("/delete-designation", [DesignationController::class, "destroy"])->name('designation.destroy');
 //employee route
 Route::get("/employee/{id?}", [EmployeeController::class, "create"])->name('employee.create');
-Route::get("/get-employee", [EmployeeController::class, "index"])->name('employee.index');
+Route::get("/manage-employee", [EmployeeController::class, "manage"])->name('employee.manage');
+Route::post("/get-employee", [EmployeeController::class, "index"])->name('employee.index');
 Route::post("/employee", [EmployeeController::class, "store"])->name('employee.store');
 Route::post("/update-employee", [EmployeeController::class, "update"])->name('employee.update');
 Route::post("/delete-employee", [EmployeeController::class, "destroy"])->name('employee.destroy');

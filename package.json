@@ -16,7 +16,9 @@
         "vue": "^3.2.37"
     },
     "dependencies": {
+        "moment": "^2.29.4",
         "mosha-vue-toastify": "^1.0.23",
+        "sweetalert2": "^11.7.12",
         "vue-good-table-next": "^0.2.1"
     }
 }

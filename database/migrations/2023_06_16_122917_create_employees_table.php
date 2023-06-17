@@ -24,9 +24,9 @@ return new class extends Migration
             $table->string('mother_name', 100)->nullable();
             $table->text('present_address', 500)->nullable();
             $table->text('permanent_address', 500)->nullable();
-            $table->decimal('salary', 16, 2);
-            $table->string('photo', 191)->nullable();
-            $table->foreignId('addedBy')->constrained('admins', 'id')->onDelete('cascade');
+            $table->decimal('salary_range', 16, 2);
+            $table->string('image')->nullable();
+            $table->foreignId('addedBy')->constrained('users', 'id')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

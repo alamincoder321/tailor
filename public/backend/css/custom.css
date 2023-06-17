@@ -143,3 +143,7 @@ button{
 .table {
     margin-bottom: 5px;
 }
+
+.sb-nav-fixed .sb-topnav{
+    background: white;
+}

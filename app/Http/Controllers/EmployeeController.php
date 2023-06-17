@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class EmployeeController extends Controller
@@ -14,28 +16,63 @@ class EmployeeController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return Employee::latest()->get();
+        if ($request->id != '') {
+            $data = Employee::find($request->id);
+        } else {
+            $data = Employee::latest()->get();
+        }
+        return $data;
     }
 
-    public function create()
+    public function manage()
     {
-        return view("pages.employee.create");
+        return view("pages.employee.manage");
+    }
+
+    public function create($id = '')
+    {
+        return view("pages.employee.create", compact('id'));
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required'
+            'name'              => 'required',
+            'mobile'            => 'required',
+            'present_address'   => 'required',
+            'permanent_address' => 'required',
+            'father_name'       => 'required',
+            'gender'            => 'required',
+            'designation_id'    => 'required',
+            'salary_range'      => 'required',
+            'birth_date'               => 'required',
+            'join_date'         => 'required',
+            'email'             => 'nullable|email',
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => false, 'msg' => 'validation error', 'errors' => $validator->errors()]);
         }
         try {
-            $data             = new Employee();
-            $data->name       = $request->name;
-            $data->created_at = Carbon::now();
+            $data                    = new Employee();
+            $data->name              = $request->name;
+            $data->email             = $request->email;
+            $data->mobile            = $request->mobile;
+            $data->gender            = $request->gender;
+            $data->designation_id    = $request->designation_id;
+            $data->birth_date        = $request->birth_date;
+            $data->father_name       = $request->father_name;
+            $data->mother_name       = $request->mother_name;
+            $data->present_address   = $request->present_address;
+            $data->permanent_address = $request->permanent_address;
+            $data->join_date         = $request->join_date;
+            $data->salary_range      = $request->salary_range;
+            $data->addedBy           = Auth::guard('web')->user()->id;
+            $data->created_at        = Carbon::now();
+            if ($request->hasFile('image')) {
+                $data->image = $this->imageUpload($request, 'image', 'uploads/employee');
+            }
             $data->save();
             return response()->json(['status' => true, 'msg' => "এমপ্লয়ী যুক্ত করা হয়েছে।"]);
         } catch (\Throwable $th) {
@@ -46,15 +83,43 @@ class EmployeeController extends Controller
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required'
+            'name'              => 'required',
+            'mobile'            => 'required',
+            'present_address'   => 'required',
+            'permanent_address' => 'required',
+            'father_name'       => 'required',
+            'gender'            => 'required',
+            'designation_id'    => 'required',
+            'salary_range'      => 'required',
+            'birth_date'               => 'required',
+            'join_date'         => 'required',
+            'email'             => 'nullable|email',
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => false, 'msg' => 'validation error', 'errors' => $validator->errors()]);
         }
         try {
-            $data = Employee::find($request->id);
-            $data->name = $request->name;
-            $data->updated_at = Carbon::now();
+            $data                    = Employee::find($request->id);
+            $data->name              = $request->name;
+            $data->email             = $request->email;
+            $data->mobile            = $request->mobile;
+            $data->gender            = $request->gender;
+            $data->designation_id    = $request->designation_id;
+            $data->birth_date        = $request->birth_date;
+            $data->father_name       = $request->father_name;
+            $data->mother_name       = $request->mother_name;
+            $data->present_address   = $request->present_address;
+            $data->permanent_address = $request->permanent_address;
+            $data->join_date         = $request->join_date;
+            $data->salary_range      = $request->salary_range;
+            $data->addedBy           = Auth::guard('web')->user()->id;
+            $data->updated_at        = Carbon::now();
+            if ($request->hasFile('image')) {
+                if (File::exists($data->image)) {
+                    File::delete($data->image);
+                }
+                $data->image = $this->imageUpload($request, 'image', 'uploads/employee');
+            }
             $data->update();
             return response()->json(['status' => true, 'msg' => "এমপ্লয়ী আপডেট করা হয়েছে।"]);
         } catch (\Throwable $th) {

@@ -20,12 +20,14 @@ import Brand from './components/brand/Brand.vue';
 import Category from './components/category/Category.vue';
 import Designation from './components/designation/Designation.vue';
 import Employee from './components/employee/Employee.vue';
+import employeeManage from './components/employee/Manage.vue';
 app.component('dashboard', Dashboard);
 app.component('setting', Setting);
 app.component('brand', Brand);
 app.component('category', Category);
 app.component('designation', Designation);
 app.component('employee', Employee);
+app.component('employee-manage', employeeManage);
 
 
 app.mount('#layoutSidenav');
