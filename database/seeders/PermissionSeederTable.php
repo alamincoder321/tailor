@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Permission;
+use App\Models\UserAccess;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -33,6 +34,15 @@ class PermissionSeederTable extends Seeder
             foreach ($permission['permission'] as $perm) {
                 Permission::create(["permission" => $perm, "group_name" => $group_name]);
             }
+        }
+
+        $allPermissions = Permission::all();
+        foreach ($allPermissions as $perm) {
+            UserAccess::create([
+                'user_id'    => 1,
+                'group_name'  => $perm->group_name,
+                'permissions' => $perm->permission,
+            ]);
         }
     }
 }

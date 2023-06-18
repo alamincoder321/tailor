@@ -16,6 +16,8 @@ app.use(VueGoodTablePlugin);
 
 import Dashboard from './components/Dashboard.vue';
 import Setting from './components/Setting.vue';
+import Role from './components/role/Role.vue';
+import User from './components/user/User.vue';
 import Brand from './components/brand/Brand.vue';
 import Category from './components/category/Category.vue';
 import Designation from './components/designation/Designation.vue';
@@ -23,6 +25,8 @@ import Employee from './components/employee/Employee.vue';
 import employeeManage from './components/employee/Manage.vue';
 app.component('dashboard', Dashboard);
 app.component('setting', Setting);
+app.component('role', Role);
+app.component('user', User);
 app.component('brand', Brand);
 app.component('category', Category);
 app.component('designation', Designation);

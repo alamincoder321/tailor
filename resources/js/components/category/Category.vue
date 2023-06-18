@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 export default {
     data() {
         return {
@@ -83,7 +84,11 @@ export default {
                     this.$moshaToast(res.data.msg,);
                     this.clearData();
                 } else {
-                    console.log(res.data.msg);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: res.data.msg,
+                    })
                 }
                 this.getCategory();
             })
@@ -103,7 +108,11 @@ export default {
                         this.$moshaToast(res.data.msg,);
                         this.clearData();
                     } else {
-                        console.log(res.data.msg);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: res.data.msg,
+                        })
                     }
                     this.getCategory();
                 })

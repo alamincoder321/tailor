@@ -58,8 +58,10 @@
             </main>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     @vite('resources/js/app.js')
     <script src="{{asset('backend')}}/js/scripts.js"></script>
+    @stack("js")
 </body>
 
 </html>

@@ -5,8 +5,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="name">ব্র্যান্ড নামঃ</label>
-                            <input type="text" name="name" v-model="brand.name" id="name" class="form-control shadow-none"
+                            <label for="name">রোল নামঃ</label>
+                            <input type="text" name="name" v-model="role.name" id="name" class="form-control shadow-none"
                                 autocomplete="off" />
                         </div>
                     </div>
@@ -19,8 +19,8 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-6 mt-3 offset-md-3 bg-content" v-if="brands.length > 0">
-            <vue-good-table :columns="columns" :rows="brands" :fixed-header="false" :pagination-options="{
+        <div class="col-md-6 mt-3 offset-md-3 bg-content" v-if="roles.length > 0">
+            <vue-good-table :columns="columns" :rows="roles" :fixed-header="false" :pagination-options="{
                 enabled: true,
                 perPage: 10,
             }" :search-options="{ enabled: true }" :line-numbers="true" styleClass="vgt-table condensed"
@@ -49,35 +49,35 @@ export default {
                 { label: 'Name', field: 'name' },
                 { label: "Action", field: "before" }
             ],
-            brand: {
+            role: {
                 id: '',
                 name: '',
             },
-            brands: [],
+            roles: [],
         }
     },
     created() {
-        this.getBrand();
+        this.getRole();
     },
     methods: {
-        getBrand() {
-            axios.get('/get-brand').then(res => {
-                this.brands = res.data;
+        getRole() {
+            axios.get('/get-role').then(res => {
+                this.roles = res.data.filter(role => role.id != 1);
             })
         },
 
         saveData(event) {
-            if (this.brand.name == '') {
-                alert("Brand name required");
+            if (this.role.name == '') {
+                alert("Role name required");
                 return;
             }
             let formdata = new FormData(event.target);
-            formdata.append('id', this.brand.id);
+            formdata.append('id', this.role.id);
             let url;
-            if (this.brand.id == '') {
-                url = '/brand'
+            if (this.role.id == '') {
+                url = '/role'
             } else {
-                url = '/update-brand'
+                url = '/update-role'
             }
             axios.post(url, formdata).then(res => {
                 if (res.data.status) {
@@ -90,21 +90,20 @@ export default {
                         text: res.data.msg,
                     })
                 }
-                this.getBrand();
+                this.getRole();
             })
         },
 
         editData(item) {
-            this.brand = {
+            this.role = {
                 id: item.id,
                 name: item.name
             }
         },
 
         deleteData(id) {
-            console.log(id);
             if (confirm("Are you sure !!")) {
-                axios.post('/delete-brand', { id: id }).then(res => {
+                axios.post('/delete-role', { id: id }).then(res => {
                     if (res.data.status) {
                         this.$moshaToast(res.data.msg,);
                         this.clearData();
@@ -115,13 +114,13 @@ export default {
                             text: res.data.msg,
                         })
                     }
-                    this.getBrand();
+                    this.getRole();
                 })
             }
         },
 
         clearData() {
-            this.brand = {
+            this.role = {
                 id: '',
                 name: '',
             }

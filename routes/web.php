@@ -7,7 +7,9 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\UserAccessController;
 
 Route::get("/", [LoginController::class, "showLoginForm"]);
 Route::post("/login", [LoginController::class, "login"]);
@@ -19,6 +21,21 @@ Route::get("/dashboard", [HomeController::class, "index"]);
 Route::get("/setting", [SettingController::class, "create"])->name('setting.create');
 Route::get("/get-setting", [SettingController::class, "index"])->name('setting.index');
 Route::post("/setting", [SettingController::class, "update"])->name('setting.update');
+//role route
+Route::get("/role", [RoleController::class, "create"])->name('role.create');
+Route::get("/get-role", [RoleController::class, "index"])->name('role.index');
+Route::post("/role", [RoleController::class, "store"])->name('role.store');
+Route::post("/update-role", [RoleController::class, "update"])->name('role.update');
+Route::post("/delete-role", [RoleController::class, "destroy"])->name('role.destroy');
+//user route
+Route::get("/useraccess/{id}", [UserAccessController::class, "permissionEdit"])->name('user.useraccess');
+Route::post("/permissionStore", [UserAccessController::class, "permissionStore"])->name('user.permissionStore');
+Route::get("/user", [UserAccessController::class, "create"])->name('user.create');
+Route::get("/user", [UserAccessController::class, "create"])->name('user.create');
+Route::get("/get-user", [UserAccessController::class, "index"])->name('user.index');
+Route::post("/user", [UserAccessController::class, "store"])->name('user.store');
+Route::post("/update-user", [UserAccessController::class, "update"])->name('user.update');
+Route::post("/delete-user", [UserAccessController::class, "destroy"])->name('user.destroy');
 //brand route
 Route::get("/brand", [BrandController::class, "create"])->name('brand.create');
 Route::get("/get-brand", [BrandController::class, "index"])->name('brand.index');

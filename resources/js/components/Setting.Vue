@@ -44,7 +44,8 @@
                                 <div class="form-group ImageBackground">
                                     <img :src="imageSrcTwo" class="imageShow" />
                                     <label for="navicon">ন্যাভ আইকোন</label>
-                                    <input type="file" id="navicon" class="form-control shadow-none" @change="imageUrlTwo" />
+                                    <input type="file" id="navicon" class="form-control shadow-none"
+                                        @change="imageUrlTwo" />
                                 </div>
                             </div>
                         </div>
@@ -61,6 +62,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 export default {
     data() {
         return {
@@ -91,8 +93,8 @@ export default {
                     logo: r.logo,
                     navicon: r.navicon,
                 }
-                this.imageSrc = r.logo != null ? r.logo:"/noImage.png"
-                this.imageSrcTwo = r.navicon != null ? r.navicon:"/noImage.png"
+                this.imageSrc = r.logo != null ? r.logo : "/noImage.png"
+                this.imageSrcTwo = r.navicon != null ? r.navicon : "/noImage.png"
             })
         },
 
@@ -108,7 +110,11 @@ export default {
                 if (res.data.status) {
                     this.$moshaToast(res.data.msg,);
                 } else {
-                    console.log(res.data.msg);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: res.data.msg,
+                    })
                 }
                 this.getSetting();
             })
