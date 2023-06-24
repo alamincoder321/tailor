@@ -63,9 +63,8 @@ Route::post("/employee", [EmployeeController::class, "store"])->name('employee.s
 Route::post("/update-employee", [EmployeeController::class, "update"])->name('employee.update');
 Route::post("/delete-employee", [EmployeeController::class, "destroy"])->name('employee.destroy');
 //tailor route
-Route::get("/tailor/{id?}", [TailorController::class, "create"])->name('tailor.create');
-Route::get("/manage-tailor", [TailorController::class, "manage"])->name('tailor.manage');
-Route::post("/get-tailor", [TailorController::class, "index"])->name('tailor.index');
+Route::get("/tailor", [TailorController::class, "create"])->name('tailor.create');
+Route::get("/get-tailor", [TailorController::class, "index"])->name('tailor.index');
 Route::post("/tailor", [TailorController::class, "store"])->name('tailor.store');
 Route::post("/update-tailor", [TailorController::class, "update"])->name('tailor.update');
 Route::post("/delete-tailor", [TailorController::class, "destroy"])->name('tailor.destroy');

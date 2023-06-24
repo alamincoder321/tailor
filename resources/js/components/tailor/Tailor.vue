@@ -8,21 +8,28 @@
                             <div class="col-md-12 mb-2">
                                 <div class="form-group">
                                     <label for="name">নামঃ</label>
-                                    <input type="text" name="name" v-model="user.name" id="name"
+                                    <input type="text" name="name" v-model="tailor.name" id="name"
                                         class="form-control shadow-none" autocomplete="off" />
                                 </div>
                             </div>
                             <div class="col-md-12 mb-2">
                                 <div class="form-group">
                                     <label for="username">ইউজার নামঃ</label>
-                                    <input type="text" name="username" v-model="user.username" id="username"
+                                    <input type="text" name="username" v-model="tailor.username" id="username"
                                         class="form-control shadow-none" autocomplete="off" />
                                 </div>
                             </div>
                             <div class="col-md-12 mb-2">
                                 <div class="form-group">
                                     <label for="email">ইমেইলঃ</label>
-                                    <input type="text" name="email" v-model="user.email" id="email"
+                                    <input type="text" name="email" v-model="tailor.email" id="email"
+                                        class="form-control shadow-none" autocomplete="off" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <div class="form-group">
+                                    <label for="password">পাসওয়ার্ডঃ</label>
+                                    <input type="password" name="password" v-model="tailor.password" id="password"
                                         class="form-control shadow-none" autocomplete="off" />
                                 </div>
                             </div>
@@ -32,23 +39,23 @@
                         <div class="row">
                             <div class="col-md-12 mb-2">
                                 <div class="form-group">
-                                    <label for="address">ঠিকানাঃ</label>
-                                    <textarea name="address" v-model="user.address" id="address"
-                                        class="form-control shadow-none" autocomplete="off"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-12 mb-2">
-                                <div class="form-group">
-                                    <label for="experience">যোগ্যতা</label>
-                                    <textarea name="experience" v-model="user.experience" id="experience"
-                                        class="form-control shadow-none" autocomplete="off"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-12 mb-2">
-                                <div class="form-group">
-                                    <label for="password">পাসওয়ার্ড</label>
-                                    <input type="password" name="password" v-model="user.password" id="password"
+                                    <label for="mobile">মোবাইলঃ</label>
+                                    <input type="mobile" name="mobile" v-model="tailor.mobile" id="mobile"
                                         class="form-control shadow-none" autocomplete="off" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <div class="form-group">
+                                    <label for="address">ঠিকানাঃ</label>
+                                    <textarea name="address" v-model="tailor.address" id="address"
+                                        class="form-control shadow-none" autocomplete="off"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <div class="form-group">
+                                    <label for="experience">যোগ্যতাঃ</label>
+                                    <textarea name="experience" v-model="tailor.experience" id="experience"
+                                        class="form-control shadow-none" autocomplete="off"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -101,14 +108,16 @@ export default {
                 { label: 'Name', field: 'name' },
                 { label: 'User Name', field: 'username' },
                 { label: 'Email', field: 'email' },
+                { label: 'Mobile', field: 'mobile' },
                 { label: 'Address', field: 'address' },
                 { label: "Action", field: "before" }
             ],
-            user: {
+            tailor: {
                 id: '',
                 name: '',
                 username: '',
                 email: '',
+                mobile: '',
                 password: '',
                 address: '',
                 image: '',
@@ -163,7 +172,9 @@ export default {
                 name: item.name,
                 username: item.username,
                 email: item.email,
-                role_id: item.role_id,
+                mobile: item.mobile,
+                address: item.address,
+                experience: item.experience,
                 image: item.image
             };
             this.imageSrc = item.image == null ? '/noImage.png':'/'+item.image;
@@ -189,8 +200,8 @@ export default {
                 name: '',
                 username: '',
                 email: '',
+                mobile: '',
                 password: '',
-                role_id: '',
                 image: '',
             };
 

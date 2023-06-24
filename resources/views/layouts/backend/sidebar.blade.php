@@ -25,7 +25,7 @@
                 <div class="sb-nav-link-icon"><i class="fa-light fa-list-dropdown text-black text-xl"></i></div>
                 কারিগর রিপোর্ট
             </a>
-            <a class="nav-link" href="{{url('/')}}">
+            <a class="nav-link" href="{{url('/tailor')}}">
                 <div class="sb-nav-link-icon"><i class="fa-light fa-bars-progress text-black text-xl"></i></div>
                 কারিগর ম্যানেজ
             </a>

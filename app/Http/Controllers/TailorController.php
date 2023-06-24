@@ -34,7 +34,6 @@ class TailorController extends Controller
             'name'     => 'required|string|min:3|max:30',
             'username' => 'required|string|min:3|max:20|unique:users',
             'email'    => 'required|email:rfc,dns|unique:users',
-            'role_id'  => 'required|string',
             'image'    => 'nullable|mimes:jpeg,png,jpg,gif',
             'password' => 'required|min:5|max:20',
         ]);
@@ -44,19 +43,20 @@ class TailorController extends Controller
         }
 
         try {
-            $data = new Tailor();
-            $data->name     = $request->name;
-            $data->username = $request->username;
-            $data->email    = $request->email;
-            $data->role_id  = $request->role_id;
-            $data->password = Hash::make($request->password);
+            $data             = new Tailor();
+            $data->name       = $request->name;
+            $data->username   = $request->username;
+            $data->email      = $request->email;
+            $data->mobile      = $request->mobile;
+            $data->address    = $request->address;
+            $data->experience = $request->experience;
+            $data->password   = Hash::make($request->password);
             if ($request->hasFile('image')) {
                 if (File::exists($data->image)) {
                     File::delete($data->image);
                 }
                 $data->image      = $this->imageUpload($request, 'image', 'uploads/tailor');
             }
-            $data->created_at = Carbon::now();
             $data->save();
 
             return response()->json(['status' => true, 'msg' => "কারিগর যুক্ত করা হয়েছে।"]);
@@ -75,7 +75,7 @@ class TailorController extends Controller
             'name'     => 'required|string|min:3|max:30',
             'username' => 'required|string|min:3|max:20|unique:users,username,' . $request->id,
             'email'    => 'required|email:rfc,dns|unique:users,email,' . $request->id,
-            'role_id'  => 'required|string',
+            'password' => 'nullable|min:5|max:20',
         ]);
 
         if ($validator->fails()) {
@@ -88,7 +88,7 @@ class TailorController extends Controller
             $data->name     = $request->name;
             $data->username = $request->username;
             $data->email    = $request->email;
-            $data->phone    = $request->phone;
+            $data->mobile    = $request->mobile;
             $data->address    = $request->address;
             $data->experience  = $request->experience;
             if (!empty($request->password)) {
