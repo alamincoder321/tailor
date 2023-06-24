@@ -16,7 +16,7 @@ class Controller extends BaseController
             $name = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
             $extention = $image->getClientOriginalExtension();
             $imageName = $name . '_' . uniqId() . '.' . $extention;
-            $image->move($directory, $imageName); 
+            $image->move($directory, $imageName);
             return $directory . '/' . $imageName;
         };
 
