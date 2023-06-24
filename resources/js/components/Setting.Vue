@@ -1,5 +1,5 @@
 <template>
-    <div class="row ">
+    <div class="row">
         <div class="col-md-8 offset-md-2 bg-content">
             <form @submit.prevent="saveData">
                 <div class="row">
@@ -28,7 +28,8 @@
                         <div class="form-group">
                             <label for="address">অ্যাড্রেসঃ</label>
                             <textarea name="address" v-model="setting.address" id="address" class="form-control shadow-none"
-                                autocomplete="off"> </textarea>
+                                autocomplete="off">
+                            </textarea>
                         </div>
                     </div>
                     <div class="col-md-8">
@@ -52,7 +53,9 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group mt-4">
-                            <button type="submit" class="btn btn-silver shadow-none px-3">Save</button>
+                            <button type="submit" class="btn btn-silver shadow-none px-3">
+                                Save
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -61,29 +64,29 @@
     </div>
 </template>
 
-<script>
-import Swal from 'sweetalert2'
+<script lang="en">
+import Swal from "sweetalert2";
 export default {
     data() {
         return {
             setting: {
-                company_name: '',
-                mobile: '',
-                email: '',
-                address: '',
-                logo: '',
-                navicon: '',
+                company_name: "",
+                mobile: "",
+                email: "",
+                address: "",
+                logo: "",
+                navicon: "",
             },
             imageSrc: "/noImage.png",
             imageSrcTwo: "/noImage.png",
-        }
+        };
     },
     created() {
-        this.getSetting()
+        this.getSetting();
     },
     methods: {
         getSetting() {
-            axios.get('/get-setting').then(res => {
+            axios.get("/get-setting").then((res) => {
                 let r = res.data;
                 this.setting = {
                     company_name: r.company_name,
@@ -92,63 +95,72 @@ export default {
                     address: r.address,
                     logo: r.logo,
                     navicon: r.navicon,
-                }
-                this.imageSrc = r.logo != null ? r.logo : "/noImage.png"
-                this.imageSrcTwo = r.navicon != null ? r.navicon : "/noImage.png"
-            })
+                };
+                this.imageSrc = r.logo != null ? r.logo : "/noImage.png";
+                this.imageSrcTwo =
+                    r.navicon != null ? r.navicon : "/noImage.png";
+            });
         },
 
         saveData(event) {
-            if (this.setting.company_name == '') {
+            if (this.setting.company_name == "") {
                 alert("Company name required");
                 return;
             }
             let formdata = new FormData(event.target);
-            formdata.append('logo', this.setting.logo);
-            formdata.append('navicon', this.setting.navicon);
-            axios.post('/setting', formdata).then(res => {
+            formdata.append("logo", this.setting.logo);
+            formdata.append("navicon", this.setting.navicon);
+            axios.post("/setting", formdata).then((res) => {
                 if (res.data.status) {
-                    this.$moshaToast(res.data.msg,);
+                    this.$moshaToast(res.data.msg);
                 } else {
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
+                        icon: "error",
+                        title: "Oops...",
                         text: res.data.msg,
-                    })
+                    });
                 }
                 this.getSetting();
-            })
+            });
         },
 
         imageUrl(event) {
             if (event.target.files[0]) {
-                let img = new Image()
+                let img = new Image();
                 img.src = window.URL.createObjectURL(event.target.files[0]);
                 img.onload = () => {
                     if (img.width === 200 && img.height === 200) {
-                        this.imageSrc = window.URL.createObjectURL(event.target.files[0]);
+                        this.imageSrc = window.URL.createObjectURL(
+                            event.target.files[0]
+                        );
                         this.setting.logo = event.target.files[0];
                     } else {
-                        alert(`This image ${img.width} X ${img.width} but require image 200 X 200`);
+                        alert(
+                            `This image ${img.width} X ${img.width} but require image 200 X 200`
+                        );
                     }
-                }
+                };
             }
         },
 
         imageUrlTwo(event) {
             if (event.target.files[0]) {
-                let img = new Image()
+                let img = new Image();
                 img.src = window.URL.createObjectURL(event.target.files[0]);
                 img.onload = () => {
                     if (img.width === 200 && img.height === 200) {
-                        this.imageSrcTwo = window.URL.createObjectURL(event.target.files[0]);
+                        this.imageSrcTwo = window.URL.createObjectURL(
+                            event.target.files[0]
+                        );
                         this.setting.navicon = event.target.files[0];
                     } else {
-                        alert(`This image ${img.width} X ${img.width} but require image 200 X 200`);
+                        alert(
+                            `This image ${img.width} X ${img.width} but require image 200 X 200`
+                        );
                     }
-                }
+                };
             }
         },
     },
-}
+};
 </script>

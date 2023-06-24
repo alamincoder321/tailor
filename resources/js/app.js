@@ -23,6 +23,7 @@ import Category from './components/category/Category.vue';
 import Designation from './components/designation/Designation.vue';
 import Employee from './components/employee/Employee.vue';
 import employeeManage from './components/employee/Manage.vue';
+import Tailor from './components/tailor/Tailor.vue';
 app.component('dashboard', Dashboard);
 app.component('setting', Setting);
 app.component('role', Role);
@@ -31,6 +32,7 @@ app.component('brand', Brand);
 app.component('category', Category);
 app.component('designation', Designation);
 app.component('employee', Employee);
+app.component('tailor', Tailor);
 app.component('employee-manage', employeeManage);
 
 

@@ -32,15 +32,16 @@
                         <div class="row">
                             <div class="col-md-12 mb-2">
                                 <div class="form-group">
-                                    <label for="role_id">রোল</label>
-                                    <div class="input-group">
-                                        <select name="role_id" id="role_id" class="form-select shadow-none" v-model="user.role_id">
-                                            <option value="">---রোল বাছাই করুন---</option>
-                                            <option v-for="(item, index) in roles" :value="item.id" :key="index">{{ item.name }}</option>
-                                        </select>
-                                        <a href="/role" style="padding:3px 5px;" class="btn btn-danger"
-                                            target="_blank"><i class="fa fa-plus text-white"></i></a>
-                                    </div>
+                                    <label for="address">ঠিকানাঃ</label>
+                                    <textarea name="address" v-model="user.address" id="address"
+                                        class="form-control shadow-none" autocomplete="off"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <div class="form-group">
+                                    <label for="experience">যোগ্যতা</label>
+                                    <textarea name="experience" v-model="user.experience" id="experience"
+                                        class="form-control shadow-none" autocomplete="off"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-12 mb-2">
@@ -70,8 +71,8 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-12 mt-3 bg-content" v-if="users.length > 0">
-            <vue-good-table :columns="columns" :rows="users" :fixed-header="false" :pagination-options="{
+        <div class="col-md-12 mt-3 bg-content" v-if="tailors.length > 0">
+            <vue-good-table :columns="columns" :rows="tailors" :fixed-header="false" :pagination-options="{
                 enabled: true,
                 perPage: 10,
             }" :search-options="{ enabled: true }" :line-numbers="true" styleClass="vgt-table condensed"
@@ -80,9 +81,6 @@
                     <span class="d-flex" style="justify-content: space-around;" v-if="props.column.field == 'before'">
                         <a href="" title="edit" @click.prevent="editData(props.row)">
                             <i class="fas fa-edit text-info"></i>
-                        </a>
-                        <a :href="`/useraccess/${props.row.id}`" title="access">
-                            <i class="fas fa-user-times text-warning"></i>
                         </a>
                         <a href="" title="delete" @click.prevent="deleteData(props.row.id)">
                             <i class="fas fa-trash text-danger"></i>
@@ -103,7 +101,7 @@ export default {
                 { label: 'Name', field: 'name' },
                 { label: 'User Name', field: 'username' },
                 { label: 'Email', field: 'email' },
-                { label: 'Role', field: 'roleName' },
+                { label: 'Address', field: 'address' },
                 { label: "Action", field: "before" }
             ],
             user: {
@@ -112,46 +110,37 @@ export default {
                 username: '',
                 email: '',
                 password: '',
-                role_id: '',
+                address: '',
                 image: '',
             },
-            users: [],
+            tailors: [],
             roles: [],
             imageSrc: "/noImage.png",
         }
     },
     created() {
-        this.getUser();
-        this.getRole();
+        this.getTailor();
     },
     methods: {
-        getRole() {
-            axios.get('/get-role').then(res => {
-                this.roles = res.data;
-            })
-        },
-        getUser() {
-            axios.get('/get-user').then(res => {
-                this.users = res.data.map(user => {
-                    user.roleName = user.role.name;
-                    return user;
-                });
+        getTailor() {
+            axios.get('/get-tailor').then(res => {
+                this.tailors = res.data;
             })
         },
 
         saveData(event) {
-            if (this.user.name == '') {
-                alert("user name required");
+            if (this.tailor.name == '') {
+                alert("Tailor name required");
                 return;
             }
             let formdata = new FormData(event.target);
-            formdata.append('id', this.user.id);
-            formdata.append('image', this.user.image);
+            formdata.append('id', this.tailor.id);
+            formdata.append('image', this.tailor.image);
             let url;
-            if (this.user.id == '') {
-                url = '/user'
+            if (this.tailor.id == '') {
+                url = '/tailor'
             } else {
-                url = '/update-user'
+                url = '/update-tailor'
             }
             axios.post(url, formdata).then(res => {
                 if (res.data.status) {
@@ -164,12 +153,12 @@ export default {
                         text: res.data.msg,
                     })
                 }
-                this.getUser();
+                this.getTailor();
             })
         },
 
         editData(item) {
-            this.user = {
+            this.tailor = {
                 id: item.id,
                 name: item.name,
                 username: item.username,
@@ -182,20 +171,20 @@ export default {
 
         deleteData(id) {
             if (confirm("Are you sure !!")) {
-                axios.post('/delete-user', { id: id }).then(res => {
+                axios.post('/delete-tailor', { id: id }).then(res => {
                     if (res.data.status) {
                         this.$moshaToast(res.data.msg,);
                         this.clearData();
                     } else {
                         console.log(res.data.msg);
                     }
-                    this.getUser();
+                    this.getTailor();
                 })
             }
         },
 
         clearData() {
-            this.user = {
+            this.tailor = {
                 id: '',
                 name: '',
                 username: '',
@@ -207,7 +196,7 @@ export default {
 
             this.imageSrc = '/noImage.png';
         },
-        
+
         imageUrl(event) {
             if (event.target.files[0]) {
                 let img = new Image()
@@ -215,7 +204,7 @@ export default {
                 img.onload = () => {
                     if (img.width === 200 && img.height === 200) {
                         this.imageSrc = window.URL.createObjectURL(event.target.files[0]);
-                        this.user.image = event.target.files[0];
+                        this.tailor.image = event.target.files[0];
                     } else {
                         alert(`This image ${img.width} X ${img.width} but require image 200 X 200`);
                     }
