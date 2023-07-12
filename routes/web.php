@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProductController;
@@ -69,9 +70,15 @@ Route::get("/get-tailor", [TailorController::class, "index"])->name('tailor.inde
 Route::post("/tailor", [TailorController::class, "store"])->name('tailor.store');
 Route::post("/update-tailor", [TailorController::class, "update"])->name('tailor.update');
 Route::post("/delete-tailor", [TailorController::class, "destroy"])->name('tailor.destroy');
+//customer route
+Route::get("/customer", [CustomerController::class, "create"])->name('customer.create');
+Route::get("/get-customer", [CustomerController::class, "index"])->name('customer.index');
+Route::post("/customer", [CustomerController::class, "store"])->name('customer.store');
+Route::post("/update-customer", [CustomerController::class, "update"])->name('customer.update');
+Route::post("/delete-customer", [CustomerController::class, "destroy"])->name('customer.destroy');
 //product route
-Route::get("/product/{id?}", [ProductController::class, "create"])->name('product.create');
-Route::post("/get-product", [ProductController::class, "index"])->name('product.index');
+Route::get("/product", [ProductController::class, "create"])->name('product.create');
+Route::get("/get-product", [ProductController::class, "index"])->name('product.index');
 Route::post("/product", [ProductController::class, "store"])->name('product.store');
 Route::post("/update-product", [ProductController::class, "update"])->name('product.update');
 Route::post("/delete-product", [ProductController::class, "destroy"])->name('product.destroy');

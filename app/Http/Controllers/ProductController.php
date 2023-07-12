@@ -16,7 +16,7 @@ class ProductController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request)
+    public function index()
     {
         $product_code = $this->generateCode('Product', 'P');
         $products = Product::with('tailor', 'category')->latest()->get();
@@ -49,7 +49,7 @@ class ProductController extends Controller
         try {
 
             $data               = new Product();
-            $data->product_code = $this->generateCode("Product", 'P');
+            $data->product_code = $request->product_code;
             $data->name         = $request->name;
             $data->description  = $request->description;
             $data->category_id  = $request->category_id;

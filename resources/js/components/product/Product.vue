@@ -251,7 +251,7 @@ export default {
         clearData() {
             this.product = {
                 id: '',
-                product_code: '',
+                product_code: this.product.product_code,
                 name: '',
                 description: '',
                 category_id: '',
@@ -281,7 +281,7 @@ export default {
         },
 
         getProduct() {
-            axios.post('/get-product', { id: '' }).then(res => {
+            axios.get('/get-product').then(res => {
                 let r = res.data;
                 this.products = res.data.products.map(p => {
                     p.category_name = p.category.name
