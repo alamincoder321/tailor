@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tailors', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table->string("username");
-            $table->integer("user_id");
-            $table->string("email");
-            $table->string("mobile");
-            $table->string("address");
-            $table->string("experience");
+            $table->string("customer_code");
+            $table->string("name")->nullable();
+            $table->string("phone", 15)->nullable();
+            $table->string("email")->nullable();
+            $table->text("address")->nullable();
+            $table->string('customer_type')->default('retail');
+            $table->decimal('previous_due', 18, 2)->default(0);
             $table->string("image")->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tailors');
+        Schema::dropIfExists('customers');
     }
 };

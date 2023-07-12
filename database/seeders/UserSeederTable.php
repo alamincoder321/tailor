@@ -25,5 +25,11 @@ class UserSeederTable extends Seeder
         Role::create([
             'name' => 'Supper Admin'
         ]);
+        Role::create([
+            'name' => 'Admin'
+        ]);
+        Role::create([
+            'name' => 'Tailor'
+        ]);
     }
 }

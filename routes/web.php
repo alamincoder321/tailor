@@ -7,6 +7,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TailorController;
@@ -68,3 +69,9 @@ Route::get("/get-tailor", [TailorController::class, "index"])->name('tailor.inde
 Route::post("/tailor", [TailorController::class, "store"])->name('tailor.store');
 Route::post("/update-tailor", [TailorController::class, "update"])->name('tailor.update');
 Route::post("/delete-tailor", [TailorController::class, "destroy"])->name('tailor.destroy');
+//product route
+Route::get("/product/{id?}", [ProductController::class, "create"])->name('product.create');
+Route::post("/get-product", [ProductController::class, "index"])->name('product.index');
+Route::post("/product", [ProductController::class, "store"])->name('product.store');
+Route::post("/update-product", [ProductController::class, "update"])->name('product.update');
+Route::post("/delete-product", [ProductController::class, "destroy"])->name('product.destroy');
