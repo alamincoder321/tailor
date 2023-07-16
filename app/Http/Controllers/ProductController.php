@@ -34,7 +34,6 @@ class ProductController extends Controller
         $validator = Validator::make($request->all(), [
             'name'         => 'required',
             'category_id'  => 'required',
-            'quantity'     => 'required',
             'tailor_price' => 'required',
             'retail_price' => 'required',
             'discount'     => 'required',
@@ -53,7 +52,6 @@ class ProductController extends Controller
             $data->name         = $request->name;
             $data->description  = $request->description;
             $data->category_id  = $request->category_id;
-            $data->quantity     = $request->quantity;
             $data->tailor_price = $request->tailor_price;
             $data->retail_price = $request->retail_price;
             $data->discount     = $request->discount;
@@ -78,7 +76,6 @@ class ProductController extends Controller
         $validator = Validator::make($request->all(), [
             'name'         => 'required',
             'category_id'  => 'required',
-            'quantity'     => 'required',
             'tailor_price' => 'required',
             'retail_price' => 'required',
             'discount'     => 'required',
@@ -96,7 +93,6 @@ class ProductController extends Controller
             $data->name         = $request->name;
             $data->description  = $request->description;
             $data->category_id  = $request->category_id;
-            $data->quantity     = $request->quantity;
             $data->tailor_price = $request->tailor_price;
             $data->retail_price = $request->retail_price;
             $data->discount     = $request->discount;

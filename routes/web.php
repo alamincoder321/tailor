@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
@@ -82,3 +83,10 @@ Route::get("/get-product", [ProductController::class, "index"])->name('product.i
 Route::post("/product", [ProductController::class, "store"])->name('product.store');
 Route::post("/update-product", [ProductController::class, "update"])->name('product.update');
 Route::post("/delete-product", [ProductController::class, "destroy"])->name('product.destroy');
+
+//order route
+Route::get("/order", [OrderController::class, "create"])->name('order.create');
+Route::get("/get-order", [OrderController::class, "index"])->name('order.index');
+Route::post("/order", [OrderController::class, "store"])->name('order.store');
+Route::post("/update-order", [OrderController::class, "update"])->name('order.update');
+Route::post("/delete-order", [OrderController::class, "destroy"])->name('order.destroy');

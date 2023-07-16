@@ -32,14 +32,6 @@
                             </div>
                             <div class="col-md-12 mb-2">
                                 <div class="form-group">
-                                    <label for="quantity">পরিমানঃ</label>
-                                    <input type="number" step="1" min="0" name="quantity"
-                                        v-model="product.quantity" id="quantity" class="form-control shadow-none"
-                                        autocomplete="off" />
-                                </div>
-                            </div>
-                            <div class="col-md-12 mb-2">
-                                <div class="form-group">
                                     <label for="discount">ডিস্কাউন্টঃ</label>
                                     <input type="number" step="0.01" min="0" name="discount"
                                         v-model="product.discount" id="discount" class="form-control shadow-none"
@@ -137,7 +129,6 @@
 import Swal from 'sweetalert2'
 
 export default {
-    props: ['id'],
     data() {
         return {
             columns: [
@@ -156,7 +147,6 @@ export default {
                 name: '',
                 description: '',
                 category_id: '',
-                quantity: 0,
                 tailor_price: 0.00,
                 retail_price: 0.00,
                 discount: 0.00,
@@ -223,7 +213,6 @@ export default {
                 product_code: item.product_code,
                 name: item.name,
                 category_id: item.category_id,
-                quantity: item.quantity,
                 discount: item.discount,
                 description: item.description,
                 tailor_id: item.tailor_id,
@@ -255,7 +244,6 @@ export default {
                 name: '',
                 description: '',
                 category_id: '',
-                quantity: '',
                 tailor_price: 0.00,
                 retail_price: 0.00,
                 discount: 0.00,
