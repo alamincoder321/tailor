@@ -16,6 +16,7 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'category_id', 'id')->select('id', 'name');
     }
+    
     public function tailor()
     {
         return $this->belongsTo(Tailor::class, 'tailor_id', 'id')->select('id', 'name');

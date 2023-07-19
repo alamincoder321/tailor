@@ -13,7 +13,8 @@ class OrderController extends Controller
 
     public function index()
     {
-
+        $order_code = $this->generateCode("Order", '#O');
+        return response()->json(['orderCode' => $order_code]);
     }
 
     public function create()

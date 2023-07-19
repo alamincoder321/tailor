@@ -12,6 +12,11 @@ const app = createApp({});
 app.use(moshaToast);
 app.use(VueGoodTablePlugin);
 
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
+app.component('v-select', vSelect)
+
+
 
 
 import Dashboard from './components/Dashboard.vue';
