@@ -416,7 +416,7 @@ export default {
             categories: [],
             products: [],
             selectProduct: '',
-            category: '',
+            category: 2,
 
             carts: [],
         }

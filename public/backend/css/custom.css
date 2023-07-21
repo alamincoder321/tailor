@@ -152,11 +152,17 @@ button{
     color: #000;
     font-size: 15px;
     padding: 4px 10px !important;
-    background: #ffeaea6b;
+    background: #ffeaea40;
     margin-left: 1px;
 }
 
 .navbarcustom .nav-link:hover {
     color: #000;
     font-size: 15px;
+}
+
+@media only screen and (max-width: 600px) and (min-width: 320px) {
+    .navbarcustom{
+        display: none !important;
+    }
 }

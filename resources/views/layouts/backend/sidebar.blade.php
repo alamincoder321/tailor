@@ -13,7 +13,7 @@
                 <div class="sb-nav-link-icon"><i class="fa-light fa-people-carry-box text-black text-xl"></i></div>
                 কাস্টমার
             </a>
-            <a class="nav-link" href="{{url('/order')}}">
+            <a class="nav-link" href="{{url('/manage-order')}}">
                 <div class="sb-nav-link-icon"><i class="fa-light fa-list-timeline text-black text-xl"></i></div>
                 অর্ডার লিস্ট
             </a>

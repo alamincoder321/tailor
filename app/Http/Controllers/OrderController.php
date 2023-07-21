@@ -26,7 +26,15 @@ class OrderController extends Controller
             $res['orderCode'] = $order_code;
             return response()->json($res);
         }
+
+        $orders = Order::with("orderDetails")->latest()->get();
+        $res['orders'] = $orders;
         return response()->json($res);
+    }
+
+    public function manage()
+    {
+        return view("pages.order.manage");
     }
 
     public function create()

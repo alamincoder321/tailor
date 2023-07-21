@@ -29,9 +29,10 @@ import Category from './components/category/Category.vue';
 import Designation from './components/designation/Designation.vue';
 import Employee from './components/employee/Employee.vue';
 import Product from './components/product/Product.vue';
-import employeeManage from './components/employee/Manage.vue';
+import EmployeeManage from './components/employee/Manage.vue';
 import Tailor from './components/tailor/Tailor.vue';
 import Order from './components/order/Order.vue';
+import OrderManage from './components/order/Manage.vue';
 app.component('dashboard', Dashboard);
 app.component('setting', Setting);
 app.component('role', Role);
@@ -43,8 +44,9 @@ app.component('designation', Designation);
 app.component('employee', Employee);
 app.component('product', Product);
 app.component('tailor', Tailor);
-app.component('employee-manage', employeeManage);
+app.component('employee-manage', EmployeeManage);
 app.component('order', Order);
+app.component('order-manage', OrderManage);
 
 
 app.mount('#layoutSidenav');

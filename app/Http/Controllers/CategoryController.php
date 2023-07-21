@@ -16,7 +16,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        return Category::latest()->get();
+        return Category::limit(2)->get();
     }
 
     public function create()
