@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('jamas', function (Blueprint $table) {
             $table->id();
-            $table->string('long');
-            $table->string('body');
-            $table->string('tira');
-            $table->string('hata');
-            $table->string('mohori');
-            $table->string('gola');
-            $table->string('gher');
-            $table->string('plate');
-            $table->string('mora');
-            $table->string('ghari');
-            $table->string('peter_map');
+            $table->string('long')->nullable();
+            $table->string('body')->nullable();
+            $table->string('tira')->nullable();
+            $table->string('hata')->nullable();
+            $table->string('mohori')->nullable();
+            $table->string('gola')->nullable();
+            $table->string('gher')->nullable();
+            $table->string('plate')->nullable();
+            $table->string('mora')->nullable();
+            $table->string('ghari')->nullable();
+            $table->string('peter_map')->nullable();
             $table->timestamps();
         });
     }

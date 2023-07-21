@@ -35,9 +35,9 @@
                             </div>
                             <div class="col-md-4 mb-2">
                                 <div class="form-group">
-                                    <label for="mobile">মোবাইল নংঃ</label>
-                                    <input type="text" v-model="order.mobile" name="mobile" id="mobile"
-                                        class="form-control shadow-none" autocomplete="off" />
+                                    <label for="customer_mobile">মোবাইল নংঃ</label>
+                                    <input type="text" v-model="order.customer_mobile" name="customer_mobile"
+                                        id="customer_mobile" class="form-control shadow-none" autocomplete="off" />
                                 </div>
                             </div>
                             <div class="col-md-4 mb-2">
@@ -268,29 +268,29 @@
                             <label for="discount">ডিস্কাউন্ট টাকাঃ</label>
                         </div>
                         <div class="col-md-5 mb-3">
-                            <input type="number" v-model="order.discount" @input="calculateTotal" name="discount" class="form-control shadow-none"
-                                id="discount" autocomplete="off" />
+                            <input type="number" v-model="order.discount" @input="calculateTotal" name="discount"
+                                class="form-control shadow-none" id="discount" autocomplete="off" />
                         </div>
                         <div class="col-md-7 mb-3">
                             <label for="total">মোট পাওনা টাকাঃ</label>
                         </div>
                         <div class="col-md-5 mb-3">
                             <input type="number" v-model="order.total" name="total" class="form-control shadow-none"
-                                id="total" autocomplete="off" disabled/>
+                                id="total" autocomplete="off" disabled />
                         </div>
                         <div class="col-md-7 mb-3">
                             <label for="advance">অগ্রীম টাকাঃ</label>
                         </div>
                         <div class="col-md-5 mb-3">
-                            <input type="number" v-model="order.advance" @input="calculateTotal" name="advance" class="form-control shadow-none"
-                                id="advance" autocomplete="off" />
+                            <input type="number" v-model="order.advance" @input="calculateTotal" name="advance"
+                                class="form-control shadow-none" id="advance" autocomplete="off" />
                         </div>
                         <div class="col-md-7 mb-3">
                             <label for="due">বাকী টাকাঃ</label>
                         </div>
                         <div class="col-md-5 mb-3">
                             <input type="number" v-model="order.due" name="due" class="form-control shadow-none" id="due"
-                                autocomplete="off" disabled/>
+                                autocomplete="off" disabled />
                         </div>
                     </div>
                 </div>
@@ -331,21 +331,21 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="tailor_slip_one">কারিগর স্লিপ-১</label>
-                                        <input type="text" class="form-control shadow-none" name="tailor_slip_one"
-                                            id="tailor_slip_one">
+                                        <input type="text" v-model="order.tailor_slip_one" class="form-control shadow-none"
+                                            name="tailor_slip_one" id="tailor_slip_one">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="tailor_slip_two">কারিগর স্লিপ-2</label>
-                                        <input type="text" class="form-control shadow-none" name="tailor_slip_two"
-                                            id="tailor_slip_two">
+                                        <input type="text" v-model="order.tailor_slip_two" class="form-control shadow-none"
+                                            name="tailor_slip_two" id="tailor_slip_two">
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6 text-end">
-                            <button type="button" class="btn btn-silver shadow-none px-3 me-2 mt-4">
+                            <button @click="saveOrder" type="button" class="btn btn-silver shadow-none px-3 me-2 mt-4">
                                 Save
                             </button>
                             <button type="button" class="btn btn-silver shadow-none px-3 me-2 mt-4">
@@ -383,7 +383,9 @@ export default {
                 discount: 0,
                 total: 0,
                 advance: 0,
-                due: 0
+                due: 0,
+                tailor_slip_one: '',
+                tailor_slip_two: '',
             },
             jama: {
                 long: '',
@@ -447,12 +449,12 @@ export default {
         },
 
         addToCart() {
-            if(this.selectProduct == '' || this.selectProduct.id == ''){
+            if (this.selectProduct == '' || this.selectProduct.id == '') {
                 alert("Product name required");
                 document.querySelector("#product [type='search']").focus();
                 return
             }
-            if(this.selectProduct.quantity == undefined || this.selectProduct.quantity == 0){
+            if (this.selectProduct.quantity == undefined || this.selectProduct.quantity == 0) {
                 alert("Quantity is empty");
                 return
             }
@@ -468,9 +470,9 @@ export default {
                 jama: this.category == 2 ? this.jama : '',
             }
             let cartIndex = this.carts.findIndex(p => cart.product_id == this.selectProduct.id);
-            if(cartIndex >= 0){
+            if (cartIndex >= 0) {
                 this.carts.splice(cartIndex, 1);
-            } 
+            }
             this.carts.push(cart);
             this.calculateTotal();
             this.clearData();
@@ -523,8 +525,41 @@ export default {
             this.selectProduct = ''
         },
 
-        getOrder(){
-            axios.get('/get-order')
+        saveOrder() {
+            let data = {
+                order: this.order,
+                carts: this.carts
+            }
+
+            axios.post('/order', data)
+                .then(res => {
+                    this.$moshaToast(res.data.msg);
+                    this.clearOrder();
+                    this.getOrder();
+                })
+        },
+
+        clearOrder() {
+            this.carts = [];
+            this.order = {
+                order_code: '',
+                orderDate: '',
+                deliveryDate: '',
+                customer_name: '',
+                customer_mobile: '',
+                refer: '',
+                subtotal: 0,
+                discount: 0,
+                total: 0,
+                advance: 0,
+                due: 0,
+                tailor_slip_one: '',
+                tailor_slip_two: '',
+            }
+        },
+
+        getOrder() {
+            axios.post('/get-order', { fromOrder: 'yes' })
                 .then(res => {
                     this.order.order_code = res.data.orderCode;
                 })
@@ -541,4 +576,5 @@ export default {
 #product .vs__clear {
     margin-right: 0;
     padding: 0px 8px !important;
-}</style>
+}
+</style>

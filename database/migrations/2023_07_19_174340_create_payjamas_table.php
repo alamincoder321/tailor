@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('payjamas', function (Blueprint $table) {
             $table->id();
-            $table->string('long');
-            $table->string('komor');
-            $table->string('mohori');
-            $table->string('high');
-            $table->string('ran');
+            $table->string('long')->nullable();
+            $table->string('komor')->nullable();
+            $table->string('mohori')->nullable();
+            $table->string('high')->nullable();
+            $table->string('ran')->nullable();
             $table->string('pocket_chain')->default('false');
             $table->string('good_runner')->default('false');
             $table->string('back_pocket')->default('false');

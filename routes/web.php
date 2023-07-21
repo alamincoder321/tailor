@@ -86,7 +86,7 @@ Route::post("/delete-product", [ProductController::class, "destroy"])->name('pro
 
 //order route
 Route::get("/order", [OrderController::class, "create"])->name('order.create');
-Route::get("/get-order", [OrderController::class, "index"])->name('order.index');
+Route::post("/get-order", [OrderController::class, "index"])->name('order.index');
 Route::post("/order", [OrderController::class, "store"])->name('order.store');
 Route::post("/update-order", [OrderController::class, "update"])->name('order.update');
 Route::post("/delete-order", [OrderController::class, "destroy"])->name('order.destroy');

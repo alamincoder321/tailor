@@ -40,12 +40,12 @@ class CustomerController extends Controller
 
         try {
 
-            $data               = new Customer();
+            $data                = new Customer();
             $data->customer_code = $request->customer_code;
-            $data->name         = $request->name;
+            $data->name          = $request->name;
             $data->phone         = $request->phone;
             $data->email         = $request->email;
-            $data->address         = $request->address;
+            $data->address       = $request->address;
             if ($request->hasFile('image')) {
                 $data->image      = $this->imageUpload($request, 'image', 'uploads/customer');
             }
