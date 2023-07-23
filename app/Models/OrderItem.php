@@ -12,4 +12,17 @@ class OrderItem extends Model
 
     protected $guarded = ['id'];
 
+    public function jama()
+    {
+        return $this->belongsTo(Jama::class, 'jama_id', 'id');
+    }
+    public function payjama()
+    {
+        return $this->belongsTo(Payjama::class, 'payjama_id', 'id');
+    }
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id')->select('id', 'name', 'category_id');
+    }
+    
 }

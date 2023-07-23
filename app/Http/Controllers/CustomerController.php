@@ -62,13 +62,13 @@ class CustomerController extends Controller
 
     public function update(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'image'        => 'nullable|mimes:jpeg,png,jpg,gif',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'image'        => 'nullable|mimes:jpg,png,gif',
+        // ]);
 
-        if ($validator->fails()) {
-            return response()->json(['status' => false, 'msg' => 'validation error', 'errors' => $validator->errors()]);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json(['status' => false, 'msg' => 'validation error', 'errors' => $validator->errors()]);
+        // }
 
         try {
 

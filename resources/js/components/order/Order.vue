@@ -78,7 +78,7 @@
                             <div class="form-group">
                                 <label for="quantity">কোয়ান্টিটিঃ</label>
                                 <input type="number" min="0" v-model="selectProduct.quantity" @input="productTotal"
-                                    name="quantity" id="quantity" class="form-control shadow-none">
+                                    name="quantity" id="quantity" class="form-control shadow-none" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -87,77 +87,77 @@
                             <div class="form-group">
                                 <label for="long">লম্বাঃ</label>
                                 <input type="text" v-model="jama.long" name="long" id="long"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="body">বডিঃ</label>
                                 <input type="text" v-model="jama.body" name="body" id="body"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="tira">তিরাঃ</label>
                                 <input type="text" v-model="jama.tira" name="tira" id="tira"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="hata">হাতাঃ</label>
                                 <input type="text" v-model="jama.hata" name="hata" id="hata"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="mohori">মোহরীঃ</label>
                                 <input type="text" v-model="jama.mohori" name="mohori" id="mohori"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="gola">গলাঃ</label>
                                 <input type="text" v-model="jama.gola" name="gola" id="gola"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="gher">ঘেরঃ</label>
                                 <input type="text" v-model="jama.gher" name="gher" id="gher"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="plate">প্লেটঃ</label>
                                 <input type="text" v-model="jama.plate" name="plate" id="plate"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="mora">মোড়াঃ</label>
                                 <input type="text" v-model="jama.mora" name="mora" id="mora"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="ghari">ঘাড়ী</label>
                                 <input type="text" v-model="jama.ghari" name="ghari" id="ghari"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="peter_map">পেটের মাপঃ</label>
                                 <input type="text" v-model="jama.peter_map" name="peter_map" id="peter_map"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                     </div>
@@ -166,35 +166,35 @@
                             <div class="form-group">
                                 <label for="long">লম্বাঃ</label>
                                 <input type="text" v-model="payjama.long" name="long" id="long"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="komor">কোমরঃ</label>
                                 <input type="text" v-model="payjama.komor" name="komor" id="komor"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="mohori">মোহরীঃ</label>
                                 <input type="text" v-model="payjama.mohori" name="mohori" id="mohori"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="high">হাইঃ</label>
                                 <input type="text" v-model="payjama.high" name="high" id="high"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="ran">রানঃ</label>
                                 <input type="text" v-model="payjama.ran" name="ran" id="ran"
-                                    class="form-control shadow-none">
+                                    class="form-control shadow-none" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-12 mt-2">
@@ -370,9 +370,11 @@ import moment from 'moment';
 import Swal from 'sweetalert2'
 
 export default {
+    props: ['id'],
     data() {
         return {
             order: {
+                id: '',
                 order_code: '',
                 orderDate: '',
                 deliveryDate: '',
@@ -416,7 +418,7 @@ export default {
             categories: [],
             products: [],
             selectProduct: '',
-            category: 2,
+            category: 1,
 
             carts: [],
         }
@@ -526,15 +528,41 @@ export default {
         },
 
         saveOrder() {
+            if (this.order.orderDate == '') {
+                alert("Order date required");
+                return
+            }
+            if (this.order.deliveryDate == '') {
+                alert("delivery date required");
+                return
+            }
+            if (this.order.customer_name == '') {
+                alert("Customer name required");
+                return
+            }
+            if (this.order.customer_mobile == '') {
+                alert("Customer mobile required");
+                return
+            }
             let data = {
                 order: this.order,
                 carts: this.carts
             }
-
-            axios.post('/order', data)
+            let url;
+            if (this.id != '') {
+                url = '/update-order'
+            }else{
+                url = '/order'
+            }
+            axios.post(url, data)
                 .then(res => {
                     this.$moshaToast(res.data.msg);
                     this.clearOrder();
+                    if(this.id != ''){
+                        setTimeout(() => {
+                            location.href = '/order'
+                        }, 1000)
+                    }
                     this.getOrder();
                 })
         },
@@ -542,6 +570,7 @@ export default {
         clearOrder() {
             this.carts = [];
             this.order = {
+                id: '',
                 order_code: '',
                 orderDate: '',
                 deliveryDate: '',
@@ -559,9 +588,52 @@ export default {
         },
 
         getOrder() {
-            axios.post('/get-order', { fromOrder: 'yes' })
+            let data = { fromOrder: 'yes' }
+            if (this.id != '') {
+                data = {id: this.id}
+            }
+            axios.post('/get-order', data)
                 .then(res => {
-                    this.order.order_code = res.data.orderCode;
+                    if (this.id != '') {
+                        let order = res.data.orders[0]
+                        let orderItem = res.data.orderItem
+                        this.order = {
+                            id: order.id,
+                            order_code: order.order_code,
+                            orderDate: order.orderDate,
+                            deliveryDate: order.deliveryDate,
+                            customer_name: order.name,
+                            customer_mobile: order.phone,
+                            refer: order.refer,
+                            subtotal: order.subtotal,
+                            discount: order.discount,
+                            total: order.total,
+                            advance: order.advance,
+                            due: order.due,
+                            tailor_slip_one: order.tailor_slip_one,
+                            tailor_slip_two: order.tailor_slip_two,
+                        }
+                        
+                        orderItem.forEach(item => {
+                            let cart = {
+                                category_id: item.product.category_id,
+                                product_id: item.product_id,
+                                product_name: item.product.name,
+                                quantity: item.quantity,
+                                retail_price: item.retail_price,
+                                tailor_price: item.tailor_price,
+                                total: item.quantity * item.retail_price,
+                                payjama: item.product.category_id == 1 ? item.payjama : '',
+                                jama: item.product.category_id == 2 ? item.jama : '',
+                            }
+
+                            this.carts.push(cart)
+                        })
+                    }else{
+                        this.order.order_code = res.data.orderCode;
+                    }
+
+
                 })
         },
     },
