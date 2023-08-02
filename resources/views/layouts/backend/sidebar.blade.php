@@ -37,7 +37,7 @@
                 <div class="sb-nav-link-icon"><i class="fa-light fa-arrow-down-small-big text-black text-xl"></i></div>
                 অর্ডার হিস্টোরি
             </a>
-            <a class="nav-link" href="{{url('/')}}">
+            <a class="nav-link" href="{{url('/expense')}}">
                 <div class="sb-nav-link-icon"><i class="fa-light fa-money-bill-transfer text-black text-xl"></i></div>
                 খরচ
             </a>

@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
@@ -77,6 +78,7 @@ Route::get("/get-customer", [CustomerController::class, "index"])->name('custome
 Route::post("/customer", [CustomerController::class, "store"])->name('customer.store');
 Route::post("/update-customer", [CustomerController::class, "update"])->name('customer.update');
 Route::post("/delete-customer", [CustomerController::class, "destroy"])->name('customer.destroy');
+Route::post("/get-mobile", [CustomerController::class, "mobileCheck"])->name('customer.mobilecheck');
 //product route
 Route::get("/product", [ProductController::class, "create"])->name('product.create');
 Route::get("/get-product", [ProductController::class, "index"])->name('product.index');
@@ -91,3 +93,10 @@ Route::post("/get-order", [OrderController::class, "index"])->name('order.index'
 Route::post("/order", [OrderController::class, "store"])->name('order.store');
 Route::post("/update-order", [OrderController::class, "update"])->name('order.update');
 Route::post("/delete-order", [OrderController::class, "destroy"])->name('order.destroy');
+
+//expense route
+Route::get("/expense", [ExpenseController::class, "create"])->name('expense.create');
+Route::get("/get-expense", [ExpenseController::class, "index"])->name('expense.index');
+Route::post("/expense", [ExpenseController::class, "store"])->name('expense.store');
+Route::post("/update-expense", [ExpenseController::class, "update"])->name('expense.update');
+Route::post("/delete-expense", [ExpenseController::class, "destroy"])->name('expense.destroy');

@@ -67,9 +67,8 @@ class OrderController extends Controller
     {
         try {
             DB::beginTransaction();
-
-            $customer_check = Customer::where('phone', $request->order['customer_mobile'])->first();
-            if (empty($customer_check)) {
+            
+            if (empty($request->customer)) {
                 $customer                = new Customer();
                 $customer->customer_code = $this->generateCode('Customer', 'C');
                 $customer->name          = $request->order['customer_name'];
@@ -77,7 +76,7 @@ class OrderController extends Controller
                 $customer->save();
                 $customerId = $customer->id;
             } else {
-                $customerId = $customer_check->id;
+                $customerId = $request->customer['id'];
             }
 
             $data                  = new Order();
@@ -158,8 +157,7 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
 
-            $customer_check = Customer::where('phone', $request->order['customer_mobile'])->first();
-            if (empty($customer_check)) {
+            if (empty($request->customer)) {
                 $customer                = new Customer();
                 $customer->customer_code = $this->generateCode('Customer', 'C');
                 $customer->name          = $request->order['customer_name'];
@@ -167,7 +165,7 @@ class OrderController extends Controller
                 $customer->save();
                 $customerId = $customer->id;
             } else {
-                $customerId = $customer_check->id;
+                $customerId = $request->customer['id'];
             }
 
             $data                  = Order::find($request->order['id']);

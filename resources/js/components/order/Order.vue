@@ -29,15 +29,23 @@
                             <div class="col-md-4 mb-2">
                                 <div class="form-group">
                                     <label for="customer_name">কাস্টমার নামঃ</label>
-                                    <input type="text" v-model="order.customer_name" name="customer_name" id="customer_name"
-                                        class="form-control shadow-none" autocomplete="off" />
+                                    <div class="position-relative">
+                                        <input type="text" v-model="order.customer_name" name="customer_name"
+                                            id="customer_name" class="form-control shadow-none" autocomplete="off" />
+                                        <ul class="position-absolute p-0 m-0" style="list-style:none;width:100%;z-index:9999;">
+                                            <li @click="CustomerName(item)" style="background: rgb(241 241 241);padding: 3px 5px;border-bottom: 1px solid rgba(255, 0, 0, 0.221);cursor:pointer;font-weight:500;" v-for="(item, index) in customers" :key="index">{{ item.name }}</li>
+                                        </ul>
+
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-2">
                                 <div class="form-group">
                                     <label for="customer_mobile">মোবাইল নংঃ</label>
                                     <input type="text" v-model="order.customer_mobile" name="customer_mobile"
-                                        id="customer_mobile" class="form-control shadow-none" autocomplete="off" />
+                                        id="customer_mobile" class="form-control shadow-none" autocomplete="off"
+                                        @input="mobileCheck" />
+                                        <span id="errorMsg" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-2">
@@ -87,77 +95,77 @@
                             <div class="form-group">
                                 <label for="long">লম্বাঃ</label>
                                 <input type="text" v-model="jama.long" name="long" id="long"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="body">বডিঃ</label>
                                 <input type="text" v-model="jama.body" name="body" id="body"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="tira">তিরাঃ</label>
                                 <input type="text" v-model="jama.tira" name="tira" id="tira"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="hata">হাতাঃ</label>
                                 <input type="text" v-model="jama.hata" name="hata" id="hata"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="mohori">মোহরীঃ</label>
                                 <input type="text" v-model="jama.mohori" name="mohori" id="mohori"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="gola">গলাঃ</label>
                                 <input type="text" v-model="jama.gola" name="gola" id="gola"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="gher">ঘেরঃ</label>
                                 <input type="text" v-model="jama.gher" name="gher" id="gher"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="plate">প্লেটঃ</label>
                                 <input type="text" v-model="jama.plate" name="plate" id="plate"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="mora">মোড়াঃ</label>
                                 <input type="text" v-model="jama.mora" name="mora" id="mora"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="ghari">ঘাড়ী</label>
                                 <input type="text" v-model="jama.ghari" name="ghari" id="ghari"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="peter_map">পেটের মাপঃ</label>
                                 <input type="text" v-model="jama.peter_map" name="peter_map" id="peter_map"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                     </div>
@@ -166,35 +174,35 @@
                             <div class="form-group">
                                 <label for="long">লম্বাঃ</label>
                                 <input type="text" v-model="payjama.long" name="long" id="long"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="komor">কোমরঃ</label>
                                 <input type="text" v-model="payjama.komor" name="komor" id="komor"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="mohori">মোহরীঃ</label>
                                 <input type="text" v-model="payjama.mohori" name="mohori" id="mohori"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="high">হাইঃ</label>
                                 <input type="text" v-model="payjama.high" name="high" id="high"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="ran">রানঃ</label>
                                 <input type="text" v-model="payjama.ran" name="ran" id="ran"
-                                    class="form-control shadow-none" autocomplete="off"/>
+                                    class="form-control shadow-none" autocomplete="off" />
                             </div>
                         </div>
                         <div class="col-md-12 mt-2">
@@ -309,7 +317,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in carts">
+                            <tr v-for="(item, index) in carts" :key="index">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ item.product_name }}</td>
                                 <td>{{ item.quantity }}</td>
@@ -421,6 +429,9 @@ export default {
             category: 1,
 
             carts: [],
+
+            customers: [],
+            customer: "",
         }
     },
 
@@ -543,22 +554,26 @@ export default {
             if (this.order.customer_mobile == '') {
                 alert("Customer mobile required");
                 return
+            } else if (this.order.customer_mobile.length != 11) {
+                alert("Customer number must be 11 digit");
+                return;
             }
             let data = {
                 order: this.order,
-                carts: this.carts
+                carts: this.carts,
+                customer: this.customer
             }
             let url;
             if (this.id != '') {
                 url = '/update-order'
-            }else{
+            } else {
                 url = '/order'
             }
             axios.post(url, data)
                 .then(res => {
                     this.$moshaToast(res.data.msg);
                     this.clearOrder();
-                    if(this.id != ''){
+                    if (this.id != '') {
                         setTimeout(() => {
                             location.href = '/order'
                         }, 1000)
@@ -590,7 +605,7 @@ export default {
         getOrder() {
             let data = { fromOrder: 'yes' }
             if (this.id != '') {
-                data = {id: this.id}
+                data = { id: this.id }
             }
             axios.post('/get-order', data)
                 .then(res => {
@@ -613,7 +628,9 @@ export default {
                             tailor_slip_one: order.tailor_slip_one,
                             tailor_slip_two: order.tailor_slip_two,
                         }
-                        
+
+                        this.customer = {id: order.customer_id}
+
                         orderItem.forEach(item => {
                             let cart = {
                                 category_id: item.product.category_id,
@@ -629,12 +646,36 @@ export default {
 
                             this.carts.push(cart)
                         })
-                    }else{
+                    } else {
                         this.order.order_code = res.data.orderCode;
                     }
 
 
                 })
+        },
+
+        mobileCheck(event) {
+            var phoneno = "(?:\\+88|88)?(01[3-9]\\d{8})";
+            this.customer = '';
+            if (this.order.customer_mobile.match(phoneno) && this.order.customer_mobile.length == 11) {
+                this.order.customer_name = "";
+                document.querySelector('#errorMsg').innerHTML = '';
+                document.querySelector('#customer_mobile').style = 'border-color:green;';
+                axios.post('/get-mobile', { 'phone': this.order.customer_mobile }).then(res => {
+                    this.customers = res.data;
+                })
+            } else {
+                this.order.customer_name = "";
+                document.querySelector('#customer_mobile').style = 'border-color:red;';
+                document.querySelector('#errorMsg').innerHTML = 'Not Valid Number';
+                this.customers = [];
+            }
+        },
+
+        CustomerName(item){
+            this.order.customer_name = item.name;
+            this.customer = item;
+            this.customers = [];
         },
     },
 }

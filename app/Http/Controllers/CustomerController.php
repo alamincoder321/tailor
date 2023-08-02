@@ -105,4 +105,11 @@ class CustomerController extends Controller
             return response()->json(['status' => false, 'msg' => $th->getMessage()]);
         }
     }
+
+
+    // extra method
+    public function mobileCheck(Request $request)
+    {
+        return Customer::where('phone', $request->phone)->get();
+    }
 }

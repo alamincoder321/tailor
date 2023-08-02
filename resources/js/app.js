@@ -33,6 +33,7 @@ import EmployeeManage from './components/employee/Manage.vue';
 import Tailor from './components/tailor/Tailor.vue';
 import Order from './components/order/Order.vue';
 import OrderManage from './components/order/Manage.vue';
+import Expense from './components/expense/Expense.vue';
 app.component('dashboard', Dashboard);
 app.component('setting', Setting);
 app.component('role', Role);
@@ -47,6 +48,7 @@ app.component('tailor', Tailor);
 app.component('employee-manage', EmployeeManage);
 app.component('order', Order);
 app.component('order-manage', OrderManage);
+app.component('expense', Expense);
 
 
 app.mount('#layoutSidenav');
