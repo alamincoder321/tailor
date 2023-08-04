@@ -110,7 +110,7 @@ export default {
     props: ['id'],
     data() {
         return {
-            company: [],
+            company: {},
             order: {},
             orderItem: [],
         }
@@ -215,7 +215,7 @@ export default {
                     </html>
                 `);
             myWindow.focus();
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 1000));
             myWindow.print();
             myWindow.close();
         },
