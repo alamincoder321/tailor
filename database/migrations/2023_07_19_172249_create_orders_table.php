@@ -25,6 +25,7 @@ return new class extends Migration
             $table->decimal("due");
             $table->string("tailor_slip_one")->nullable();
             $table->string("tailor_slip_two")->nullable();
+            $table->string("addby");
             $table->timestamps();
             $table->softDeletes();
         });

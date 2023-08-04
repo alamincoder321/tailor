@@ -85,8 +85,9 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="quantity">কোয়ান্টিটিঃ</label>
-                                <input type="number" min="0" v-model="selectProduct.quantity" @input="productTotal"
+                                <input v-if="selectProduct != null" type="number" min="0" v-model="selectProduct.quantity" @input="productTotal"
                                     name="quantity" id="quantity" class="form-control shadow-none" autocomplete="off">
+                                <input v-else type="number" min="0" name="quantity" id="quantity" class="form-control shadow-none" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -375,7 +376,6 @@
 
 <script>
 import moment from 'moment';
-import Swal from 'sweetalert2'
 
 export default {
     props: ['id'],
@@ -384,7 +384,7 @@ export default {
             order: {
                 id: '',
                 order_code: '',
-                orderDate: '',
+                orderDate: moment().format('YYYY-MM-DD'),
                 deliveryDate: '',
                 customer_name: '',
                 customer_mobile: '',
@@ -449,11 +449,11 @@ export default {
         getProduct(catId) {
             axios.get('/get-product').then(res => {
                 this.products = res.data.products.filter(p => p.category_id == catId);
-                this.products.unshift({ id: '', name: '---প্রডাক্ট নাম বাছাই করুন---' });
             })
         },
 
         onChangeCategory(catId) {
+            this.selectProduct = '';
             this.getProduct(catId);
         },
 
@@ -587,7 +587,7 @@ export default {
             this.order = {
                 id: '',
                 order_code: '',
-                orderDate: '',
+                orderDate: moment().format('YYYY-MM-DD'),
                 deliveryDate: '',
                 customer_name: '',
                 customer_mobile: '',
@@ -639,7 +639,7 @@ export default {
                                 quantity: item.quantity,
                                 retail_price: item.retail_price,
                                 tailor_price: item.tailor_price,
-                                total: item.quantity * item.retail_price,
+                                total: item.total,
                                 payjama: item.product.category_id == 1 ? item.payjama : '',
                                 jama: item.product.category_id == 2 ? item.jama : '',
                             }

@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payjama;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -44,7 +45,8 @@ class OrderController extends Controller
                             om.*,
                             c.name,
                             c.customer_code,
-                            c.phone
+                            c.phone,
+                            c.address
                         FROM orders om
                         LEFT JOIN customers c ON c.id = om.customer_id
                         WHERE om.deleted_at IS NULL $clauses");
@@ -61,6 +63,11 @@ class OrderController extends Controller
     public function create($id = null)
     {
         return view("pages.order.create", compact('id'));
+    }
+
+    public function invoice($id = null)
+    {
+        return view("pages.order.invoice", compact('id'));
     }
 
     public function store(Request $request)
@@ -92,6 +99,7 @@ class OrderController extends Controller
             $data->due             = $request->order['due'];
             $data->tailor_slip_one = $request->order['tailor_slip_one'];
             $data->tailor_slip_two = $request->order['tailor_slip_two'];
+            $data->addby           = Auth::user()->name;
             $data->save();
 
             foreach ($request->carts as $item) {
@@ -136,6 +144,7 @@ class OrderController extends Controller
                 $orderitem->quantity     = $item['quantity'];
                 $orderitem->retail_price = $item['retail_price'];
                 $orderitem->tailor_price = $item['tailor_price'];
+                $orderitem->total        = $item['total'];
                 $orderitem->jama_id      = isset($jamaId) ? $jamaId : null;
                 $orderitem->payjama_id   = isset($payjamaId) ? $payjamaId : null;
                 $orderitem->save();
@@ -181,6 +190,7 @@ class OrderController extends Controller
             $data->due             = $request->order['due'];
             $data->tailor_slip_one = $request->order['tailor_slip_one'];
             $data->tailor_slip_two = $request->order['tailor_slip_two'];
+            $data->addby           = Auth::user()->name;
             $data->save();
 
             $oldItem = OrderItem::where('order_id', $data->id)->get();
@@ -235,6 +245,7 @@ class OrderController extends Controller
                 $orderitem->quantity     = $item['quantity'];
                 $orderitem->retail_price = $item['retail_price'];
                 $orderitem->tailor_price = $item['tailor_price'];
+                $orderitem->total        = $item['total'];
                 $orderitem->jama_id      = isset($jamaId) ? $jamaId : null;
                 $orderitem->payjama_id   = isset($payjamaId) ? $payjamaId : null;
                 $orderitem->save();

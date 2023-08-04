@@ -1,7 +1,11 @@
 @extends('layouts.master')
 
-@section("title", "Product Sales")
-@section("bread_crum", "Product Sales")
+@section("title")
+{{ $id == null ? 'Product Sales' : 'Product Sales Update' }}
+@endsection
+@section("bread_crum")
+{{ $id == null ? 'Product Sales' : 'Product Sales Update' }}
+@endsection
 @section("content")
 <order id="{{$id}}"></order>
 @endsection

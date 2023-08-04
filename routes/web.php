@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ClothingController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeController;
@@ -93,6 +94,7 @@ Route::post("/get-order", [OrderController::class, "index"])->name('order.index'
 Route::post("/order", [OrderController::class, "store"])->name('order.store');
 Route::post("/update-order", [OrderController::class, "update"])->name('order.update');
 Route::post("/delete-order", [OrderController::class, "destroy"])->name('order.destroy');
+Route::get("/order-invoice/{id?}", [OrderController::class, "invoice"])->name('order.invoice');
 
 //expense route
 Route::get("/expense", [ExpenseController::class, "create"])->name('expense.create');
@@ -100,3 +102,11 @@ Route::get("/get-expense", [ExpenseController::class, "index"])->name('expense.i
 Route::post("/expense", [ExpenseController::class, "store"])->name('expense.store');
 Route::post("/update-expense", [ExpenseController::class, "update"])->name('expense.update');
 Route::post("/delete-expense", [ExpenseController::class, "destroy"])->name('expense.destroy');
+
+//clothing route
+Route::get("/clothing/{id?}", [ClothingController::class, "create"])->name('clothing.create');
+Route::get("/manage-clothing", [ClothingController::class, "manage"])->name('clothing.manage');
+Route::post("/get-clothing", [ClothingController::class, "index"])->name('clothing.index');
+Route::post("/clothing", [ClothingController::class, "store"])->name('clothing.store');
+Route::post("/update-clothing", [ClothingController::class, "update"])->name('clothing.update');
+Route::post("/delete-clothing", [ClothingController::class, "destroy"])->name('clothing.destroy');
