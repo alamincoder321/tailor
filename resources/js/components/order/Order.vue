@@ -539,6 +539,10 @@ export default {
         },
 
         saveOrder() {
+            if (this.carts.length == 0) {
+                alert("Cart is empty");
+                return
+            }
             if (this.order.orderDate == '') {
                 alert("Order date required");
                 return

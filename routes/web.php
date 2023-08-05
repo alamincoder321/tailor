@@ -7,6 +7,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClothingController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomerPaymentController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
@@ -80,6 +81,7 @@ Route::post("/customer", [CustomerController::class, "store"])->name('customer.s
 Route::post("/update-customer", [CustomerController::class, "update"])->name('customer.update');
 Route::post("/delete-customer", [CustomerController::class, "destroy"])->name('customer.destroy');
 Route::post("/get-mobile", [CustomerController::class, "mobileCheck"])->name('customer.mobilecheck');
+Route::post("/get-customer-due", [CustomerController::class, "customerDue"])->name('customer.customerdue');
 //product route
 Route::get("/product", [ProductController::class, "create"])->name('product.create');
 Route::get("/get-product", [ProductController::class, "index"])->name('product.index');
@@ -110,3 +112,10 @@ Route::post("/get-clothing", [ClothingController::class, "index"])->name('clothi
 Route::post("/clothing", [ClothingController::class, "store"])->name('clothing.store');
 Route::post("/update-clothing", [ClothingController::class, "update"])->name('clothing.update');
 Route::post("/delete-clothing", [ClothingController::class, "destroy"])->name('clothing.destroy');
+
+//customerpayment route
+Route::get("/customerpayment", [CustomerPaymentController::class, "create"])->name('customerpayment.create');
+Route::get("/get-customerpayment", [CustomerPaymentController::class, "index"])->name('customerpayment.index');
+Route::post("/customerpayment", [CustomerPaymentController::class, "store"])->name('customerpayment.store');
+Route::post("/update-customerpayment", [CustomerPaymentController::class, "update"])->name('customerpayment.update');
+Route::post("/delete-customerpayment", [CustomerPaymentController::class, "destroy"])->name('customerpayment.destroy');

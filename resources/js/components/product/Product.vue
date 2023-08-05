@@ -53,7 +53,7 @@
                                                 item.name }}
                                             </option>
                                         </select>
-                                        <a href="/designation" style="padding:3px 5px;" class="btn btn-danger"
+                                        <a href="/tailor" style="padding:3px 5px;" class="btn btn-danger"
                                             target="_blank"><i class="fa fa-plus text-white"></i></a>
                                     </div>
                                 </div>

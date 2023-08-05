@@ -1,7 +1,7 @@
 <template>
-    <div style="width:80%;margin:auto;">
+    <div style="width:100%;margin:auto;">
         <div class="container text-end">
-            <button class="btn btn-warning btn-sm text-white shadow-none px-4 mb-3" @click="PrintInvoice"><i class="bi bi-printer"></i> Print</button>
+            <button style="font-size: 16px;;" class="btn btn-warning btn-sm text-white shadow-none px-3 mb-2" @click="PrintInvoice"><i class="bi bi-printer"></i> Print</button>
         </div>
         <div class="container" id="invoice">
             <div class="row">
@@ -156,6 +156,7 @@ export default {
                                 img {
                                     width: 100px;
                                     height: 100px;
+                                    padding: 1px;
                                     border: 1px solid #c9c9c9;
                                 }
     
@@ -165,8 +166,9 @@ export default {
     
                                 @media print {
                                     img {
-                                        width: 100px;
+                                        width: 105px;
                                         height: 100px;
+                                        padding: 1px;
                                         border: 1px solid #c9c9c9;
                                     }
     

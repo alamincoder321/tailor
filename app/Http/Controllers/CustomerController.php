@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Customer;
+use App\Models\ModelTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -111,5 +112,10 @@ class CustomerController extends Controller
     public function mobileCheck(Request $request)
     {
         return Customer::where('phone', $request->phone)->get();
+    }
+
+    public function customerDue(Request $request)
+    {
+        return ModelTable::customerDue($request->id);
     }
 }
