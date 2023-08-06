@@ -19,11 +19,11 @@
             <i class="fa-light fa-circle-plus text-black text-2xl"></i>
             <span class="text-xs">অ্যাড অর্ডার</span>
         </a>
-        <a class="nav-link d-flex flex-column align-items-center" href="{{url('/order')}}">
+        <a class="nav-link d-flex flex-column align-items-center" href="/customerpayment">
             <i class="fa-light fa-money-bill text-black text-2xl"></i>
             <span class="text-xs">ক্যাশ রিসিভ</span>
         </a>
-        <a class="nav-link d-flex flex-column align-items-center" href="{{url('/order')}}">
+        <a class="nav-link d-flex flex-column align-items-center" href="">
             <i class="fa-light fa-clipboard-user text-black text-2xl"></i>
             <span class="text-xs">অ্যাটেনডেন্স</span>
         </a>

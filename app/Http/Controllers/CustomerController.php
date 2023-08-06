@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Customer;
 use App\Models\ModelTable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -63,14 +64,6 @@ class CustomerController extends Controller
 
     public function update(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'image'        => 'nullable|mimes:jpg,png,gif',
-        // ]);
-
-        // if ($validator->fails()) {
-        //     return response()->json(['status' => false, 'msg' => 'validation error', 'errors' => $validator->errors()]);
-        // }
-
         try {
 
             $data             = Customer::find($request->id);
@@ -117,5 +110,57 @@ class CustomerController extends Controller
     public function customerDue(Request $request)
     {
         return ModelTable::customerDue($request->id);
+    }
+
+    public function customerLedger()
+    {
+        return view('pages.customer.ledger');
+    }
+
+    // ledger
+    public function getcustomerLedger(Request $request)
+    {
+        $cusDue = DB::select("SELECT c.previous_due AS previousDue FROM customers c WHERE c.id = '$request->id'");
+
+        $result = DB::select("SELECT
+                        'a' AS sequence,
+                        (om.created_at) AS date,
+                        concat('Order Invoice: ',om.order_code) AS description,
+                        om.total AS billAmount,
+                        om.advance AS paidAmount,
+                        om.due AS dueAmount
+                        FROM orders om
+                        WHERE om.customer_id = '$request->id'
+                        
+                    UNION
+                        SELECT
+                        'b' AS sequence,
+                        cp.date AS date,
+                        'Customer Payment' AS description,
+                        0.00 AS billAmount,
+                        cp.amount AS paidAmount,
+                        0.00 AS dueAmount
+                        FROM customer_payments cp
+                        WHERE cp.customer_id = '$request->id'
+                        ORDER BY date, sequence ASC");
+
+        $ledger = array_map(function ($key, $row) use ($result) {
+            $row->due = $key == 0 ? $row->billAmount - $row->paidAmount : ($result[$key - 1]->due + ($row->billAmount - $row->paidAmount));
+            return $row;
+        }, array_keys($result), $result);
+
+        $preDue = $cusDue[0]->previousDue;
+        if (count($ledger) > 0) {
+            foreach($ledger as $val){
+                $val->due += $preDue;
+            }
+        }
+
+        $previousRows = array_filter($ledger, function ($row) use ($request) {
+            return $row->date < $request->dateFrom;
+        });
+        $previousDue = empty($previousRows) ? $preDue : end($previousRows)->due;
+
+        return ["ledger" => $ledger, "previousDue" => $previousDue];
     }
 }

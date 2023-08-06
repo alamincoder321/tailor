@@ -40,6 +40,8 @@
                             <th>Date</th>
                             <th>Tailor Name</th>
                             <th>Total</th>
+                            <th>Paid</th>
+                            <th>Due</th>
                             <th>Note</th>
                             <th>Status</th>
                             <th class="text-center action">Action</th>
@@ -51,6 +53,8 @@
                             <td>{{ item.date }}</td>
                             <td>{{ item.name }}</td>
                             <td>{{ item.total }}</td>
+                            <td>{{ item.paid }}</td>
+                            <td>{{ item.due }}</td>
                             <td>{{ item.note }}</td>
                             <td>
                                 <span class="badge bg-danger" v-if="item.status == 'p'">Pending</span>
@@ -69,6 +73,8 @@
                         <tr>
                             <th colspan="3">Total</th>
                             <th>{{ clothing.reduce((acc, pre) => {return acc + +parseFloat(pre.total)}, 0).toFixed(2) }}</th>
+                            <th>{{ clothing.reduce((acc, pre) => {return acc + +parseFloat(pre.paid)}, 0).toFixed(2) }}</th>
+                            <th>{{ clothing.reduce((acc, pre) => {return acc + +parseFloat(pre.due)}, 0).toFixed(2) }}</th>
                             <th colspan="3"></th>
                         </tr>
                     </tfoot>

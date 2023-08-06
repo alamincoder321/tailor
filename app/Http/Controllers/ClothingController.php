@@ -65,6 +65,8 @@ class ClothingController extends Controller
             $data->tailor_id  = $cloth['tailor_id'];
             $data->date       = $cloth['date'];
             $data->total      = $cloth['total'];
+            $data->paid       = $cloth['paid'];
+            $data->due        = $cloth['due'];
             $data->addby      = Auth::user()->name;
             $data->note       = $cloth['note'];
             $data->created_at = Carbon::now();
@@ -100,6 +102,8 @@ class ClothingController extends Controller
             $data->tailor_id  = $cloth['tailor_id'];
             $data->date       = $cloth['date'];
             $data->total      = $cloth['total'];
+            $data->paid       = $cloth['paid'];
+            $data->due        = $cloth['due'];
             $data->addby      = Auth::user()->name;
             $data->note       = $cloth['note'];
             $data->updated_at = Carbon::now();

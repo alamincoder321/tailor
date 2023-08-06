@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('tailor_id')->constrained('tailors', 'id')->cascadeOnDelete();
             $table->string('date');
             $table->decimal('total');
+            $table->decimal('paid');
+            $table->decimal('due');
             $table->string('addby');
             $table->text('note')->nullable();
             $table->char('status')->default('p');

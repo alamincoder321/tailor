@@ -16,6 +16,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TailorController;
+use App\Http\Controllers\TailorPaymentController;
 use App\Http\Controllers\UserAccessController;
 
 Route::get("/", [LoginController::class, "showLoginForm"]);
@@ -74,6 +75,10 @@ Route::get("/get-tailor", [TailorController::class, "index"])->name('tailor.inde
 Route::post("/tailor", [TailorController::class, "store"])->name('tailor.store');
 Route::post("/update-tailor", [TailorController::class, "update"])->name('tailor.update');
 Route::post("/delete-tailor", [TailorController::class, "destroy"])->name('tailor.destroy');
+Route::post("/get-tailor-due", [TailorController::class, "tailorDue"])->name('tailor.tailordue');
+Route::get("/tailor-ledger", [TailorController::class, "tailorLedger"])->name('tailor.tailorLedger');
+Route::post("/get-tailor-ledger", [TailorController::class, "gettailorLedger"])->name('tailor.gettailorLedger');
+
 //customer route
 Route::get("/customer", [CustomerController::class, "create"])->name('customer.create');
 Route::get("/get-customer", [CustomerController::class, "index"])->name('customer.index');
@@ -82,6 +87,9 @@ Route::post("/update-customer", [CustomerController::class, "update"])->name('cu
 Route::post("/delete-customer", [CustomerController::class, "destroy"])->name('customer.destroy');
 Route::post("/get-mobile", [CustomerController::class, "mobileCheck"])->name('customer.mobilecheck');
 Route::post("/get-customer-due", [CustomerController::class, "customerDue"])->name('customer.customerdue');
+Route::get("/customer-ledger", [CustomerController::class, "customerLedger"])->name('customer.customerLedger');
+Route::post("/get-customer-ledger", [CustomerController::class, "getcustomerLedger"])->name('customer.getcustomerLedger');
+
 //product route
 Route::get("/product", [ProductController::class, "create"])->name('product.create');
 Route::get("/get-product", [ProductController::class, "index"])->name('product.index');
@@ -119,3 +127,10 @@ Route::get("/get-customerpayment", [CustomerPaymentController::class, "index"])-
 Route::post("/customerpayment", [CustomerPaymentController::class, "store"])->name('customerpayment.store');
 Route::post("/update-customerpayment", [CustomerPaymentController::class, "update"])->name('customerpayment.update');
 Route::post("/delete-customerpayment", [CustomerPaymentController::class, "destroy"])->name('customerpayment.destroy');
+
+//tailorpayment route
+Route::get("/tailorpayment", [TailorPaymentController::class, "create"])->name('customerpayment.create');
+Route::get("/get-tailorpayment", [TailorPaymentController::class, "index"])->name('tailorpayment.index');
+Route::post("/tailorpayment", [TailorPaymentController::class, "store"])->name('tailorpayment.store');
+Route::post("/update-tailorpayment", [TailorPaymentController::class, "update"])->name('tailorpayment.update');
+Route::post("/delete-tailorpayment", [TailorPaymentController::class, "destroy"])->name('tailorpayment.destroy');

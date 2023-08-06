@@ -80,6 +80,24 @@
                                 id="total" autocomplete="off" disabled />
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-7 mb-3">
+                            <label for="paid">পেমেন্টঃ</label>
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <input type="number" v-model="clothing.paid" name="paid" class="form-control shadow-none"
+                                id="paid" autocomplete="off" @input="calculateTotal" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-7 mb-3">
+                            <label for="due">বাকি টাকাঃ</label>
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <input type="number" v-model="clothing.due" name="due" class="form-control shadow-none"
+                                id="due" autocomplete="off" disabled />
+                        </div>
+                    </div>
                 </div>
                 <!-- total section end -->
 
@@ -115,7 +133,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="note">ক্লোথিং নোট:</label>
+                                <label for="note">ক্লোথিং নোটঃ</label>
                                 <textarea v-model="clothing.note" class="form-control shadow-none"
                                     name="note" id="note"></textarea>
                             </div>
@@ -153,6 +171,8 @@ export default {
                 date: moment().format('YYYY-MM-DD'),
                 tailor_id: '',
                 total: 0,
+                paid: 0,
+                due: 0,
                 note: '',
             },
             categories: [],
@@ -236,6 +256,7 @@ export default {
             this.clothing.total = this.carts.reduce((acc, pre) => {
                 return acc + +parseFloat(pre.total)
             }, 0).toFixed(2);
+            this.clothing.due = parseFloat(parseFloat(this.clothing.total) - parseFloat(this.clothing.paid)).toFixed(2);
         },
 
         clearData() {
@@ -287,6 +308,8 @@ export default {
                 date: moment().format('YYYY-MM-DD'),
                 tailor_id: '',
                 total: 0,
+                paid: 0,
+                due: 0,
                 note:'',
             }
         },
@@ -298,21 +321,23 @@ export default {
                     let clothing = res.data.clothing[0]
                     let clothingItem = res.data.clothingItem
                     this.clothing = {
-                        id: clothing.id,
-                        date: clothing.date,
+                        id       : clothing.id,
+                        date     : clothing.date,
                         tailor_id: clothing.tailor_id,
-                        total: clothing.total,
-                        note: clothing.note
+                        total    : clothing.total,
+                        paid     : clothing.paid,
+                        due      : clothing.due,
+                        note     : clothing.note
                     }
 
                     clothingItem.forEach(item => {
                         let cart = {
-                            category_id: item.product.category_id,
-                            product_id: item.product_id,
+                            category_id : item.product.category_id,
+                            product_id  : item.product_id,
                             product_name: item.product.name,
-                            quantity: item.quantity,
+                            quantity    : item.quantity,
                             tailor_price: item.tailor_price,
-                            total: item.total,
+                            total       : item.total,
                         }
 
                         this.carts.push(cart)

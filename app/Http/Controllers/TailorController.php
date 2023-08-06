@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tailor;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Tailor;
+use App\Models\ModelTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -151,4 +152,64 @@ class TailorController extends Controller
             return response()->json(['status' => false, 'msg' => $th->getMessage()]);
         }
     }
+
+    // extra method
+
+    public function tailorDue(Request $request)
+    {
+        return ModelTable::tailorDue($request->id);
+    }
+
+    // ledger
+    public function tailorLedger()
+    {
+        return view('pages.tailor.ledger');
+    }
+
+    public function gettailorLedger(Request $request)
+    {
+        $cusDue = DB::select("SELECT 0 AS previousDue FROM tailors t WHERE t.id = '$request->id'");
+
+        $result = DB::select("SELECT
+                        'a' AS sequence,
+                        ct.date AS date,
+                        concat('Tailor Clothing Add') AS description,
+                        ct.total AS billAmount,
+                        ct.paid AS paidAmount,
+                        ct.due AS dueAmount
+                        FROM clothing ct
+                        WHERE ct.tailor_id = '$request->id'
+                        
+                    UNION
+                        SELECT
+                        'b' AS sequence,
+                        tp.date AS date,
+                        'Tailor Payment' AS description,
+                        0.00 AS billAmount,
+                        tp.amount AS paidAmount,
+                        0.00 AS dueAmount
+                        FROM tailor_payments tp
+                        WHERE tp.tailor_id = '$request->id'
+                        ORDER BY date, sequence ASC");
+
+        $ledger = array_map(function ($key, $row) use ($result) {
+            $row->due = $key == 0 ? $row->billAmount - $row->paidAmount : ($result[$key - 1]->due + ($row->billAmount - $row->paidAmount));
+            return $row;
+        }, array_keys($result), $result);
+
+        $preDue = $cusDue[0]->previousDue;
+        if (count($ledger) > 0) {
+            foreach($ledger as $val){
+                $val->due += $preDue;
+            }
+        }
+
+        $previousRows = array_filter($ledger, function ($row) use ($request) {
+            return $row->date < $request->dateFrom;
+        });
+        $previousDue = empty($previousRows) ? $preDue : end($previousRows)->due;
+
+        return ["ledger" => $ledger, "previousDue" => $previousDue];
+    }
+    
 }
