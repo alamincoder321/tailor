@@ -153,8 +153,8 @@ class OrderController extends Controller
                 $orderitem->retail_price = $item['retail_price'];
                 $orderitem->tailor_price = $item['tailor_price'];
                 $orderitem->total        = $item['total'];
-                $orderitem->jama_id      = $jamaId != '' ? $jamaId : 0;
-                $orderitem->payjama_id   = $payjamaId != '' ? $payjamaId : 0;
+                $orderitem->jama_id      = $jamaId != 0 ? $jamaId : 0;
+                $orderitem->payjama_id   = $payjamaId != 0 ? $payjamaId : 0;
                 $orderitem->save();
 
                 $jamaId = 0;
@@ -261,8 +261,8 @@ class OrderController extends Controller
                 $orderitem->retail_price = $item['retail_price'];
                 $orderitem->tailor_price = $item['tailor_price'];
                 $orderitem->total        = $item['total'];
-                $orderitem->jama_id      = isset($jamaId) ? $jamaId : 0;
-                $orderitem->payjama_id   = isset($payjamaId) ? $payjamaId : 0;
+                $orderitem->jama_id      = $jamaId !=0 ? $jamaId : 0;
+                $orderitem->payjama_id   = $payjamaId !=0 ? $payjamaId : 0;
                 $orderitem->save();
 
                 $jamaId = 0;
