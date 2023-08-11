@@ -124,7 +124,7 @@ class CustomerController extends Controller
 
         $result = DB::select("SELECT
                         'a' AS sequence,
-                        (om.created_at) AS date,
+                        date(om.created_at) AS date,
                         concat('Order Invoice: ',om.order_code) AS description,
                         om.total AS billAmount,
                         om.advance AS paidAmount,

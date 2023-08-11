@@ -34,22 +34,27 @@ class OrderController extends Controller
         if (isset($request->customerId) && $request->customerId != '') {
             $clauses .= " AND om.customer_id = '$request->customerId'";
         }
+
         if (isset($request->id) && $request->id != '') {
             $clauses .= " AND om.id = '$request->id'";
-
-            $orderDetails = OrderItem::with('jama', 'payjama', 'product')->where('order_id', $request->id)->get();
-            $res['orderItem'] = $orderDetails;
         }
 
         $orders = DB::select("SELECT
-                            om.*,
-                            c.name,
-                            c.customer_code,
-                            c.phone,
-                            c.address
-                        FROM orders om
-                        LEFT JOIN customers c ON c.id = om.customer_id
-                        WHERE om.deleted_at IS NULL $clauses");
+                        om.*,
+                        c.name,
+                        c.customer_code,
+                        c.phone,
+                        c.address
+                    FROM orders om
+                    LEFT JOIN customers c ON c.id = om.customer_id
+                    WHERE om.deleted_at IS NULL $clauses");
+
+        if ((isset($request->id) && $request->id != '') || isset($request->detail) && $request->detail == 'with') {
+            foreach ($orders as $key => $item) {
+                $item->orderItem = OrderItem::with('jama', 'payjama', 'product')->where('order_id', $item->id)->get();
+            }
+        }
+
         $res['orders'] = $orders;
 
         return response()->json($res);
@@ -74,7 +79,7 @@ class OrderController extends Controller
     {
         try {
             DB::beginTransaction();
-            
+
             if (empty($request->customer)) {
                 $customer                = new Customer();
                 $customer->customer_code = $this->generateCode('Customer', 'C');
@@ -151,7 +156,7 @@ class OrderController extends Controller
             }
 
             DB::commit();
-            return response()->json(['status' => true, 'msg' => "অর্ডার যুক্ত করা হয়েছে।"]);
+            return response()->json(['status' => true, 'msg' => "অর্ডার যুক্ত করা হয়েছে।", 'id' => $data->id]);
         } catch (\Throwable $e) {
             DB::rollBack();
             return response()->json([
@@ -165,6 +170,7 @@ class OrderController extends Controller
     {
         try {
             DB::beginTransaction();
+
 
             if (empty($request->customer)) {
                 $customer                = new Customer();
@@ -196,10 +202,10 @@ class OrderController extends Controller
             $oldItem = OrderItem::where('order_id', $data->id)->get();
             foreach ($oldItem as $item) {
                 if (!empty($item->jama_id)) {
-                    Jama::where('id', $item->jama_id)->first()->delete();
+                    Jama::find($item->jama_id)->delete();
                 }
                 if (!empty($item->payjama_id)) {
-                    Payjama::where('id', $item->payjama_id)->first()->delete();
+                    Payjama::find($item->payjama_id)->delete();
                 }
                 OrderItem::where('id', $item->id)->first()->forceDelete();
             }
@@ -252,7 +258,7 @@ class OrderController extends Controller
             }
 
             DB::commit();
-            return response()->json(['status' => true, 'msg' => "অর্ডার আপডেট করা হয়েছে।"]);
+            return response()->json(['status' => true, 'msg' => "অর্ডার আপডেট করা হয়েছে।", 'id' => $data->id]);
         } catch (\Throwable $e) {
             DB::rollBack();
             return response()->json([

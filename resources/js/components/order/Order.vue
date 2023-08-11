@@ -32,8 +32,11 @@
                                     <div class="position-relative">
                                         <input type="text" v-model="order.customer_name" name="customer_name"
                                             id="customer_name" class="form-control shadow-none" autocomplete="off" />
-                                        <ul class="position-absolute p-0 m-0" style="list-style:none;width:100%;z-index:9999;">
-                                            <li @click="CustomerName(item)" style="background: rgb(241 241 241);padding: 3px 5px;border-bottom: 1px solid rgba(255, 0, 0, 0.221);cursor:pointer;font-weight:500;" v-for="(item, index) in customers" :key="index">{{ item.name }}</li>
+                                        <ul class="position-absolute p-0 m-0"
+                                            style="list-style:none;width:100%;z-index:9999;">
+                                            <li @click="CustomerName(item)"
+                                                style="background: rgb(241 241 241);padding: 3px 5px;border-bottom: 1px solid rgba(255, 0, 0, 0.221);cursor:pointer;font-weight:500;"
+                                                v-for="(item, index) in customers" :key="index">{{ item.name }}</li>
                                         </ul>
 
                                     </div>
@@ -45,7 +48,7 @@
                                     <input type="text" v-model="order.customer_mobile" name="customer_mobile"
                                         id="customer_mobile" class="form-control shadow-none" autocomplete="off"
                                         @input="mobileCheck" />
-                                        <span id="errorMsg" class="text-danger"></span>
+                                    <span id="errorMsg" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-2">
@@ -85,9 +88,11 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="quantity">কোয়ান্টিটিঃ</label>
-                                <input v-if="selectProduct != null" type="number" min="0" v-model="selectProduct.quantity" @input="productTotal"
-                                    name="quantity" id="quantity" class="form-control shadow-none" autocomplete="off">
-                                <input v-else type="number" min="0" name="quantity" id="quantity" class="form-control shadow-none" autocomplete="off">
+                                <input v-if="selectProduct != null" type="number" min="0" v-model="selectProduct.quantity"
+                                    @input="productTotal" name="quantity" id="quantity" class="form-control shadow-none"
+                                    autocomplete="off">
+                                <input v-else type="number" min="0" name="quantity" id="quantity"
+                                    class="form-control shadow-none" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -325,6 +330,8 @@
                                 <td>{{ item.retail_price }}</td>
                                 <td>{{ item.total }}</td>
                                 <td>
+                                    <i style="font-size: 15px;cursor: pointer;" @click="editCart(index)"
+                                        class="text-primary fa fa-edit me-2"></i>
                                     <i style="font-size: 15px;cursor: pointer;" @click="removeCart(index)"
                                         class="text-danger fa fa-trash"></i>
                                 </td>
@@ -354,17 +361,11 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-end">
-                            <button @click="saveOrder" type="button" class="btn btn-silver shadow-none px-3 me-2 mt-4">
-                                Save
+                            <button @click="saveOrder" type="button" class="btn btn-silver shadow-none px-5 me-2 mt-4">
+                                Confirm Order
                             </button>
-                            <button type="button" class="btn btn-silver shadow-none px-3 me-2 mt-4">
-                                Update
-                            </button>
-                            <button type="button" class="btn btn-silver shadow-none px-3 me-2 mt-4">
-                                Delete
-                            </button>
-                            <button type="button" class="btn btn-silver shadow-none px-3 me-2 mt-4">
-                                Close
+                            <button type="button" @click="clearOrder" class="btn btn-silver shadow-none px-3 me-2 mt-4">
+                                Reset
                             </button>
                         </div>
                     </div>
@@ -435,9 +436,10 @@ export default {
         }
     },
 
-    created() {
+    async created() {
         this.getCategory();
         this.getOrder();
+        await this.getProduct(this.category)
     },
 
     methods: {
@@ -446,8 +448,8 @@ export default {
                 this.categories = res.data;
             })
         },
-        getProduct(catId) {
-            axios.get('/get-product').then(res => {
+        async getProduct(catId) {
+            await axios.get('/get-product').then(res => {
                 this.products = res.data.products.filter(p => p.category_id == catId);
             })
         },
@@ -482,7 +484,7 @@ export default {
                 payjama: this.category == 1 ? this.payjama : '',
                 jama: this.category == 2 ? this.jama : '',
             }
-            let cartIndex = this.carts.findIndex(p => cart.product_id == this.selectProduct.id);
+            let cartIndex = this.carts.findIndex(p => p.product_id == cart.product_id);
             if (cartIndex >= 0) {
                 this.carts.splice(cartIndex, 1);
             }
@@ -506,6 +508,47 @@ export default {
             }, 0).toFixed(2);
             this.order.total = parseFloat(this.order.subtotal - this.order.discount).toFixed(2);
             this.order.due = parseFloat(this.order.total - this.order.advance).toFixed(2);
+        },
+
+        editCart(index) {
+            let cart = this.carts[index];
+            this.category = cart.category_id
+            this.selectProduct = {
+                id:cart.product_id,
+                name: cart.product_name,
+                quantity: cart.quantity,
+                retail_price: cart.retail_price,
+                tailor_price: cart.tailor_price
+            }
+            if (this.category == 2) {
+                this.jama = {
+                    long: cart.jama.long,
+                    body: cart.jama.body,
+                    tira: cart.jama.tira,
+                    hata: cart.jama.hata,
+                    mohori: cart.jama.mohori,
+                    gola: cart.jama.gola,
+                    gher: cart.jama.gher,
+                    plate: cart.jama.plate,
+                    mora: cart.jama.mora,
+                    ghari: cart.jama.ghari,
+                    peter_map: cart.jama.peter_map,
+                };
+            } else {
+                this.payjama = {
+                    long: cart.payjama.long,
+                    komor: cart.payjama.komor,
+                    mohori: cart.payjama.mohori,
+                    high: cart.payjama.high,
+                    ran: cart.payjama.ran,
+                    pocket_chain: cart.payjama.pocket_chain,
+                    good_runner: cart.payjama.good_runner,
+                    back_pocket: cart.payjama.back_pocket,
+                    pocket_chain_one: cart.payjama.pocket_chain_one,
+                    fitha: cart.payjama.fitha,
+                    rabar: cart.payjama.rabar,
+                }
+            }
         },
 
         clearData() {
@@ -535,7 +578,8 @@ export default {
                 fitha: 'false',
                 rabar: 'false',
             }
-            this.selectProduct = ''
+            this.selectProduct = '';
+            this.category = 1;
         },
 
         saveOrder() {
@@ -576,12 +620,15 @@ export default {
             axios.post(url, data)
                 .then(res => {
                     this.$moshaToast(res.data.msg);
-                    this.clearOrder();
+                    if(confirm("Are you sure want print")){
+                        window.open(`/order-invoice/${res.data.id}`, '_blank');
+                    }
                     if (this.id != '') {
                         setTimeout(() => {
                             location.href = '/order'
                         }, 1000)
                     }
+                    this.clearOrder();
                     this.getOrder();
                 })
         },
@@ -615,7 +662,7 @@ export default {
                 .then(res => {
                     if (this.id != '') {
                         let order = res.data.orders[0]
-                        let orderItem = res.data.orderItem
+                        let orderItem = order.orderItem
                         this.order = {
                             id: order.id,
                             order_code: order.order_code,
@@ -633,7 +680,7 @@ export default {
                             tailor_slip_two: order.tailor_slip_two,
                         }
 
-                        this.customer = {id: order.customer_id}
+                        this.customer = { id: order.customer_id }
 
                         orderItem.forEach(item => {
                             let cart = {
@@ -676,7 +723,7 @@ export default {
             }
         },
 
-        CustomerName(item){
+        CustomerName(item) {
             this.order.customer_name = item.name;
             this.customer = item;
             this.customers = [];

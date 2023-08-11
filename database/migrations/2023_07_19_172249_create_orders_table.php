@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string("tailor_slip_one")->nullable();
             $table->string("tailor_slip_two")->nullable();
             $table->string("addby");
+            $table->char('status', 5)->default('p');
             $table->timestamps();
             $table->softDeletes();
         });

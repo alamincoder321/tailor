@@ -20,7 +20,7 @@ class ProductController extends Controller
     public function index()
     {
         $product_code = $this->generateCode('Product', 'P');
-        $products = Product::with('tailor', 'category')->latest()->get();
+        $products = Product::with('brand', 'category')->latest()->get();
 
         return response()->json(["products" => $products, "product_code" => $product_code]);
     }
@@ -38,7 +38,6 @@ class ProductController extends Controller
             'tailor_price' => 'required',
             'retail_price' => 'required',
             'discount'     => 'required',
-            'tailor_id'    => 'required',
             'image'        => 'nullable|mimes:jpeg,png,jpg,gif',
         ]);
 
@@ -56,7 +55,7 @@ class ProductController extends Controller
             $data->tailor_price = $request->tailor_price;
             $data->retail_price = $request->retail_price;
             $data->discount     = $request->discount;
-            $data->tailor_id    = $request->tailor_id;
+            $data->brand_id    = $request->brand_id;
             $data->user_id      = Auth::guard('web')->user()->id;
             if ($request->hasFile('image')) {
                 $data->image      = $this->imageUpload($request, 'image', 'uploads/product');
@@ -80,7 +79,6 @@ class ProductController extends Controller
             'tailor_price' => 'required',
             'retail_price' => 'required',
             'discount'     => 'required',
-            'tailor_id'    => 'required',
             'image'        => 'nullable|mimes:jpeg,png,jpg,gif',
         ]);
 
@@ -97,7 +95,7 @@ class ProductController extends Controller
             $data->tailor_price = $request->tailor_price;
             $data->retail_price = $request->retail_price;
             $data->discount     = $request->discount;
-            $data->tailor_id    = $request->tailor_id;
+            $data->brand_id    = $request->brand_id;
             $data->user_id      = Auth::guard('web')->user()->id;
             $data->updated_at   = Carbon::now();
             if ($request->hasFile('image')) {

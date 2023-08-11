@@ -8,11 +8,17 @@
                             <select class="form-control shadow-none" v-model="searchBy">
                                 <option value="">All</option>
                                 <option value="customer">By Customer</option>
-                                <option value="invoice">By Invoice</option>
                             </select>
                         </div>
                         <div class="col-md-3" :class="searchBy == 'customer' ? '' : 'd-none'">
                             <v-select :options="customers" v-model="selectCustomer" label="name" id="customer"></v-select>
+                        </div>
+
+                        <div class="col-md-1 ps-0">
+                            <select class="form-control shadow-none" v-model="detail" @change="DetailChange">
+                                <option value="without">Without Details</option>
+                                <option value="with">With Details</option>
+                            </select>
                         </div>
                         <div class="col-md-2">
                             <input type="date" class="form-control shadow-none" v-model="dateFrom">
@@ -34,7 +40,8 @@
                 <a href="" @click.prevent="print"><i class="fa fa-print"></i></a>
             </div>
             <div class="orderDaTa" :class="orders.length > 0 ? '' : 'd-none'">
-                <table class="table table-striped table-sm">
+                <table class="table table-striped table-sm" v-if="showDetail == false"
+                    :class="showDetail == false ? '' : 'd-none'">
                     <thead class="text-white bg-dark">
                         <tr>
                             <th>Sl</th>
@@ -65,25 +72,110 @@
                             <td>{{ item.due }}</td>
                             <td>{{ item.refer }}</td>
                             <td style="width: 10%;text-align: center;" class="action">
-                                <a :href="`/order-invoice/${item.id}`"><i style="font-size: 18px;" class="fa fa-file"></i></a>
+                                <a :href="`/order-invoice/${item.id}`"><i style="font-size: 18px;"
+                                        class="fa fa-file"></i></a>
                                 <a :href="`/order/${item.id}`"><i style="font-size: 18px;" class="fa fa-edit mx-2"></i></a>
-                                <a href="#" @click.prevent="deleteData(item.id)"><i style="font-size: 18px;" class="fa fa-trash text-danger"></i></a>
+                                <a href="#" @click.prevent="deleteData(item.id)"><i style="font-size: 18px;"
+                                        class="fa fa-trash text-danger"></i></a>
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
                             <th colspan="5">Total</th>
-                            <th>{{ orders.reduce((acc, pre) => {return acc + +parseFloat(pre.subtotal)}, 0).toFixed(2) }}</th>
-                            <th>{{ orders.reduce((acc, pre) => {return acc + +parseFloat(pre.discount)}, 0).toFixed(2) }}</th>
-                            <th>{{ orders.reduce((acc, pre) => {return acc + +parseFloat(pre.total)}, 0).toFixed(2) }}</th>
-                            <th>{{ orders.reduce((acc, pre) => {return acc + +parseFloat(pre.advance)}, 0).toFixed(2) }}</th>
-                            <th>{{ orders.reduce((acc, pre) => {return acc + +parseFloat(pre.due)}, 0).toFixed(2) }}</th>
+                            <th>{{ orders.reduce((acc, pre) => { return acc + +parseFloat(pre.subtotal) }, 0).toFixed(2) }}
+                            </th>
+                            <th>{{ orders.reduce((acc, pre) => { return acc + +parseFloat(pre.discount) }, 0).toFixed(2) }}
+                            </th>
+                            <th>{{ orders.reduce((acc, pre) => { return acc + +parseFloat(pre.total) }, 0).toFixed(2) }}
+                            </th>
+                            <th>{{ orders.reduce((acc, pre) => { return acc + +parseFloat(pre.advance) }, 0).toFixed(2) }}
+                            </th>
+                            <th>{{ orders.reduce((acc, pre) => { return acc + +parseFloat(pre.due) }, 0).toFixed(2) }}</th>
+                            <th colspan="2"></th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <table v-else class="table table-striped table-sm" :class="this.showDetail ? '' : 'd-none'">
+                    <thead class="text-white bg-dark">
+                        <tr>
+                            <th>Sl</th>
+                            <th>Invoice</th>
+                            <th>Order Date</th>
+                            <th>Delivery Date</th>
+                            <th>Customer</th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Qty</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                            <th class="text-center action">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template v-for="(order, index) in orders">
+                            <tr>
+                                <td>{{ index + 1 }}</td>
+                                <td>{{ order.order_code }}</td>
+                                <td>{{ order.orderDate }}</td>
+                                <td>{{ order.deliveryDate }}</td>
+                                <td>{{ order.name }}</td>
+                                <td>{{ order.orderItem[0].product.name }}</td>
+                                <td>{{ order.orderItem[0].product.category.name }}</td>
+                                <td>{{ order.orderItem[0].quantity }}</td>
+                                <td>{{ order.orderItem[0].retail_price }}</td>
+                                <td>{{ order.orderItem[0].total }}</td>
+                                <td style="width: 10%;text-align: center;" class="action">
+                                    <a :href="`/order-invoice/${order.id}`"><i style="font-size: 18px;"
+                                            class="fa fa-file"></i></a>
+                                    <a :href="`/order/${order.id}`"><i style="font-size: 18px;"
+                                            class="fa fa-edit mx-2"></i></a>
+                                    <a href="#" @click.prevent="deleteData(order.id)"><i style="font-size: 18px;"
+                                            class="fa fa-trash text-danger"></i></a>
+                                </td>
+                            </tr>
+                            <tr v-for="(item, sl) in order.orderItem.slice(1)" :key="sl">
+                                <td colspan="5" :rowspan="order.orderItem.length - 1" v-if="sl == 0"></td>
+                                <td>{{ item.product.name }}</td>
+                                <td>{{ item.product.category.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.retail_price }}</td>
+                                <td>{{ item.total }}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="9" style="border-right: 1px solid gray;">
+                                    <strong>Refer:</strong> {{ order.refer }}
+                                </td>
+                                <td colspan="2" class="text-end">
+                                    <strong>SubTotal:</strong> {{ order.subtotal }}<br>
+                                    <strong>Discount:</strong> {{ order.discount }}<br>
+                                    <strong>Total:</strong> {{ order.total }}<br>
+                                    <strong>Advance:</strong> {{ order.advance }}<br>
+                                    <strong>Due</strong> {{ order.due }}
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="5">Total</th>
+                            <th>{{ orders.reduce((acc, pre) => { return acc + +parseFloat(pre.subtotal) }, 0).toFixed(2) }}
+                            </th>
+                            <th>{{ orders.reduce((acc, pre) => { return acc + +parseFloat(pre.discount) }, 0).toFixed(2) }}
+                            </th>
+                            <th>{{ orders.reduce((acc, pre) => { return acc + +parseFloat(pre.total) }, 0).toFixed(2) }}
+                            </th>
+                            <th>{{ orders.reduce((acc, pre) => { return acc + +parseFloat(pre.advance) }, 0).toFixed(2) }}
+                            </th>
+                            <th>{{ orders.reduce((acc, pre) => { return acc + +parseFloat(pre.due) }, 0).toFixed(2) }}</th>
                             <th colspan="2"></th>
                         </tr>
                     </tfoot>
                 </table>
             </div>
+
             <div class="text-center" :class="orders.length == 0 ? '' : 'd-none'">Data Not Found</div>
         </div>
     </div>
@@ -96,18 +188,28 @@ export default {
     data() {
         return {
             searchBy: '',
+            detail: 'without',
             dateFrom: moment().format('YYYY-MM-DD'),
             dateTo: moment().format('YYYY-MM-DD'),
             customers: [],
             selectCustomer: null,
             orders: [],
+            showDetail: false,
         }
     },
-    created(){
+    created() {
         this.getOrder();
         this.getCustomer();
     },
     methods: {
+        DetailChange() {
+            this.orders = [];
+            if (this.detail == 'with') {
+                this.showDetail = true;
+            } else {
+                this.showDetail = false;
+            }
+        },
         getCustomer() {
             axios.get('/get-customer').then(res => {
                 let r = res.data;
@@ -118,7 +220,8 @@ export default {
             let data = {
                 dateFrom: this.dateFrom,
                 dateTo: this.dateTo,
-                customerId: this.searchBy =='customer' ? this.selectCustomer.id : ''
+                detail: this.detail,
+                customerId: this.searchBy == 'customer' ? this.selectCustomer.id : ''
 
             }
             axios.post('/get-order', data).then(res => {
@@ -139,7 +242,7 @@ export default {
             }
         },
 
-        async print(){
+        async print() {
             var myWindow = window.open('', '', `width=${window.screen.width},height=${window.screen.height}`);
             myWindow.document.write(`
                     <!doctype html>
@@ -162,7 +265,7 @@ export default {
                         </head>
                         <body>
                             <div class="container-fluid">
-                                <h3 class="m-0 text-center bg-primary text-white text-uppercase">Order Records ${this.searchBy == 'customer' ? 'of '+this.selectCustomer.name: ''}</h3>
+                                <h3 class="m-0 text-center bg-primary text-white text-uppercase">Order Records ${this.searchBy == 'customer' ? 'of ' + this.selectCustomer.name : ''}</h3>
                                 <div class="row">
                                     <div class="col-12">
                                         ${document.querySelector('.orderDaTa').innerHTML}
@@ -182,23 +285,26 @@ export default {
 </script>
 
 <style>
-#customer #vs1__combobox{
+#customer #vs1__combobox {
     padding: 0;
     height: 32px;
 }
-#customer .vs__search{
+
+#customer .vs__search {
     margin: 0 !important;
 }
-#customer .vs__actions{
+
+#customer .vs__actions {
     padding: 0 2px;
 }
-#customer .vs__clear{
+
+#customer .vs__clear {
     margin: 0;
     padding: 0px 8px !important;
 }
-#customer .vs__selected{
+
+#customer .vs__selected {
     margin: 0 !important;
     padding: 0 !important;
 }
-
 </style>

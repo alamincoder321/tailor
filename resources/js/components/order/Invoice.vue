@@ -129,7 +129,7 @@ export default {
         getOrder() {
             axios.post("/get-order", { id: this.id }).then((res) => {
                 this.order = res.data.orders[0]
-                this.orderItem = res.data.orderItem
+                this.orderItem = res.data.orders[0].orderItem
             });
         },
         formatDate(date) {

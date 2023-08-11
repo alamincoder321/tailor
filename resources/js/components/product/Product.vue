@@ -15,13 +15,18 @@
                             <div class="col-md-12 mb-2">
                                 <div class="form-group">
                                     <label for="category_id">ক্যাটাগরি নাম</label>
-                                    <select name="category_id" v-model="product.category_id" id="category_id"
-                                        class="form-select shadow-none" autocomplete="off">
-                                        <option value="">----ক্যাটাগরি বাছাই করুন----</option>
-                                        <option v-for="(item, index) in categories" :key="index" :value="item.id">{{
-                                            item.name }}</option>
-                                    </select>
+                                    <div class="input-group">
+                                        <select name="category_id" v-model="product.category_id" id="category_id"
+                                            class="form-select shadow-none" autocomplete="off">
+                                            <option value="">----ক্যাটাগরি বাছাই করুন----</option>
+                                            <option v-for="(item, index) in categories" :key="index" :value="item.id">{{
+                                                item.name }}</option>
+                                        </select>
+                                        <a href="/category" style="padding:3px 5px;" class="btn btn-danger"
+                                            target="_blank"><i class="fa fa-plus text-white"></i></a>
+                                    </div>
                                 </div>
+
                             </div>
                             <div class="col-md-12 mb-2">
                                 <div class="form-group">
@@ -33,9 +38,8 @@
                             <div class="col-md-12 mb-2">
                                 <div class="form-group">
                                     <label for="discount">ডিস্কাউন্টঃ</label>
-                                    <input type="number" step="0.01" min="0" name="discount"
-                                        v-model="product.discount" id="discount" class="form-control shadow-none"
-                                        autocomplete="off" />
+                                    <input type="number" step="0.01" min="0" name="discount" v-model="product.discount"
+                                        id="discount" class="form-control shadow-none" autocomplete="off" />
                                 </div>
                             </div>
                         </div>
@@ -44,17 +48,17 @@
                         <div class="row">
                             <div class="col-md-12 mb-2">
                                 <div class="form-group">
-                                    <label for="tailor_id">কারিগরঃ</label>
+                                    <label for="brand_id">ব্র্যান্ডঃ</label>
                                     <div class="input-group">
-                                        <select name="tailor_id" v-model="product.tailor_id" id="tailor_id"
+                                        <select name="brand_id" v-model="product.brand_id" id="brand_id"
                                             class="form-select shadow-none" autocomplete="off">
-                                            <option value="">---কারিগর বাছাই করুন---</option>
-                                            <option v-for="(item, index) in tailors" :key="index" :value="item.id">{{
+                                            <option value="">--- ব্র্যান্ড বাছাই করুন---</option>
+                                            <option v-for="(item, index) in brands" :key="index" :value="item.id">{{
                                                 item.name }}
                                             </option>
                                         </select>
-                                        <a href="/tailor" style="padding:3px 5px;" class="btn btn-danger"
-                                            target="_blank"><i class="fa fa-plus text-white"></i></a>
+                                        <a href="/brand" style="padding:3px 5px;" class="btn btn-danger" target="_blank"><i
+                                                class="fa fa-plus text-white"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +139,7 @@ export default {
                 { label: 'Code', field: 'product_code' },
                 { label: 'Product Name', field: 'name' },
                 { label: 'Category', field: 'category_name' },
-                { label: 'Tailor', field: 'tailor_name' },
+                { label: 'Brand', field: 'brand_name' },
                 { label: 'Discount', field: 'discount' },
                 { label: 'Tailor_Price', field: 'tailor_price' },
                 { label: 'Retail_Price', field: 'retail_price' },
@@ -150,11 +154,11 @@ export default {
                 tailor_price: 0.00,
                 retail_price: 0.00,
                 discount: 0.00,
-                tailor_id: '',
+                brand_id: '',
                 image: '',
             },
             categories: [],
-            tailors: [],
+            brands: [],
 
             products: [],
 
@@ -163,7 +167,7 @@ export default {
     },
     created() {
         this.getCategory();
-        this.getTailor();
+        this.getBrand();
         this.getProduct();
     },
     methods: {
@@ -172,9 +176,9 @@ export default {
                 this.categories = res.data;
             })
         },
-        getTailor() {
-            axios.get('/get-tailor').then(res => {
-                this.tailors = res.data;
+        getBrand() {
+            axios.get('/get-brand').then(res => {
+                this.brands = res.data;
             })
         },
 
@@ -215,12 +219,12 @@ export default {
                 category_id: item.category_id,
                 discount: item.discount,
                 description: item.description,
-                tailor_id: item.tailor_id,
+                brand_id: item.brand_id == null ? '' : item.brand_id,
                 retail_price: item.retail_price,
                 tailor_price: item.tailor_price,
-                image: item.image == null ? "":item.image
+                image: item.image == null ? "" : item.image
             };
-            this.imageSrc = item.image == null ? '/noImage.png':'/'+item.image;
+            this.imageSrc = item.image == null ? '/noImage.png' : '/' + item.image;
         },
 
         deleteData(id) {
@@ -247,7 +251,7 @@ export default {
                 tailor_price: 0.00,
                 retail_price: 0.00,
                 discount: 0.00,
-                tailor_id: '',
+                brand_id: '',
                 image: '',
             };
             this.imageSrc = "/noImage.png"
@@ -273,7 +277,7 @@ export default {
                 let r = res.data;
                 this.products = res.data.products.map(p => {
                     p.category_name = p.category.name
-                    p.tailor_name = p.tailor.name
+                    p.brand_name = p.brand == null ? '' : p.brand.name
                     return p;
                 });
                 this.product.product_code = r.product_code

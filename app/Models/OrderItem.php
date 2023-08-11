@@ -22,7 +22,7 @@ class OrderItem extends Model
     }
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id', 'id')->select('id', 'name', 'category_id');
+        return $this->belongsTo(Product::class, 'product_id', 'id')->select('id', 'name', 'category_id')->with('category');
     }
     
 }

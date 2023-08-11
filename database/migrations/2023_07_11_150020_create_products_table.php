@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string("name");
             $table->text("description")->nullable();
             $table->foreignId("category_id")->constrained('categories', 'id')->cascadeOnDelete();
+            $table->integer("brand_id")->nullable();
             $table->decimal("tailor_price", 18, 2);
             $table->decimal("retail_price", 18, 2);
             $table->decimal("discount", 18, 2);
-            $table->foreignId("tailor_id")->constrained('tailors', 'id')->cascadeOnDelete();
             $table->char("status")->default('a');
             $table->string("image")->nullable();
             $table->integer("user_id");
