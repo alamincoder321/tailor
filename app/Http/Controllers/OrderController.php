@@ -161,7 +161,7 @@ class OrderController extends Controller
             DB::rollBack();
             return response()->json([
                 'status'  => false,
-                'message' => $e->getMessage()
+                'msg' => $e->getMessage()
             ]);
         }
     }
@@ -263,7 +263,7 @@ class OrderController extends Controller
             DB::rollBack();
             return response()->json([
                 'status'  => false,
-                'message' => $e->getMessage()
+                'msg' => $e->getMessage()
             ]);
         }
     }

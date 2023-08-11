@@ -619,17 +619,21 @@ export default {
             }
             axios.post(url, data)
                 .then(res => {
-                    this.$moshaToast(res.data.msg);
-                    if(confirm("Are you sure want print")){
-                        window.open(`/order-invoice/${res.data.id}`, '_blank');
+                    if(res.data.status){
+                        this.$moshaToast(res.data.msg);
+                        if(confirm("Are you sure want print")){
+                            window.open(`/order-invoice/${res.data.id}`, '_blank');
+                        }
+                        if (this.id != '') {
+                            setTimeout(() => {
+                                location.href = '/order'
+                            }, 1000)
+                        }
+                        this.clearOrder();
+                        this.getOrder();
+                    }else{
+                        console.log(res.data.msg)
                     }
-                    if (this.id != '') {
-                        setTimeout(() => {
-                            location.href = '/order'
-                        }, 1000)
-                    }
-                    this.clearOrder();
-                    this.getOrder();
                 })
         },
 
