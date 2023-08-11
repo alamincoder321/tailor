@@ -108,6 +108,9 @@ class OrderController extends Controller
             $data->save();
 
             foreach ($request->carts as $item) {
+                $jamaId = 0;
+                $payjamaId = 0;
+
                 if ($item['category_id'] == 1) {
                     $payjama                   = new Payjama();
                     $payjama->long             = $item['payjama']['long'];
@@ -150,9 +153,12 @@ class OrderController extends Controller
                 $orderitem->retail_price = $item['retail_price'];
                 $orderitem->tailor_price = $item['tailor_price'];
                 $orderitem->total        = $item['total'];
-                $orderitem->jama_id      = isset($jamaId) ? $jamaId : null;
-                $orderitem->payjama_id   = isset($payjamaId) ? $payjamaId : null;
+                $orderitem->jama_id      = $jamaId != '' ? $jamaId : 0;
+                $orderitem->payjama_id   = $payjamaId != '' ? $payjamaId : 0;
                 $orderitem->save();
+
+                $jamaId = 0;
+                $payjamaId = 0;
             }
 
             DB::commit();
@@ -170,7 +176,6 @@ class OrderController extends Controller
     {
         try {
             DB::beginTransaction();
-
 
             if (empty($request->customer)) {
                 $customer                = new Customer();
@@ -201,15 +206,19 @@ class OrderController extends Controller
 
             $oldItem = OrderItem::where('order_id', $data->id)->get();
             foreach ($oldItem as $item) {
-                if (!empty($item->jama_id)) {
+                if ($item->jama_id != 0) {
                     Jama::find($item->jama_id)->delete();
-                }
-                if (!empty($item->payjama_id)) {
+                }else{
                     Payjama::find($item->payjama_id)->delete();
                 }
+
                 OrderItem::where('id', $item->id)->first()->forceDelete();
             }
+
             foreach ($request->carts as $item) {
+                $jamaId = 0;
+                $payjamaId = 0;
+
                 if ($item['category_id'] == 1) {
                     $payjama                   = new Payjama();
                     $payjama->long             = $item['payjama']['long'];
@@ -252,9 +261,12 @@ class OrderController extends Controller
                 $orderitem->retail_price = $item['retail_price'];
                 $orderitem->tailor_price = $item['tailor_price'];
                 $orderitem->total        = $item['total'];
-                $orderitem->jama_id      = isset($jamaId) ? $jamaId : null;
-                $orderitem->payjama_id   = isset($payjamaId) ? $payjamaId : null;
+                $orderitem->jama_id      = isset($jamaId) ? $jamaId : 0;
+                $orderitem->payjama_id   = isset($payjamaId) ? $payjamaId : 0;
                 $orderitem->save();
+
+                $jamaId = 0;
+                $payjamaId = 0;
             }
 
             DB::commit();

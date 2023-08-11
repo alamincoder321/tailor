@@ -19,8 +19,8 @@ return new class extends Migration
             $table->decimal('retail_price');
             $table->decimal('tailor_price');
             $table->decimal('total');
-            $table->integer("jama_id")->nullable();
-            $table->integer("payjama_id")->nullable();
+            $table->integer("jama_id")->default(0);
+            $table->integer("payjama_id")->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
