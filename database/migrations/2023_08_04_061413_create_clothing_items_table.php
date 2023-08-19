@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('clothing_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('clothing_id')->constrained('clothing', 'id');
+            $table->integer('tailor_id');
             $table->integer('product_id');
-            $table->integer('category_id');
             $table->integer('quantity');
             $table->decimal('tailor_price');
             $table->decimal('total');
+            $table->char('status', 5)->default('p');
             $table->timestamps();
         });
     }

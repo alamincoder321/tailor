@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('clothing', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tailor_id')->constrained('tailors', 'id')->cascadeOnDelete();
+            $table->integer('order_id');
             $table->string('date');
             $table->decimal('total');
             $table->decimal('paid');

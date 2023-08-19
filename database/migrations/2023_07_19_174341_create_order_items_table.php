@@ -21,6 +21,8 @@ return new class extends Migration
             $table->decimal('total');
             $table->integer("jama_id")->default(0);
             $table->integer("payjama_id")->default(0);
+            $table->integer('tailor_id')->default(0);
+            $table->char('status', 5)->default('p');
             $table->timestamps();
             $table->softDeletes();
         });

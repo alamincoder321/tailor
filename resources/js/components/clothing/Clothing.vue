@@ -13,11 +13,11 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label for="tailor_id">কারিগর নামঃ</label>
-                                <select v-model="clothing.tailor_id" name="tailor_id" id="tailor_id"
+                                <label for="order_id">অর্ডার লিস্টঃ</label>
+                                <select @change="OrderList" v-model="clothing.order_id" name="order_id" id="order_id"
                                     class="form-select shadow-none">
-                                    <option value="">---কারিগর নাম বাছাই করুন---</option>
-                                    <option v-for="(item, index) in tailors" :key="index" :value="item.id">{{ item.name }}
+                                    <option value="">---অর্ডার বাছাই করুন---</option>
+                                    <option v-for="(item, index) in orders" :key="index" :value="item.id">{{ item.order_code }}-({{ item.orderDate }})-{{ item.name }}
                                     </option>
                                 </select>
                             </div>
@@ -29,83 +29,12 @@
 
         <div class="col-md-10 offset-md-1 py-4">
             <div class="row">
-                <div class="col-md-7 bg-content">
-                    <div class="row">
-                        <div class="col-md-3" v-for="(item, index) in categories" :key="index">
-                            <div class="input-group">
-                                <input type="radio" v-model="category" :value="item.id" @change="onChangeCategory(item.id)"
-                                    name="category_type" :id="index" class="me-2">
-                                <label :for="index">{{ item.name }}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="m-0">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <label for="product_name">প্রডাক্ট নামঃ</label>
-                                <v-select v-model="selectProduct" :options="products" label="name" id="product"
-                                    placeholder="---প্রোডাক্ট নাম বাছাই করুন---"></v-select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="quantity">কোয়ান্টিটিঃ</label>
-                                <input v-if="selectProduct != null" type="number" min="0" v-model="selectProduct.quantity"
-                                    @input="productTotal" name="quantity" id="quantity" class="form-control shadow-none"
-                                    autocomplete="off">
-                                <input v-else type="number" min="0" name="quantity" id="quantity"
-                                    class="form-control shadow-none" autocomplete="off">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 text-end">
-                        <button @click="addToCart" type="button" class="btn btn-silver shadow-none px-3 me-2 mt-4">
-                            কার্ডে যুক্ত করুন
-                        </button>
-                    </div>
-                </div>
-                <!-- middle section -->
-                <div class="col-md-1 my-3"></div>
-                <!-- middle section end -->
-
-                <!-- total section -->
-                <div class="col-md-4 bg-content">
-                    <div class="row">
-                        <div class="col-md-7 mb-3">
-                            <label for="total">মোট টাকাঃ</label>
-                        </div>
-                        <div class="col-md-5 mb-3">
-                            <input type="number" v-model="clothing.total" name="total" class="form-control shadow-none"
-                                id="total" autocomplete="off" disabled />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-7 mb-3">
-                            <label for="paid">পেমেন্টঃ</label>
-                        </div>
-                        <div class="col-md-5 mb-3">
-                            <input type="number" v-model="clothing.paid" name="paid" class="form-control shadow-none"
-                                id="paid" autocomplete="off" @input="calculateTotal" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-7 mb-3">
-                            <label for="due">বাকি টাকাঃ</label>
-                        </div>
-                        <div class="col-md-5 mb-3">
-                            <input type="number" v-model="clothing.due" name="due" class="form-control shadow-none"
-                                id="due" autocomplete="off" disabled />
-                        </div>
-                    </div>
-                </div>
-                <!-- total section end -->
-
-                <div class="col-md-7 bg-content mt-2" v-if="carts.length > 0">
+                <div class="col-md-12 bg-content mt-2" v-if="carts.length > 0">
                     <table class="table table-sm table-striped">
                         <thead>
                             <tr>
                                 <td>ক্রমিক</td>
+                                <td>কারিগর নাম</td>
                                 <td>প্রোডাক্ট নাম</td>
                                 <td>কোয়ান্টিটি</td>
                                 <td>একক টাকা</td>
@@ -114,15 +43,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in carts" :key="index">
+                            <tr v-for="(item, index) in carts[0].orderItem" :key="index">
                                 <td>{{ index + 1 }}</td>
-                                <td>{{ item.product_name }}</td>
+                                <td>
+                                    <select name="tailor_id" :id="index" class="form-select shadow-none" v-model="item.tailor_id" :disabled="item.tailor_id > 0 ? true : false">
+                                        <option value="0">---কারিগর নাম বাছা্ই করুন---</option>
+                                        <option v-for="(tailor, sl) in tailors" :value="tailor.id" :key="sl">{{ tailor.name }}</option>
+                                    </select>
+                                </td>
+                                <td>{{ item.product.name }}</td>
                                 <td>{{ item.quantity }}</td>
                                 <td>{{ item.tailor_price }}</td>
-                                <td>{{ item.total }}</td>
+                                <td>{{ parseFloat(item.quantity * item.tailor_price).toFixed(2) }}</td>
                                 <td>
-                                    <i style="font-size: 15px;cursor: pointer;" @click="removeCart(index)"
-                                        class="text-danger fa fa-trash"></i>
+                                    <button type="button" class="btn btn-sm px-3 shadow-none" :class="item.status == 'p' ? 'btn-danger':'btn-success'">{{ item.status == 'p' ? 'Pending' : 'Processing' }}</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -134,8 +68,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="note">ক্লোথিং নোটঃ</label>
-                                <textarea v-model="clothing.note" class="form-control shadow-none"
-                                    name="note" id="note"></textarea>
+                                <textarea v-model="clothing.note" class="form-control shadow-none" name="note"
+                                    id="note"></textarea>
                             </div>
                         </div>
                         <div class="col-md-6 text-end">
@@ -143,13 +77,7 @@
                                 Save
                             </button>
                             <button type="button" class="btn btn-silver shadow-none px-3 me-2 mt-4">
-                                Update
-                            </button>
-                            <button type="button" class="btn btn-silver shadow-none px-3 me-2 mt-4">
-                                Delete
-                            </button>
-                            <button type="button" class="btn btn-silver shadow-none px-3 me-2 mt-4">
-                                Close
+                                Reset
                             </button>
                         </div>
                     </div>
@@ -169,117 +97,52 @@ export default {
             clothing: {
                 id: '',
                 date: moment().format('YYYY-MM-DD'),
-                tailor_id: '',
-                total: 0,
-                paid: 0,
-                due: 0,
+                order_id: '',
                 note: '',
             },
-            categories: [],
-            products: [],
-            selectProduct: '',
-            category: 1,
 
             carts: [],
 
             tailors: [],
+            orders: [],
         }
     },
 
     created() {
-        this.getCategory();
         this.getTailor();
+        this.getOrder();
         if (this.id != '') {
             this.getClothing();
         }
     },
 
     methods: {
-        getCategory() {
-            axios.get('/get-category').then(res => {
-                this.categories = res.data;
-            })
-        },
         getTailor() {
             axios.get('/get-tailor').then(res => {
                 this.tailors = res.data;
             })
         },
-        getProduct(catId) {
-            axios.get('/get-product').then(res => {
-                this.products = res.data.products.filter(p => p.category_id == catId);
+
+        getOrder() {
+            axios.post('/get-order', {detail: 'with'}).then(res => {
+                this.orders = res.data.orders;
             })
         },
 
-        onChangeCategory(catId) {
-            this.selectProduct = '';
-            this.getProduct(catId);
-        },
-
-        productTotal() {
-            this.selectProduct.total = parseFloat(this.selectProduct.tailor_price * this.selectProduct.quantity).toFixed(2);
-        },
-
-        addToCart() {
-            if (this.selectProduct == '' || this.selectProduct.id == '') {
-                alert("Product name required");
-                document.querySelector("#product [type='search']").focus();
-                return
+        OrderList(event){
+            if(event.target.value){
+                this.carts = [];
+                let findIndex = this.orders.findIndex(order => order.id == event.target.value);
+                let cart = this.orders[findIndex];
+                this.carts.push(cart);
             }
-            if (this.selectProduct.quantity == undefined || this.selectProduct.quantity == 0) {
-                alert("Quantity is empty");
-                return
-            }
-            let cart = {
-                category_id: this.category,
-                product_id: this.selectProduct.id,
-                product_name: this.selectProduct.name,
-                quantity: this.selectProduct.quantity,
-                tailor_price: this.selectProduct.tailor_price,
-                total: this.selectProduct.total,
-            }
-            let cartIndex = this.carts.findIndex(p => cart.product_id == this.selectProduct.id);
-            if (cartIndex >= 0) {
-                this.carts.splice(cartIndex, 1);
-            }
-            this.carts.push(cart);
-            this.calculateTotal();
-            this.clearData();
-        },
-
-        removeCart(index) {
-            this.carts.splice(index, 1);
-            this.calculateTotal();
-        },
-
-        calculateTotal() {
-            this.clothing.total = this.carts.reduce((acc, pre) => {
-                return acc + +parseFloat(pre.total)
-            }, 0).toFixed(2);
-            this.clothing.due = parseFloat(parseFloat(this.clothing.total) - parseFloat(this.clothing.paid)).toFixed(2);
-        },
-
-        clearData() {
-            this.selectProduct = ''
         },
 
         saveClothing() {
-            if (this.carts.length == 0) {
-                alert("Carts empty");
-                return
-            }
-            if (this.clothing.date == '') {
-                alert("Clothing date required");
-                return
-            }
-            if (this.clothing.tailor_id == '') {
-                alert("Tailor name required");
-                return
-            }
-
+            
             let data = {
                 clothing: this.clothing,
-                carts: this.carts,
+                carts: this.carts[0].orderItem,
             }
 
             let url;
@@ -297,7 +160,7 @@ export default {
                             location.href = '/clothing'
                         }, 500)
                     }
-                    this.getClothing();
+                    this.getOrder();
                 })
         },
 
@@ -306,11 +169,11 @@ export default {
             this.clothing = {
                 id: '',
                 date: moment().format('YYYY-MM-DD'),
-                tailor_id: '',
+                order_id: 0,
                 total: 0,
                 paid: 0,
                 due: 0,
-                note:'',
+                note: '',
             }
         },
 
@@ -321,23 +184,23 @@ export default {
                     let clothing = res.data.clothing[0]
                     let clothingItem = res.data.clothingItem
                     this.clothing = {
-                        id       : clothing.id,
-                        date     : clothing.date,
+                        id: clothing.id,
+                        date: clothing.date,
                         tailor_id: clothing.tailor_id,
-                        total    : clothing.total,
-                        paid     : clothing.paid,
-                        due      : clothing.due,
-                        note     : clothing.note
+                        total: clothing.total,
+                        paid: clothing.paid,
+                        due: clothing.due,
+                        note: clothing.note
                     }
 
                     clothingItem.forEach(item => {
                         let cart = {
-                            category_id : item.product.category_id,
-                            product_id  : item.product_id,
+                            category_id: item.product.category_id,
+                            product_id: item.product_id,
                             product_name: item.product.name,
-                            quantity    : item.quantity,
+                            quantity: item.quantity,
                             tailor_price: item.tailor_price,
-                            total       : item.total,
+                            total: item.total,
                         }
 
                         this.carts.push(cart)

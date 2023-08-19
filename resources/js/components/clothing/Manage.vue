@@ -7,7 +7,10 @@
                         <div class="col-md-2">
                             <select class="form-control shadow-none" v-model="searchBy">
                                 <option value="">All</option>
-                                <option value="tailor">By Tailor</option>
+                                <option value="p">Pending</option>
+                                <option value="pr">Processing</option>
+                                <option value="c">Cutting</option>
+                                <option value="a">Delivery</option>
                             </select>
                         </div>
                         <div class="col-md-3" :class="searchBy == 'tailor' ? '' : 'd-none'">
@@ -38,12 +41,12 @@
                         <tr>
                             <th>Sl</th>
                             <th>Date</th>
-                            <th>Tailor Name</th>
                             <th>Total</th>
                             <th>Paid</th>
                             <th>Due</th>
                             <th>Note</th>
                             <th>Status</th>
+                            <th>Change</th>
                             <th class="text-center action">Action</th>
                         </tr>
                     </thead>
@@ -51,7 +54,6 @@
                         <tr v-for="(item, index) in clothing" :key="index">
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.date }}</td>
-                            <td>{{ item.name }}</td>
                             <td>{{ item.total }}</td>
                             <td>{{ item.paid }}</td>
                             <td>{{ item.due }}</td>
@@ -62,20 +64,28 @@
                                 <span class="badge bg-warning" v-if="item.status == 'c'">Completed</span>
                                 <span class="badge bg-success" v-if="item.status == 'a'">Delivered</span>
                             </td>
+                            <td>
+                                <select id="status" class="form-select shadow-none" @change="statusChange(item)">
+                                    <option :selected="item.status == 'p' ? true : false" value="p">Pending</option>
+                                    <option :selected="item.status == 'pr' ? true : false" value="pr">Processing</option>
+                                    <option :selected="item.status == 'c' ? true : false" value="c">Cutting</option>
+                                    <option :selected="item.status == 'a' ? true : false" value="a">Delivered</option>
+                                </select>
+                            </td>
                             <td style="width: 10%;text-align: center;" class="action">
-                                <a href="#"><i style="font-size: 18px;" class="fa fa-file"></i></a>
-                                <a :href="`/clothing/${item.id}`"><i style="font-size: 18px;" class="fa fa-edit mx-2"></i></a>
+                                <a href="#"><i style="font-size: 18px;" class="fa fa-file mx-2"></i></a>
+                                <!-- <a :href="`/clothing/${item.id}`"><i style="font-size: 18px;" class="fa fa-edit mx-2"></i></a> -->
                                 <a href="#" @click.prevent="deleteData(item.id)"><i style="font-size: 18px;" class="fa fa-trash text-danger"></i></a>
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="3">Total</th>
+                            <th colspan="2">Total</th>
                             <th>{{ clothing.reduce((acc, pre) => {return acc + +parseFloat(pre.total)}, 0).toFixed(2) }}</th>
                             <th>{{ clothing.reduce((acc, pre) => {return acc + +parseFloat(pre.paid)}, 0).toFixed(2) }}</th>
                             <th>{{ clothing.reduce((acc, pre) => {return acc + +parseFloat(pre.due)}, 0).toFixed(2) }}</th>
-                            <th colspan="3"></th>
+                            <th colspan="4"></th>
                         </tr>
                     </tfoot>
                 </table>
@@ -113,12 +123,18 @@ export default {
             let data = {
                 dateFrom: this.dateFrom,
                 dateTo: this.dateTo,
-                tailorId: this.searchBy =='tailor' ? this.selectTailor.id : ''
+                status: this.searchBy
 
             }
             axios.post('/get-clothing', data).then(res => {
                 this.clothing = res.data.clothing;
             })
+        },
+
+        statusChange(order){
+            if(confirm("Are you sure!!")){
+                console.log(order);
+            }
         },
 
         deleteData(id) {
