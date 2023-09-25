@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\ModelTable;
 use App\Models\Tailor;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -216,6 +217,7 @@ class HomeController extends Controller
             'year_order'    => $yearOrder,
             'completed'     => $complete,
             'order_detail'  => $orderDetail,
+            'dueAmount'     => ModelTable::customerDue(),
             'tailor'        => Tailor::get(),
             'customer'      => Customer::get(),
         ]);

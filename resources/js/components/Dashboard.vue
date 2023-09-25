@@ -19,6 +19,71 @@
             <div class="col-md-3 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
+                        <i class="fas fa-dollar-sign bg-secondary" style="padding: 12px 17px;"></i>
+                    </div>
+                    <div class="box bg-secondary text-center">
+                        <h3 class="font-light text-white fontSize">Bill Amount</h3>
+                        <h4 class="text-white">{{ dueAmount.reduce((acc, pre) => {
+                            return acc +
+                                parseFloat(pre.billAmount)
+                        },
+                            0).toFixed(2) }}</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+            <div class="col-md-3 col-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-center py-2 px-0">
+                        <i class="fas fa-dollar-sign bg-danger" style="padding: 12px 17px;"></i>
+                    </div>
+                    <div class="box bg-danger text-center">
+                        <h3 class="font-light text-white fontSize">Paid Amount</h3>
+                        <h4 class="text-white">{{ dueAmount.reduce((acc, pre) => {
+                            return acc + (parseFloat(pre.paidAmount) + parseFloat(pre.customerPaymentAmount))
+                        },
+                            0).toFixed(2) }}</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+            <div class="col-md-3 col-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-center py-2 px-0">
+                        <i class="fas fa-dollar-sign bg-primary" style="padding: 12px 17px;"></i>
+                    </div>
+                    <div class="box bg-primary text-center">
+                        <h3 class="font-light text-white fontSize">Due Amount</h3>
+                        <h4 class="text-white">{{ dueAmount.reduce((acc, pre) => {
+                            return acc +
+                                parseFloat(pre.due)
+                        },
+                            0).toFixed(2) }}</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+            <div class="col-md-3 col-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-center py-2 px-0">
+                        <i class="fas fa-dollar-sign bg-info" style="padding: 12px 17px;"></i>
+                    </div>
+                    <div class="box bg-info text-center">
+                        <h3 class="font-light text-white fontSize"> Discount </h3>
+                        <h4 class="text-white"> {{ orderDetail.reduce((acc, pre) => {
+                            return acc +
+                                parseFloat(pre.discount)
+                        },
+                            0).toFixed(2) }} </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <!-- Column -->
+            <div class="col-md-3 col-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-shopping-cart bg-dark"></i>
                     </div>
                     <div class="box bg-dark text-center">
@@ -54,57 +119,7 @@
         </div>
         <div class="row d-flex justify-content-center">
             <!-- Column -->
-            <div class="col-md-3 col-6">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-center py-2 px-0">
-                        <i class="fas fa-dollar-sign bg-secondary" style="padding: 12px 17px;"></i>
-                    </div>
-                    <div class="box bg-secondary text-center">
-                        <h3 class="font-light text-white fontSize">Bill Amount</h3>
-                        <h4 class="text-white">{{ orderDetail.reduce((acc, pre) => {
-                            return acc +
-                                parseFloat(pre.total)
-                        },
-                            0).toFixed(2) }}</h4>
-                    </div>
-                </div>
-            </div>
-            <!-- Column -->
-            <div class="col-md-3 col-6">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-center py-2 px-0">
-                        <i class="fas fa-dollar-sign bg-danger" style="padding: 12px 17px;"></i>
-                    </div>
-                    <div class="box bg-danger text-center">
-                        <h3 class="font-light text-white fontSize">Advance Amount</h3>
-                        <h4 class="text-white">{{ orderDetail.reduce((acc, pre) => {
-                            return acc +
-                                parseFloat(pre.advance)
-                        },
-                            0).toFixed(2) }}</h4>
-                    </div>
-                </div>
-            </div>
-            <!-- Column -->
-            <div class="col-md-3 col-6">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-center py-2 px-0">
-                        <i class="fas fa-dollar-sign bg-primary" style="padding: 12px 17px;"></i>
-                    </div>
-                    <div class="box bg-primary text-center">
-                        <h3 class="font-light text-white fontSize">Due Amount</h3>
-                        <h4 class="text-white">{{ orderDetail.reduce((acc, pre) => {
-                            return acc +
-                                parseFloat(pre.due)
-                        },
-                            0).toFixed(2) }}</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row d-flex justify-content-center">
-            <!-- Column -->
-            <div class="col-md-3 col-6" v-if="role != 'manager'">
+            <!-- <div class="col-md-3 col-6" v-if="role != 'manager'">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-users bg-primary"></i>
@@ -114,9 +129,9 @@
                         <h4 class="text-white"> {{ '0' }} </h4>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- Column -->
-            <div class="col-md-3 col-6">
+            <!-- <div class="col-md-3 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-users bg-info"></i>
@@ -126,9 +141,9 @@
                         <h4 class="text-white">{{ tailor }}</h4>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- Column -->
-            <div class="col-md-3 col-6">
+            <!-- <div class="col-md-3 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
                         <i class="fas fa-users bg-secondary"></i>
@@ -138,7 +153,7 @@
                         <h4 class="text-white"> {{ customer }} </h4>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -151,6 +166,7 @@ export default {
             todayOrder: 0,
             pendingOrder: 0,
             completedOrder: 0,
+            dueAmount: [],
             tailor: 0,
             customer: 0,
         }
@@ -172,6 +188,7 @@ export default {
                     this.pendingOrder = res.data.pending_order.length
                     this.completedOrder = res.data.completed.length
                     this.orderDetail = res.data.order_detail
+                    this.dueAmount = res.data.dueAmount
                 })
         }
     },

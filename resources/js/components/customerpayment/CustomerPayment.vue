@@ -153,7 +153,7 @@ export default {
             })
         },
         saveData(event) {
-            if(parseFloat(this.customerpayment.amount) == 0 || this.tailorpayment.amount == ''){
+            if(parseFloat(this.customerpayment.amount) == 0 || this.customerpayment.amount == ''){
                 alert('পেমেন্ট টাকা খালি রয়েছে।')
                 return;
             }
