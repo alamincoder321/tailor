@@ -12,6 +12,10 @@ class OrderItem extends Model
 
     protected $guarded = ['id'];
 
+    public function tailor()
+    {
+        return $this->belongsTo(Tailor::class, 'tailor_id', 'id');
+    }
     public function jama()
     {
         return $this->belongsTo(Jama::class, 'jama_id', 'id');

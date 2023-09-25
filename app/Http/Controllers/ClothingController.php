@@ -56,94 +56,94 @@ class ClothingController extends Controller
         return view("pages.clothing.manage");
     }
 
-    public function store(Request $request)
-    {
-        try {
-            DB::beginTransaction();
-            $cloth = $request->clothing;
+    // public function store(Request $request)
+    // {
+    //     try {
+    //         DB::beginTransaction();
+    //         $cloth = $request->clothing;
 
-            $data             = new Clothing();
-            $data->date       = $cloth['date'];
-            $data->order_id   = $cloth['order_id'];
-            $data->total      = 0;
-            $data->paid       = 0;
-            $data->due        = 0;
-            $data->addby      = Auth::user()->name;
-            $data->note       = $cloth['note'];
-            $data->created_at = Carbon::now();
-            $data->save();
+    //         $data             = new Clothing();
+    //         $data->date       = $cloth['date'];
+    //         $data->order_id   = $cloth['order_id'];
+    //         $data->total      = 0;
+    //         $data->paid       = 0;
+    //         $data->due        = 0;
+    //         $data->addby      = Auth::user()->name;
+    //         $data->note       = $cloth['note'];
+    //         $data->created_at = Carbon::now();
+    //         $data->save();
 
-            foreach ($request->carts as $key => $val) {
-                if ($val['tailor_id'] != 0 && $val['status'] == 'p') {
-                    $item               = new ClothingItem();
-                    $item->clothing_id  = $data->id;
-                    $item->tailor_id    = $val['tailor_id'];
-                    $item->product_id   = $val['product_id'];
-                    $item->quantity     = $val['quantity'];
-                    $item->tailor_price = $val['tailor_price'];
-                    $item->total        = $val['quantity'] * $val['tailor_price'];
-                    $item->save();
+    //         foreach ($request->carts as $key => $val) {
+    //             if ($val['tailor_id'] != 0 && $val['status'] == 'p') {
+    //                 $item               = new ClothingItem();
+    //                 $item->clothing_id  = $data->id;
+    //                 $item->tailor_id    = $val['tailor_id'];
+    //                 $item->product_id   = $val['product_id'];
+    //                 $item->quantity     = $val['quantity'];
+    //                 $item->tailor_price = $val['tailor_price'];
+    //                 $item->total        = $val['quantity'] * $val['tailor_price'];
+    //                 $item->save();
 
-                    OrderItem::where("id", $val['id'])->first()->update(['tailor_id' => $val['tailor_id'], 'status' => 'a']);
-                }
-            }
+    //                 OrderItem::where("id", $val['id'])->first()->update(['tailor_id' => $val['tailor_id'], 'status' => 'a']);
+    //             }
+    //         }
 
-            DB::commit();
+    //         DB::commit();
 
-            return response()->json(['status' => true, 'msg' => "ক্লোথিং যুক্ত করা হয়েছে।"]);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return response()->json(['status' => false, 'msg' => $th->getMessage()]);
-        }
-    }
+    //         return response()->json(['status' => true, 'msg' => "ক্লোথিং যুক্ত করা হয়েছে।"]);
+    //     } catch (\Throwable $th) {
+    //         DB::rollBack();
+    //         return response()->json(['status' => false, 'msg' => $th->getMessage()]);
+    //     }
+    // }
 
-    public function update(Request $request)
-    {
-        try {
-            DB::beginTransaction();
-            $cloth = $request->clothing;
+    // public function update(Request $request)
+    // {
+    //     try {
+    //         DB::beginTransaction();
+    //         $cloth = $request->clothing;
 
-            $data             = Clothing::find($cloth['id']);
-            $data->tailor_id  = $cloth['tailor_id'];
-            $data->date       = $cloth['date'];
-            $data->total      = $cloth['total'];
-            $data->paid       = $cloth['paid'];
-            $data->due        = $cloth['due'];
-            $data->addby      = Auth::user()->name;
-            $data->note       = $cloth['note'];
-            $data->updated_at = Carbon::now();
-            $data->update();
+    //         $data             = Clothing::find($cloth['id']);
+    //         $data->tailor_id  = $cloth['tailor_id'];
+    //         $data->date       = $cloth['date'];
+    //         $data->total      = $cloth['total'];
+    //         $data->paid       = $cloth['paid'];
+    //         $data->due        = $cloth['due'];
+    //         $data->addby      = Auth::user()->name;
+    //         $data->note       = $cloth['note'];
+    //         $data->updated_at = Carbon::now();
+    //         $data->update();
 
-            ClothingItem::where('clothing_id', $cloth['id'])->delete();
+    //         ClothingItem::where('clothing_id', $cloth['id'])->delete();
 
-            foreach ($request->carts as $key => $val) {
-                $item               = new ClothingItem();
-                $item->clothing_id  = $cloth['id'];
-                $item->product_id   = $val['product_id'];
-                $item->category_id  = $val['category_id'];
-                $item->quantity     = $val['quantity'];
-                $item->tailor_price = $val['tailor_price'];
-                $item->total        = $val['total'];
-                $item->save();
-            }
+    //         foreach ($request->carts as $key => $val) {
+    //             $item               = new ClothingItem();
+    //             $item->clothing_id  = $cloth['id'];
+    //             $item->product_id   = $val['product_id'];
+    //             $item->category_id  = $val['category_id'];
+    //             $item->quantity     = $val['quantity'];
+    //             $item->tailor_price = $val['tailor_price'];
+    //             $item->total        = $val['total'];
+    //             $item->save();
+    //         }
 
-            DB::commit();
+    //         DB::commit();
 
-            return response()->json(['status' => true, 'msg' => "ক্লোথিং আপডেট করা হয়েছে।"]);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return response()->json(['status' => false, 'msg' => $th->getMessage()]);
-        }
-    }
+    //         return response()->json(['status' => true, 'msg' => "ক্লোথিং আপডেট করা হয়েছে।"]);
+    //     } catch (\Throwable $th) {
+    //         DB::rollBack();
+    //         return response()->json(['status' => false, 'msg' => $th->getMessage()]);
+    //     }
+    // }
 
-    public function destroy(Request $request)
-    {
-        try {
-            $data = Clothing::where('id', $request->id)->first();
-            $data->delete();
-            return response()->json(['status' => true, 'msg' => "ক্লোথিং মুছে ফেলা হয়েছে।"]);
-        } catch (\Throwable $th) {
-            return response()->json(['status' => false, 'msg' => $th->getMessage()]);
-        }
-    }
+    // public function destroy(Request $request)
+    // {
+    //     try {
+    //         $data = Clothing::where('id', $request->id)->first();
+    //         $data->delete();
+    //         return response()->json(['status' => true, 'msg' => "ক্লোথিং মুছে ফেলা হয়েছে।"]);
+    //     } catch (\Throwable $th) {
+    //         return response()->json(['status' => false, 'msg' => $th->getMessage()]);
+    //     }
+    // }
 }

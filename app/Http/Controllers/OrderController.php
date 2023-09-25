@@ -10,7 +10,6 @@ use App\Models\Payjama;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
@@ -49,11 +48,11 @@ class OrderController extends Controller
                     LEFT JOIN customers c ON c.id = om.customer_id
                     WHERE om.deleted_at IS NULL $clauses");
 
-        if ((isset($request->id) && $request->id != '') || isset($request->detail) && $request->detail == 'with') {
+        // if ((isset($request->id) && $request->id != '') || isset($request->detail) && $request->detail == 'with') {
             foreach ($orders as $key => $item) {
-                $item->orderItem = OrderItem::with('jama', 'payjama', 'product')->where('order_id', $item->id)->get();
+                $item->orderItem = OrderItem::with('jama', 'payjama', 'product', 'tailor')->where('order_id', $item->id)->get();
             }
-        }
+        // }
 
         $res['orders'] = $orders;
 

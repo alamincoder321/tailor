@@ -1,84 +1,147 @@
 <template>
     <div class="row">
-        <div class="col-md-10 offset-md-1 bg-content py-4">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label for="date">তারিখঃ</label>
-                                <input type="date" v-model="clothing.date" name="date" id="date"
-                                    class="form-control shadow-none" autocomplete="off" />
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <form @submit.prevent="getOrder">
+                        <div class="row">
+                            <div class="col-6 col-md-3" v-if="role != 'manager'" :class="role != 'manager' ? '' : 'd-none'">
+                                <div class="form-group m-0">
+                                    <v-select id="thanas" :options="thanas" v-model="selectedThana" label="name"></v-select>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <div class="form-group m-0">
+                                    <input type="date" class="form-control" v-model="filter.dateFrom" />
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <div class="form-group m-0">
+                                    <input type="date" class="form-control" v-model="filter.dateTo" />
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-1">
+                                <div class="form-group m-0">
+                                    <button type="submit" class="btn btn-info btn-sm shadow-none px-3">
+                                        Submit
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label for="order_id">অর্ডার লিস্টঃ</label>
-                                <select @change="OrderList" v-model="clothing.order_id" name="order_id" id="order_id"
-                                    class="form-select shadow-none">
-                                    <option value="">---অর্ডার বাছাই করুন---</option>
-                                    <option v-for="(item, index) in orders" :key="index" :value="item.id">{{ item.order_code }}-({{ item.orderDate }})-{{ item.name }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
+                </div>
+                <div class="card-body" style="overflow-x: auto;" :style="{ display: orders.length > 0 ? '' : 'none' }">
+                    <table class="table table-bordered m-0" v-if="recordType == 'with'" style="display:none"
+                        :style="{ display: recordType == 'with' ? '' : 'none' }">
+                        <thead style="background: #59d9ff">
+                            <tr>
+                                <th style="text-align: center; width: 8%;color:white;"> Sl </th>
+                                <th style="text-align: center; width: 10%;color:white;"> #Invoice </th>
+                                <th style="text-align: center;color:white;width: 10%;"> Date </th>
+                                <th style="text-align: center;color:white;"> Customer </th>
+                                <th style="text-align: center;color:white;">Status</th>
+                                <th style="text-align: center;color:white;">Product</th>
+                                <th style="text-align: center;color:white;">Quantity</th>
+                                <th style="text-align: center;color:white;">Price</th>
+                                <th style="text-align: center;color:white;">Total</th>
+                                <th style="text-align: center;color:white;">Tailor</th>
+                                <th style="text-align: center;color:white;">Status</th>
+                                <th style="text-align: center; width: 5%;color:white;"> Action </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template v-for="(item, index) in orders">
+                                <tr>
+                                    <td class="text-center" style="width: 5%"> {{ index + 1 }} </td>
+                                    <td class="text-center"> {{ item.order_code }} </td>
+                                    <td class="text-center"> {{ formatDate(item.orderDate) }} </td>
+                                    <td class="text-center"> {{ item.name }} </td>
+                                    <td class="text-center text-capitalize" v-html="statusText(item.status)"></td>
+                                    <td class="text-center">{{ item.orderItem[0].product.name }}</td>
+                                    <td class="text-center">{{ item.orderItem[0].quantity }}</td>
+                                    <td class="text-center">{{ item.orderItem[0].tailor_price }}</td>
+                                    <td class="text-center">{{ parseFloat(item.orderItem[0].tailor_price * item.orderItem[0].quantity).toFixed(2)}}</td>
+                                    <td class="text-center">{{ item.orderItem[0].tailor ? item.orderItem[0].tailor.name : 'N/A' }}</td>
+                                    <td class="text-center" v-html="statusText(item.orderItem[0].status)"></td>
+                                    <td>
+                                        <button v-if="item.orderItem[0].status != 'complete'"
+                                            @click="modalShow(item.orderItem[0], item.thanaId)" type="button"
+                                            class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
+                                    </td>
+                                </tr>
+                                <tr v-for="(service, sl) in item.orderItem.slice(1)">
+                                    <td colspan="5" :rowspan="item.orderItem.length - 1" v-if="sl == 0"></td>
+                                    <td class="text-center">{{ service.name }}</td>
+                                    <td class="text-center">{{ service.quantity }}</td>
+                                    <td class="text-center">{{ service.bill_amount }}</td>
+                                    <td class="text-center">{{ service.paid_amount }}</td>
+                                    <td class="text-center">{{ service.due }}</td>
+                                    <td class="text-center">{{ service.worker_name }}</td>
+                                    <td class="text-center" v-html="statusText(service.status)"></td>
+                                    <td>
+                                        <button v-if="service.status != 'complete'"
+                                            @click="modalShow(service, item.thanaId)" type="button"
+                                            class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="13">
+                                        <div class="devider"></div>
+                                    </td>
+                                </tr>
+                                <!-- <tr style="font-weight:bold;">
+                                    <td colspan="6" style="font-weight:normal;"><strong>Note: </strong>{{ item.note }}</td>
+                                    <td style="text-align:center;">Total Quantity<br>{{ item.orderItem.reduce((prev,
+                                        curr) => { return prev + parseFloat(curr.quantity) }, 0) }}</td>
+                                    <td style="text-align:left;">
+                                        Total: 0<br>
+                                        Paid: 0<br>
+                                    </td>
+                                </tr> -->
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-body" :style="{ display: orders.length > 0 ? 'none' : '' }">
+                    <p class="m-0 text-center">Not Found Data in Table</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-10 offset-md-1 py-4">
-            <div class="row">
-                <div class="col-md-12 bg-content mt-2" v-if="carts.length > 0">
-                    <table class="table table-sm table-striped">
-                        <thead>
-                            <tr>
-                                <td>ক্রমিক</td>
-                                <td>কারিগর নাম</td>
-                                <td>প্রোডাক্ট নাম</td>
-                                <td>কোয়ান্টিটি</td>
-                                <td>একক টাকা</td>
-                                <td>মোট টাকা</td>
-                                <td></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(item, index) in carts[0].orderItem" :key="index">
-                                <td>{{ index + 1 }}</td>
-                                <td>
-                                    <select name="tailor_id" :id="index" class="form-select shadow-none" v-model="item.tailor_id" :disabled="item.tailor_id > 0 ? true : false">
-                                        <option value="0">---কারিগর নাম বাছা্ই করুন---</option>
-                                        <option v-for="(tailor, sl) in tailors" :value="tailor.id" :key="sl">{{ tailor.name }}</option>
-                                    </select>
-                                </td>
-                                <td>{{ item.product.name }}</td>
-                                <td>{{ item.quantity }}</td>
-                                <td>{{ item.tailor_price }}</td>
-                                <td>{{ parseFloat(item.quantity * item.tailor_price).toFixed(2) }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-sm px-3 shadow-none" :class="item.status == 'p' ? 'btn-danger':'btn-success'">{{ item.status == 'p' ? 'Pending' : 'Processing' }}</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
 
-                <div class="col-md-12 bg-content mt-3">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="note">ক্লোথিং নোটঃ</label>
-                                <textarea v-model="clothing.note" class="form-control shadow-none" name="note"
-                                    id="note"></textarea>
-                            </div>
+        <!-- modal for assign order -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header d-flex justify-content-between">
+                        <h5 class="modal-title" id="staticBackdropLabel">Order Assign On Tailor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <!-- {{ modalData }} -->
+                        <table class="table table-bordered m-0">
+                            <thead>
+                                <tr>
+                                    <th>Sl</th>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>{{ modalData.product.name }}</td>
+                                    <td>{{ modalData.quantity }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-group mt-3">
+                            <label for="tailors">Worker</label>
+                            <v-select id="tailors" :options="tailors" v-model="selectedTailor" label="name"></v-select>
                         </div>
-                        <div class="col-md-6 text-end">
-                            <button @click="saveClothing" type="button" class="btn btn-silver shadow-none px-3 me-2 mt-4">
-                                Save
-                            </button>
-                            <button type="button" class="btn btn-silver shadow-none px-3 me-2 mt-4">
-                                Reset
-                            </button>
+                        <div class="form-group mt-3">
+                            <button @click="assignWork" type="button" class="btn btn-info shadow-none w-100">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -89,137 +152,114 @@
 
 <script>
 import moment from 'moment';
-
 export default {
-    props: ['id'],
     data() {
         return {
-            clothing: {
-                id: '',
-                date: moment().format('YYYY-MM-DD'),
-                order_id: '',
-                note: '',
+            searchBy: "",
+            recordType: 'with',
+            filter: {
+                dateFrom: "",
+                dateTo: "",
             },
-
-            carts: [],
-
-            tailors: [],
             orders: [],
-        }
+            tailors: [],
+            selectedTailor: null,
+
+            modalData: {},
+        };
     },
 
     created() {
-        this.getTailor();
         this.getOrder();
-        if (this.id != '') {
-            this.getClothing();
-        }
     },
 
     methods: {
-        getTailor() {
-            axios.get('/get-tailor').then(res => {
-                this.tailors = res.data;
-            })
+        statusText(status) {
+            let texT = "";
+            if (status == 'pending') {
+                texT = "<span class='badge bg-danger'>Pending</span>"
+            }
+            if (status == 'proccess') {
+                texT = "<span class='badge bg-warning'>Proccessing</span>"
+            }
+            if (status == 'complete') {
+                texT = "<span class='badge bg-success'>Completed</span>"
+            }
+            return texT;
         },
 
+        getWorker(thana_id) {
+            axios.get("/get-tailor").then((res) => {
+                this.tailors = res.data
+            });
+        },
         getOrder() {
-            axios.post('/get-order', {detail: 'with'}).then(res => {
-                this.orders = res.data.orders;
-            })
+            axios.post("/get-order", this.filter).then((res) => {
+                this.orders = res.data.orders.filter(order => order.status != 'cancel');
+            });
         },
 
-        OrderList(event){
-            if(event.target.value){
-                this.carts = [];
-                let findIndex = this.orders.findIndex(order => order.id == event.target.value);
-                let cart = this.orders[findIndex];
-                this.carts.push(cart);
+        modalShow(service, thana_id) {
+            $('#staticBackdrop').modal('show');
+            this.getWorker(thana_id);
+            this.modalData = service;
+            this.selectedTailor = null;
+            if (service.worker_id) {
+                this.selectedTailor = {
+                    id: service.worker_id,
+                    name: service.worker_name
+                }
             }
         },
 
-        saveClothing() {
-            
-            let data = {
-                clothing: this.clothing,
-                carts: this.carts[0].orderItem,
+        assignWork() {
+            let filter = {
+                id: this.modalData.id,
+                worker_id: this.selectedTailor == null ? null : this.selectedTailor.id
             }
-
-            let url;
-            if (this.id != '') {
-                url = '/update-clothing'
-            } else {
-                url = '/clothing'
-            }
-            axios.post(url, data)
-                .then(res => {
-                    this.$moshaToast(res.data.msg);
-                    this.clearClothing();
-                    if (this.id != '') {
-                        setTimeout(() => {
-                            location.href = '/clothing'
-                        }, 500)
-                    }
-                    this.getOrder();
-                })
+            axios.post("/admin/order/assign-worker", filter).then((res) => {
+                $.notify(res.data, "success");
+                this.getOrder();
+                this.selectedTailor = null;
+                $('#staticBackdrop').modal('hide');
+            });
         },
 
-        clearClothing() {
-            this.carts = [];
-            this.clothing = {
-                id: '',
-                date: moment().format('YYYY-MM-DD'),
-                order_id: 0,
-                total: 0,
-                paid: 0,
-                due: 0,
-                note: '',
-            }
-        },
-
-        getClothing() {
-            let data = { id: this.id }
-            axios.post('/get-clothing', data)
-                .then(res => {
-                    let clothing = res.data.clothing[0]
-                    let clothingItem = res.data.clothingItem
-                    this.clothing = {
-                        id: clothing.id,
-                        date: clothing.date,
-                        tailor_id: clothing.tailor_id,
-                        total: clothing.total,
-                        paid: clothing.paid,
-                        due: clothing.due,
-                        note: clothing.note
-                    }
-
-                    clothingItem.forEach(item => {
-                        let cart = {
-                            category_id: item.product.category_id,
-                            product_id: item.product_id,
-                            product_name: item.product.name,
-                            quantity: item.quantity,
-                            tailor_price: item.tailor_price,
-                            total: item.total,
-                        }
-
-                        this.carts.push(cart)
-                    })
-
-
-                })
+        formatDate(date) {
+            return moment(date).format("DD-MM-YYYY");
         },
     },
-}
+};
 </script>
 
 <style>
-#product [role='combobox'] {
-    height: 32px !important;
+#thanas [role="combobox"] {
+    padding: 0 !important;
 }
 
-#product .vs__clear {
-    margin-right: 0;
-    padding: 0px 8px !important;
+.devider {
+    width: 15px;
+    height: 10px;
+    border: 1px solid #59d9ff;
+    margin: 0 auto;
+    border-top-left-radius: 50px;
+    border-bottom-right-radius: 50px;
 }
-</style>
+
+.devider::before {
+    content: "";
+    border: 1px dashed #59d9ff;
+    position: absolute;
+    left: 23px;
+    width: 450px;
+    height: 8px;
+}
+
+.devider::after {
+    content: "";
+    border: 1px dashed #59d9ff;
+    position: absolute;
+    right: 23px;
+    width: 450px;
+    height: 8px;
+}</style>
