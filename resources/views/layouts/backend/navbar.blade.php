@@ -31,10 +31,10 @@
     <ul class="navbar-nav form-inline me-0 me-md-3 my-2 my-md-0">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="{{asset('nouser.jpg')}}" alt="Admin Image" style="width: 30px;border-radius: 50%;">
+                <img src="{{asset(Auth::user()->image !=null ? Auth::user()->image : 'nouser.jpg')}}" alt="Admin Image" style="width: 30px;border-radius: 50%;">
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#!">Settings</a></li>
+                <li><a class="dropdown-item" href="{{ url('/user-profile') }}">Profile</a></li>
                 <li>
                     <hr class="dropdown-divider" />
                 </li>

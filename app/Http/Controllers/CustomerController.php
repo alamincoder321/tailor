@@ -163,4 +163,9 @@ class CustomerController extends Controller
 
         return ["ledger" => $ledger, "previousDue" => $previousDue];
     }
+
+    public function dueList()
+    {
+        return view('pages.customer.duelist');
+    }
 }

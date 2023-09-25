@@ -153,6 +153,10 @@ export default {
             })
         },
         saveData(event) {
+            if (parseFloat(this.customerpayment.due) < parseFloat(this.customerpayment.amount)) {
+                alert('কাস্টমার বাঁকি এর থেকে পে টাকা বেশি হয়েছে।')
+                return;
+            }
             let formdata = new FormData(event.target);
             formdata.append('id', this.customerpayment.id);
             formdata.append('due', this.customerpayment.due);

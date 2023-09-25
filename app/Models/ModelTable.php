@@ -46,11 +46,10 @@ class ModelTable extends Model
                         t.mobile,
                         t.address,
                         (SELECT IFNULL(SUM(clt.total), 0)
-                            FROM clothing AS clt
-                            WHERE clt.deleted_at IS NULL AND clt.tailor_id = t.id) AS billAmount,
-                        (SELECT IFNULL(SUM(clt.paid), 0)
-                            FROM clothing AS clt
-                            WHERE clt.deleted_at IS NULL AND clt.tailor_id = t.id) AS paidAmount,
+                            FROM clothing_items AS clt
+                            LEFT JOIN clothing cl ON cl.id = clt.clothing_id
+                            WHERE cl.deleted_at IS NULL AND clt.tailor_id = t.id) AS billAmount,
+                        0 AS paidAmount,
                         (SELECT IFNULL(SUM(tp.amount), 0)
                             FROM tailor_payments AS tp
                             WHERE tp.deleted_at IS NULL AND tp.tailor_id = t.id) AS tailorPaymentAmount,

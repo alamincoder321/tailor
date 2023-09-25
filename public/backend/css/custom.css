@@ -24,7 +24,7 @@
 }
 
 .sb-sidenav-dark .sb-sidenav-menu .nav-link:first-child {
-    margin-top: 15px !important;
+    margin-top: 0;
 }
 
 .nav-link {

@@ -41,9 +41,6 @@
                         <tr>
                             <th>Sl</th>
                             <th>Date</th>
-                            <th>Total</th>
-                            <th>Paid</th>
-                            <th>Due</th>
                             <th>Note</th>
                             <th>Status</th>
                             <th>Change</th>
@@ -54,9 +51,6 @@
                         <tr v-for="(item, index) in clothing" :key="index">
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.date }}</td>
-                            <td>{{ item.total }}</td>
-                            <td>{{ item.paid }}</td>
-                            <td>{{ item.due }}</td>
                             <td>{{ item.note }}</td>
                             <td>
                                 <span class="badge bg-danger" v-if="item.status == 'p'">Pending</span>
@@ -79,15 +73,6 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <th colspan="2">Total</th>
-                            <th>{{ clothing.reduce((acc, pre) => {return acc + +parseFloat(pre.total)}, 0).toFixed(2) }}</th>
-                            <th>{{ clothing.reduce((acc, pre) => {return acc + +parseFloat(pre.paid)}, 0).toFixed(2) }}</th>
-                            <th>{{ clothing.reduce((acc, pre) => {return acc + +parseFloat(pre.due)}, 0).toFixed(2) }}</th>
-                            <th colspan="4"></th>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
             <div class="text-center" :class="clothing.length == 0 ? '' : 'd-none'">Data Not Found</div>
@@ -111,7 +96,7 @@ export default {
     },
     created(){
         this.getClothing();
-        this.getTailor();
+        // this.getTailor();
     },
     methods: {
         getTailor() {

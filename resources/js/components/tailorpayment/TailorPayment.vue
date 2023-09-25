@@ -153,6 +153,10 @@ export default {
             })
         },
         saveData(event) {
+            if (parseFloat(this.tailorpayment.due) < parseFloat(this.tailorpayment.amount)) {
+                alert('কারিগর বাঁকি এর থেকে পে টাকা বেশি হয়েছে।')
+                return;
+            }
             let formdata = new FormData(event.target);
             formdata.append('id', this.tailorpayment.id);
             formdata.append('due', this.tailorpayment.due);

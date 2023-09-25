@@ -22,9 +22,13 @@ use App\Http\Controllers\UserAccessController;
 Route::get("/", [LoginController::class, "showLoginForm"]);
 Route::post("/login", [LoginController::class, "login"]);
 Route::get("/logout", [LoginController::class, "logout"])->name("logout");
+Route::get("/user-profile", [HomeController::class, "profile"])->name("user.profile");
+Route::post("/user-profile", [HomeController::class, "profileUpdate"])->name("user.profile.update");
+Route::post("/user-profileimage", [HomeController::class, "imageUpdate"])->name("user.profile.imageUpdate");
+
 
 //dashboard route
-Route::get("/dashboard", [HomeController::class, "index"]);
+Route::get("/dashboard", [HomeController::class, "index"])->name('home');
 //setting route
 Route::get("/setting", [SettingController::class, "create"])->name('setting.create');
 Route::get("/get-setting", [SettingController::class, "index"])->name('setting.index');
@@ -38,7 +42,6 @@ Route::post("/delete-role", [RoleController::class, "destroy"])->name('role.dest
 //user route
 Route::get("/useraccess/{id}", [UserAccessController::class, "permissionEdit"])->name('user.useraccess');
 Route::post("/permissionStore", [UserAccessController::class, "permissionStore"])->name('user.permissionStore');
-Route::get("/user", [UserAccessController::class, "create"])->name('user.create');
 Route::get("/user", [UserAccessController::class, "create"])->name('user.create');
 Route::get("/get-user", [UserAccessController::class, "index"])->name('user.index');
 Route::post("/user", [UserAccessController::class, "store"])->name('user.store');
@@ -89,6 +92,7 @@ Route::post("/get-mobile", [CustomerController::class, "mobileCheck"])->name('cu
 Route::post("/get-customer-due", [CustomerController::class, "customerDue"])->name('customer.customerdue');
 Route::get("/customer-ledger", [CustomerController::class, "customerLedger"])->name('customer.customerLedger');
 Route::post("/get-customer-ledger", [CustomerController::class, "getcustomerLedger"])->name('customer.getcustomerLedger');
+Route::get("/customer-dueList", [CustomerController::class, "dueList"])->name('customer.dueList');
 
 //product route
 Route::get("/product", [ProductController::class, "create"])->name('product.create');
@@ -129,7 +133,7 @@ Route::post("/update-customerpayment", [CustomerPaymentController::class, "updat
 Route::post("/delete-customerpayment", [CustomerPaymentController::class, "destroy"])->name('customerpayment.destroy');
 
 //tailorpayment route
-Route::get("/tailorpayment", [TailorPaymentController::class, "create"])->name('customerpayment.create');
+Route::get("/tailorpayment", [TailorPaymentController::class, "create"])->name('tailorpayment.create');
 Route::get("/get-tailorpayment", [TailorPaymentController::class, "index"])->name('tailorpayment.index');
 Route::post("/tailorpayment", [TailorPaymentController::class, "store"])->name('tailorpayment.store');
 Route::post("/update-tailorpayment", [TailorPaymentController::class, "update"])->name('tailorpayment.update');
