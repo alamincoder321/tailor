@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Clothing;
-use App\Models\ClothingItem;
+use Carbon\Carbon;
+use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class ClothingController extends Controller
 {
@@ -20,30 +17,41 @@ class ClothingController extends Controller
 
     public function index(Request $request)
     {
-        $clauses = "";
-        if (isset($request->dateFrom) && $request->dateFrom != '') {
-            $clauses .= " AND ct.date BETWEEN '$request->dateFrom' AND '$request->dateTo'";
-        }
-        // if (isset($request->tailorId) && $request->tailorId != '') {
-        //     $clauses .= " AND ctd.tailor_id = '$request->tailorId'";
-        // }
-        if (isset($request->status) && $request->status != '') {
-            $clauses .= " AND ct.status = '$request->status'";
-        }
-        if (isset($request->id) && $request->id != '') {
-            $clauses .= " AND ct.id = '$request->id'";
 
-            $clothingDetails = ClothingItem::with('product')->where('clothing_id', $request->id)->get();
-            $res['clothingItem'] = $clothingDetails;
+        try {
+            $clauses = "";
+            if (isset($request->dateFrom) && $request->dateFrom != '') {
+                $clauses .= " AND o.orderDate BETWEEN '$request->dateFrom' AND '$request->dateTo'";
+            }
+            if (isset($request->tailorId) && $request->tailorId != '') {
+                $clauses .= " AND ot.tailor_id = '$request->tailorId'";
+            }
+            if (isset($request->status) && $request->status != '') {
+                $clauses .= " AND ot.status = '$request->status'";
+            }
+
+            $detail = DB::select("SELECT
+                            ot.*,
+                            p.name as product_name,
+                            t.name as tailor_name,
+                            o.orderDate,
+                            o.customer_id,
+                            c.name as customer_name
+                        FROM order_items ot
+                        LEFT JOIN products p ON p.id = ot.product_id
+                        LEFT JOIN tailors t ON t.id = ot.tailor_id
+                        LEFT JOIN orders o ON o.id = ot.order_id
+                        LEFT JOIN customers c ON c.id = o.customer_id
+                        WHERE ot.status != 'complete' 
+                        AND ot.status != 'cancel'
+                        AND ot.tailor_id is not null
+                        $clauses
+                        ");
+
+            return response()->json(['status' => false, 'msg' => $detail]);
+        } catch (\Throwable $e) {
+            return response()->json(['status' => false, 'msg' => $e->getMessage()]);
         }
-
-        $clothing = DB::select("SELECT
-                            ct.*
-                        FROM clothing ct
-                        WHERE ct.deleted_at IS NULL $clauses");
-        $res['clothing'] = $clothing;
-
-        return response()->json($res);
     }
 
     public function create($id = null)
@@ -56,94 +64,51 @@ class ClothingController extends Controller
         return view("pages.clothing.manage");
     }
 
-    // public function store(Request $request)
-    // {
-    //     try {
-    //         DB::beginTransaction();
-    //         $cloth = $request->clothing;
+    public function store(Request $request)
+    {
+        try {
+            $data = OrderItem::where("id", $request->id)->first();
+            $data->tailor_id = $request->tailor_id;
+            $data->updated_at = Carbon::now();
+            $data->save();
+            return response()->json(['status' => true, 'msg' => "Clothing assign on Tailor Successfully"]);
+        } catch (\Throwable $e) {
+            return response()->json(['status' => false, 'msg' => $e->getMessage()]);
+        }
+    }
 
-    //         $data             = new Clothing();
-    //         $data->date       = $cloth['date'];
-    //         $data->order_id   = $cloth['order_id'];
-    //         $data->total      = 0;
-    //         $data->paid       = 0;
-    //         $data->due        = 0;
-    //         $data->addby      = Auth::user()->name;
-    //         $data->note       = $cloth['note'];
-    //         $data->created_at = Carbon::now();
-    //         $data->save();
+    public function statusChange(Request $request)
+    {
+        try {
+            $data = OrderItem::where('id', $request->id)->first();
+            $orderId = $data->order_id;
+            
+            if ($request->status == 'complete') {
+                $data->tailor_total = $request->billAmount;
+                $data->paid         = $request->paidAmount;
+                $data->due          = $request->dueAmount;
+            }
+            $data->status = $request->status;
+            $data->update();
 
-    //         foreach ($request->carts as $key => $val) {
-    //             if ($val['tailor_id'] != 0 && $val['status'] == 'p') {
-    //                 $item               = new ClothingItem();
-    //                 $item->clothing_id  = $data->id;
-    //                 $item->tailor_id    = $val['tailor_id'];
-    //                 $item->product_id   = $val['product_id'];
-    //                 $item->quantity     = $val['quantity'];
-    //                 $item->tailor_price = $val['tailor_price'];
-    //                 $item->total        = $val['quantity'] * $val['tailor_price'];
-    //                 $item->save();
-
-    //                 OrderItem::where("id", $val['id'])->first()->update(['tailor_id' => $val['tailor_id'], 'status' => 'a']);
-    //             }
-    //         }
-
-    //         DB::commit();
-
-    //         return response()->json(['status' => true, 'msg' => "ক্লোথিং যুক্ত করা হয়েছে।"]);
-    //     } catch (\Throwable $th) {
-    //         DB::rollBack();
-    //         return response()->json(['status' => false, 'msg' => $th->getMessage()]);
-    //     }
-    // }
-
-    // public function update(Request $request)
-    // {
-    //     try {
-    //         DB::beginTransaction();
-    //         $cloth = $request->clothing;
-
-    //         $data             = Clothing::find($cloth['id']);
-    //         $data->tailor_id  = $cloth['tailor_id'];
-    //         $data->date       = $cloth['date'];
-    //         $data->total      = $cloth['total'];
-    //         $data->paid       = $cloth['paid'];
-    //         $data->due        = $cloth['due'];
-    //         $data->addby      = Auth::user()->name;
-    //         $data->note       = $cloth['note'];
-    //         $data->updated_at = Carbon::now();
-    //         $data->update();
-
-    //         ClothingItem::where('clothing_id', $cloth['id'])->delete();
-
-    //         foreach ($request->carts as $key => $val) {
-    //             $item               = new ClothingItem();
-    //             $item->clothing_id  = $cloth['id'];
-    //             $item->product_id   = $val['product_id'];
-    //             $item->category_id  = $val['category_id'];
-    //             $item->quantity     = $val['quantity'];
-    //             $item->tailor_price = $val['tailor_price'];
-    //             $item->total        = $val['total'];
-    //             $item->save();
-    //         }
-
-    //         DB::commit();
-
-    //         return response()->json(['status' => true, 'msg' => "ক্লোথিং আপডেট করা হয়েছে।"]);
-    //     } catch (\Throwable $th) {
-    //         DB::rollBack();
-    //         return response()->json(['status' => false, 'msg' => $th->getMessage()]);
-    //     }
-    // }
-
-    // public function destroy(Request $request)
-    // {
-    //     try {
-    //         $data = Clothing::where('id', $request->id)->first();
-    //         $data->delete();
-    //         return response()->json(['status' => true, 'msg' => "ক্লোথিং মুছে ফেলা হয়েছে।"]);
-    //     } catch (\Throwable $th) {
-    //         return response()->json(['status' => false, 'msg' => $th->getMessage()]);
-    //     }
-    // }
+            $msg = "";
+            if ($request->status == 'proccess') {
+                $msg = 'Work proccessing successfully';
+            }
+            if ($request->status == 'complete') {
+                $msg = 'Work complete successfully';
+            }
+            $orderdetail = OrderItem::where('order_id', $orderId)->get();
+            $ordercomplete = OrderItem::where('order_id', $orderId)->where('status', 'complete')->get();
+            if (count($orderdetail) == count($ordercomplete)) {
+                $order = Order::where('id', $orderId)->first();
+                $order->status = 'complete';
+                $order->update();
+            }
+            
+            return response()->json(['status' => false, 'msg' => $msg]);
+        } catch (\Throwable $e) {
+            return response()->json(['status' => false, 'msg' => $e->getMessage()]);
+        }
+    }
 }

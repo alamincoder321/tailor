@@ -13,13 +13,13 @@
     <div class="row">
         <div class="col-12 col-lg-12">
             <div class="card">
-                <div class="card-header" style="background:linear-gradient(45deg, #bb3a87, #000000d1);">
+                <div class="card-header">
                     <form @submit.prevent="getLedger">
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group m-0">
                                     <v-select :options="tailors" id="tailors" v-model="selectedTailor"
-                                        label="name"></v-select>
+                                        label="name" placeholder="কারিগর বাছাই করুন"></v-select>
                                 </div>
                             </div>
                             <div class="col-lg-2">
@@ -42,7 +42,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="card-body" style="overflow-x:auto;" v-if="ledgers.length > 0">
+                <div class="card-body" style="overflow-x:auto;">
                     <button class="btn btn-warning text-white btn-sm shadow-none" @click="print" v-if="ledgers.length > 0"><i
                             class="bi bi-printer" style="font-size: 15px;"></i> Print</button>
                     <table class="table table-sm table-hover table-bordered" id="ledgers">
@@ -62,7 +62,7 @@
                                 <th colspan="6" style="padding-left:44px;">Previous Due</th>
                                 <td class="text-end">{{ parseFloat(previousDue).toFixed(2) }}</td>
                             </tr>
-                            <template v-for="(item, index) in ledgers">
+                            <template v-for="(item, index) in ledgers" v-if="ledgers.length > 0">
                                 <tr>
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ item.description }}</td>
@@ -75,9 +75,6 @@
                             </template>
                         </tbody>
                     </table>
-                </div>
-                <div class="card-body text-center" v-else>
-                    Not found data in Table
                 </div>
             </div>
         </div>

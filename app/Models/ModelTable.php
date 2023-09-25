@@ -45,11 +45,14 @@ class ModelTable extends Model
                         t.name,
                         t.mobile,
                         t.address,
-                        (SELECT IFNULL(SUM(clt.total), 0)
-                            FROM clothing_items AS clt
-                            LEFT JOIN clothing cl ON cl.id = clt.clothing_id
+                        (SELECT IFNULL(SUM(clt.tailor_total), 0)
+                            FROM order_items AS clt
+                            LEFT JOIN orders cl ON cl.id = clt.order_id
                             WHERE cl.deleted_at IS NULL AND clt.tailor_id = t.id) AS billAmount,
-                        0 AS paidAmount,
+                            (SELECT IFNULL(SUM(clt.paid), 0)
+                            FROM order_items AS clt
+                            LEFT JOIN orders cl ON cl.id = clt.order_id
+                            WHERE cl.deleted_at IS NULL AND clt.tailor_id = t.id) AS paidAmount,
                         (SELECT IFNULL(SUM(tp.amount), 0)
                             FROM tailor_payments AS tp
                             WHERE tp.deleted_at IS NULL AND tp.tailor_id = t.id) AS tailorPaymentAmount,

@@ -1,200 +1,254 @@
 <template>
-    <div class="row ">
-        <div class="col-md-12 p-md-0">
+    <div class="row">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <select class="form-control shadow-none" v-model="searchBy">
-                                <option value="">All</option>
-                                <option value="p">Pending</option>
-                                <option value="pr">Processing</option>
-                                <option value="c">Cutting</option>
-                                <option value="a">Delivery</option>
-                            </select>
+                    <form @submit.prevent="getOrder">
+                        <div class="row">
+                            <div class="col-6 col-md-2 mb-1">
+                                <div class="form-group m-0">
+                                    <select class="form-select shadow-none" v-model="searchBy" @change="onChangeSearch">
+                                        <option value="">All</option>
+                                        <option value="thana">Area Wise</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-1" v-if="searchBy == 'thana'"
+                                :class="searchBy == 'thana' ? '' : 'd-none'">
+                                <div class="form-group m-0">
+                                    <v-select id="tailors" :options="tailors" v-model="selectedTailor"
+                                        label="name"></v-select>
+                                </div>
+                            </div>
+                            <!-- <div class="col-6 col-md-2 mb-1">
+                                <div class="form-group m-0">
+                                    <select class="form-select shadow-none" v-model="filter.status">
+                                        <option value="">All</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="complete">Completed</option>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <div class="col-6 col-md-2 mb-1">
+                                <div class="form-group m-0">
+                                    <input type="date" class="form-control" v-model="filter.dateFrom" />
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-2 mb-1">
+                                <div class="form-group m-0">
+                                    <input type="date" class="form-control" v-model="filter.dateTo" />
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-1 mb-1">
+                                <div class="form-group m-0">
+                                    <button type="submit" class="btn btn-info btn-sm shadow-none px-3">
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3" :class="searchBy == 'tailor' ? '' : 'd-none'">
-                            <v-select :options="tailors" v-model="selectTailor" label="name" id="tailor"></v-select>
+                    </form>
+                </div>
+                <div class="card-body" v-if="orders.length > 0">
+                    <table class="table table-bordered m-0">
+                        <thead style="background: #59d9ff">
+                            <tr>
+                                <th style="text-align: center; width: 8%;color:white;"> Sl </th>
+                                <th style="text-align: center;color:white;"> Customer </th>
+                                <th style="text-align: center;color:white;">Status</th>
+                                <th style="text-align: center;color:white;">Product</th>
+                                <th style="text-align: center;color:white;">Quantity</th>
+                                <th style="text-align: center;color:white;">Price</th>
+                                <th style="text-align: center;color:white;">Total</th>
+                                <th style="text-align: center;color:white;">Tailor</th>
+                                <th style="text-align: center; width: 10%;color:white;"> Action </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template v-for="(item, index) in orders">
+                                <tr>
+                                    <td class="text-center" style="width: 5%"> {{ index + 1 }} </td>
+                                    <td class="text-center"> {{ item.customer_name }} </td>
+                                    <td class="text-center text-capitalize" v-html="statusText(item.status)"></td>
+                                    <td class="text-center">{{ item.product_name }}</td>
+                                    <td class="text-center">{{ item.quantity }}</td>
+                                    <td class="text-center">{{ item.tailor_price }}</td>
+                                    <td class="text-center">{{ parseFloat(item.tailor_price * item.quantity).toFixed(2) }}</td>
+                                    <td class="text-center">{{ item.tailor_name }}</td>
+                                    <td>
+                                        <div class="input-group gap-2 justify-content-center">
+                                            <button v-if="item.status == 'pending'"
+                                                @click="statusChange(item.id, 'proccess')" type="button"
+                                                style="padding: 5px;" class="btn btn-sm btn-warning shadow-none">
+                                                <i class="fas fa-check-square text-white"></i>
+                                            </button>
+                                            <button v-if="item.status == 'proccess'" @click="showModal(item)"
+                                                type="button" style="padding: 5px;"
+                                                class="btn btn-sm btn-success shadow-none"> <i
+                                                    class="fas fa-spinner text-white"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-body" :style="{ display: orders.length > 0 ? 'none' : '' }">
+                    <p class="m-0 text-center">Not Found Data in Table</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Worker Deal</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="billAmount">Bill Amount</label>
+                                    <input type="number" min="0" step="0.01" class="shadow-none form-control" id="billAmount"
+                                        @input="calculateTotal" name="billAmount" v-model="calculate.billAmount" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="paidAmount">Paid Amount</label>
+                                    <input type="number" min="0" step="0.01" class="shadow-none form-control" id="paidAmount"
+                                        @input="calculateTotal" name="paidAmount" v-model="calculate.paidAmount" />
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <div class="form-group">
+                                    <label for="dueAmount">Due Amount</label>
+                                    <input type="number" min="0" step="0.01" class="shadow-none form-control" id="dueAmount"
+                                        name="dueAmount" v-model="calculate.dueAmount" readonly />
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-2">
-                            <input type="date" class="form-control shadow-none" v-model="dateFrom">
-                        </div>
-                        <div class="col-md-2">
-                            <input type="date" class="form-control shadow-none" v-model="dateTo">
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-silver" @click="getClothing">Search</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" @click="statusChange" class="btn btn-success text-white">Completed</button>
                     </div>
                 </div>
             </div>
-
-        </div>
-
-        <div class="col-md-12 bg-content">
-            <div class="text-end" :class="clothing.length > 0 ? '' : 'd-none'">
-                <a href="" @click.prevent="print"><i class="fa fa-print"></i></a>
-            </div>
-            <div class="clothingDaTa" :class="clothing.length > 0 ? '' : 'd-none'">
-                <table class="table table-striped table-sm">
-                    <thead class="text-white bg-dark">
-                        <tr>
-                            <th>Sl</th>
-                            <th>Date</th>
-                            <th>Note</th>
-                            <th>Status</th>
-                            <th>Change</th>
-                            <th class="text-center action">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(item, index) in clothing" :key="index">
-                            <td>{{ index + 1 }}</td>
-                            <td>{{ item.date }}</td>
-                            <td>{{ item.note }}</td>
-                            <td>
-                                <span class="badge bg-danger" v-if="item.status == 'p'">Pending</span>
-                                <span class="badge bg-secondary" v-if="item.status == 'pr'">Processing</span>
-                                <span class="badge bg-warning" v-if="item.status == 'c'">Completed</span>
-                                <span class="badge bg-success" v-if="item.status == 'a'">Delivered</span>
-                            </td>
-                            <td>
-                                <select id="status" class="form-select shadow-none" @change="statusChange(item)">
-                                    <option :selected="item.status == 'p' ? true : false" value="p">Pending</option>
-                                    <option :selected="item.status == 'pr' ? true : false" value="pr">Processing</option>
-                                    <option :selected="item.status == 'c' ? true : false" value="c">Cutting</option>
-                                    <option :selected="item.status == 'a' ? true : false" value="a">Delivered</option>
-                                </select>
-                            </td>
-                            <td style="width: 10%;text-align: center;" class="action">
-                                <a href="#"><i style="font-size: 18px;" class="fa fa-file mx-2"></i></a>
-                                <!-- <a :href="`/clothing/${item.id}`"><i style="font-size: 18px;" class="fa fa-edit mx-2"></i></a> -->
-                                <a href="#" @click.prevent="deleteData(item.id)"><i style="font-size: 18px;" class="fa fa-trash text-danger"></i></a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="text-center" :class="clothing.length == 0 ? '' : 'd-none'">Data Not Found</div>
         </div>
     </div>
 </template>
 
 <script>
 import moment from 'moment';
-
 export default {
     data() {
         return {
-            searchBy: '',
-            dateFrom: moment().format('YYYY-MM-DD'),
-            dateTo: moment().format('YYYY-MM-DD'),
+            searchBy: "",
+            filter: {
+                status: "",
+                dateFrom: "",
+                dateTo: "",
+            },
+            calculate: {
+                billAmount: 0,
+                paidAmount: 0,
+                dueAmount: 0,
+            },
+            orders: [],
             tailors: [],
-            selectTailor: null,
-            clothing: [],
-        }
+            selectedTailor: null,
+        };
     },
-    created(){
-        this.getClothing();
-        // this.getTailor();
+
+    created() {
+        this.getOrder();
+        this.getTailor();
     },
+
     methods: {
+        statusText(status) {
+            let texT = "";
+            if (status == 'pending') {
+                texT = "<span class='badge bg-danger'>Pending</span>"
+            }
+            if (status == 'proccess') {
+                texT = "<span class='badge bg-warning'>Proccessing</span>"
+            }
+
+            return texT;
+        },
+        calculateTotal() {
+            if (parseFloat(this.calculate.paidAmount) > parseFloat(this.calculate.billAmount)) {
+                this.calculate.paidAmount = this.calculate.billAmount
+                return;
+            }
+            this.calculate.dueAmount = parseFloat(parseFloat(this.calculate.billAmount) - parseFloat(this.calculate.paidAmount)).toFixed(2);
+        },
         getTailor() {
-            axios.get('/get-tailor').then(res => {
+            axios.get("/get-tailor").then((res) => {
                 this.tailors = res.data
-            })
+            });
         },
-        getClothing() {
-            let data = {
-                dateFrom: this.dateFrom,
-                dateTo: this.dateTo,
-                status: this.searchBy
-
-            }
-            axios.post('/get-clothing', data).then(res => {
-                this.clothing = res.data.clothing;
-            })
+        onChangeSearch() {
+            this.selectedTailor = null;
         },
+        getOrder() {
+            this.filter.tailorId = this.selectedTailor == null ? null : this.selectedTailor.id
 
-        statusChange(order){
-            if(confirm("Are you sure!!")){
-                console.log(order);
-            }
+            axios.post("/get-clothing", this.filter).then((res) => {
+                this.orders = res.data.msg;
+            });
         },
 
-        deleteData(id) {
-            if (confirm("Are you sure !!")) {
-                axios.post('/delete-clothing', { id: id }).then(res => {
-                    if (res.data.status) {
-                        this.$moshaToast(res.data.msg,);
-                    } else {
-                        console.log(res.data.msg);
+        statusChange(id = null, status = null) {
+            if (confirm("Are you sure!")) {
+                if (status == 'proccess') {
+                    this.calculate.id = id;
+                    this.calculate.status = status;
+                }
+                axios.post("/update-clothing", this.calculate).then((res) => {
+                    this.$moshaToast(res.data.msg);
+                    if (this.calculate.status == 'complete') {
+                        $("#staticBackdrop").modal('hide');
                     }
-                    this.getEmployee();
-                })
+                    this.clearData();
+                    this.getOrder();
+                });
             }
         },
 
-        async print(){
-            var myWindow = window.open('', '', `width=${window.screen.width},height=${window.screen.height}`);
-            myWindow.document.write(`
-                    <!doctype html>
-                    <html lang="en">
-                        <head>
-                            <meta charset="utf-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1">
-                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-                            <title>Order Record</title>
-                            <style>
-                                @media print{
-                                    .action{
-                                        display:none;
-                                    }
-                                    body{
-                                        font-size: 13px !important;
-                                    }
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <div class="container-fluid">
-                                <h3 class="m-0 text-center bg-primary text-white text-uppercase">Clothing Records ${this.searchBy == 'tailor' ? 'of '+this.selectTailor.name: ''}</h3>
-                                <div class="row">
-                                    <div class="col-12">
-                                        ${document.querySelector('.clothingDaTa').innerHTML}
-                                    </div>
-                                </div>
-                            </div>
-                        </body>
-                    </html>
-            `);
-            myWindow.focus();
-            await new Promise(resolve => setTimeout(resolve, 500));
-            myWindow.print();
-            myWindow.close();
+        showModal(item) {
+            $("#staticBackdrop").modal('show');
+            this.calculate.id = item.id;
+            this.calculate.billAmount = parseFloat(item.tailor_price * item.quantity).toFixed(2);
+            this.calculateTotal();
+            this.calculate.status = 'complete';
+        },
+
+        formatDate(date) {
+            return moment(date).format("DD-MM-YYYY");
+        },
+
+        clearData() {
+            this.calculate = {
+                billAmount: 0,
+                paidAmount: 0,
+                dueAmount: 0,
+            }
         },
     },
-}
+};
 </script>
 
 <style>
-#tailor #vs1__combobox{
-    padding: 0;
-    height: 32px;
-}
-#tailor .vs__search{
-    margin: 0 !important;
-}
-#tailor .vs__actions{
-    padding: 0 2px;
-}
-#tailor .vs__clear{
-    margin: 0;
-    padding: 0px 8px !important;
-}
-#tailor .vs__selected{
-    margin: 0 !important;
+#tailors [role="combobox"] {
     padding: 0 !important;
 }
-
 </style>

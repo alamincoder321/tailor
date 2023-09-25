@@ -29,6 +29,7 @@ Route::post("/user-profileimage", [HomeController::class, "imageUpdate"])->name(
 
 //dashboard route
 Route::get("/dashboard", [HomeController::class, "index"])->name('home');
+Route::get("/get-profit", [HomeController::class, "getProfit"])->name('profit');
 //setting route
 Route::get("/setting", [SettingController::class, "create"])->name('setting.create');
 Route::get("/get-setting", [SettingController::class, "index"])->name('setting.index');
@@ -122,8 +123,7 @@ Route::get("/clothing/{id?}", [ClothingController::class, "create"])->name('clot
 Route::get("/manage-clothing", [ClothingController::class, "manage"])->name('clothing.manage');
 Route::post("/get-clothing", [ClothingController::class, "index"])->name('clothing.index');
 Route::post("/clothing", [ClothingController::class, "store"])->name('clothing.store');
-Route::post("/update-clothing", [ClothingController::class, "update"])->name('clothing.update');
-Route::post("/delete-clothing", [ClothingController::class, "destroy"])->name('clothing.destroy');
+Route::post("/update-clothing", [ClothingController::class, "statusChange"])->name('clothing.update');
 
 //customerpayment route
 Route::get("/customerpayment", [CustomerPaymentController::class, "create"])->name('customerpayment.create');

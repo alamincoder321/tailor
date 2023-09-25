@@ -5,9 +5,9 @@
                 <div class="card-header">
                     <form @submit.prevent="getOrder">
                         <div class="row">
-                            <div class="col-6 col-md-3" v-if="role != 'manager'" :class="role != 'manager' ? '' : 'd-none'">
+                            <div class="col-6 col-md-3">
                                 <div class="form-group m-0">
-                                    <v-select id="thanas" :options="thanas" v-model="selectedThana" label="name"></v-select>
+                                    <v-select id="customers" :options="customers" v-model="selectedCustomer" label="name" placeholder="Select Customer"></v-select>
                                 </div>
                             </div>
                             <div class="col-6 col-md-2">
@@ -37,7 +37,7 @@
                             <tr>
                                 <th style="text-align: center; width: 8%;color:white;"> Sl </th>
                                 <th style="text-align: center; width: 10%;color:white;"> #Invoice </th>
-                                <th style="text-align: center;color:white;width: 10%;"> Date </th>
+                                <th style="text-align: center;color:white;width: 12%;"> Date </th>
                                 <th style="text-align: center;color:white;"> Customer </th>
                                 <th style="text-align: center;color:white;">Status</th>
                                 <th style="text-align: center;color:white;">Product</th>
@@ -65,22 +65,22 @@
                                     <td class="text-center" v-html="statusText(item.orderItem[0].status)"></td>
                                     <td>
                                         <button v-if="item.orderItem[0].status != 'complete'"
-                                            @click="modalShow(item.orderItem[0], item.thanaId)" type="button"
+                                            @click="modalShow(item.orderItem[0])" type="button"
                                             class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
                                     </td>
                                 </tr>
-                                <tr v-for="(service, sl) in item.orderItem.slice(1)">
+                                <tr v-for="(product, sl) in item.orderItem.slice(1)">
                                     <td colspan="5" :rowspan="item.orderItem.length - 1" v-if="sl == 0"></td>
-                                    <td class="text-center">{{ service.name }}</td>
-                                    <td class="text-center">{{ service.quantity }}</td>
-                                    <td class="text-center">{{ service.bill_amount }}</td>
-                                    <td class="text-center">{{ service.paid_amount }}</td>
-                                    <td class="text-center">{{ service.due }}</td>
-                                    <td class="text-center">{{ service.worker_name }}</td>
-                                    <td class="text-center" v-html="statusText(service.status)"></td>
+                                    <td class="text-center">{{ product.name }}</td>
+                                    <td class="text-center">{{ product.quantity }}</td>
+                                    <td class="text-center">{{ product.tailor_price }}</td>
+                                    <td class="text-center">{{ parseFloat(product.tailor_price * item.quantity).toFixed(2)}}</td>
+                                    <td class="text-center">{{ product.due }}</td>
+                                    <td class="text-center">{{ product.tailor ? product.tailor.name : 'N/A' }}</td>
+                                    <td class="text-center" v-html="statusText(product.status)"></td>
                                     <td>
-                                        <button v-if="service.status != 'complete'"
-                                            @click="modalShow(service, item.thanaId)" type="button"
+                                        <button v-if="product.status != 'complete'"
+                                            @click="modalShow(product)" type="button"
                                             class="btn btn-danger btn-sm shadow-none fas fa-user"></button>
                                     </td>
                                 </tr>
@@ -131,17 +131,17 @@
                             <tbody>
                                 <tr>
                                     <td>1</td>
-                                    <td>{{ modalData.product.name }}</td>
+                                    <td>{{ modalData.product ? modalData.product.name : '' }}</td>
                                     <td>{{ modalData.quantity }}</td>
                                 </tr>
                             </tbody>
                         </table>
                         <div class="form-group mt-3">
                             <label for="tailors">Worker</label>
-                            <v-select id="tailors" :options="tailors" v-model="selectedTailor" label="name"></v-select>
+                            <v-select id="tailors" :options="tailors" v-model="selectedTailor" label="name"  placeholder="Select Tailor"></v-select>
                         </div>
                         <div class="form-group mt-3">
-                            <button @click="assignWork" type="button" class="btn btn-info shadow-none w-100">Submit</button>
+                            <button @click="assignTailor" type="button" class="btn btn-info shadow-none w-100">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -162,6 +162,8 @@ export default {
                 dateTo: "",
             },
             orders: [],
+            customers: [],
+            selectedCustomer: null,
             tailors: [],
             selectedTailor: null,
 
@@ -170,6 +172,7 @@ export default {
     },
 
     created() {
+        this.getCustomer();
         this.getOrder();
     },
 
@@ -188,7 +191,12 @@ export default {
             return texT;
         },
 
-        getWorker(thana_id) {
+        getCustomer() {
+            axios.get("/get-customer").then((res) => {
+                this.customers = res.data.customers
+            });
+        },
+        getTailor() {
             axios.get("/get-tailor").then((res) => {
                 this.tailors = res.data
             });
@@ -199,26 +207,26 @@ export default {
             });
         },
 
-        modalShow(service, thana_id) {
+        modalShow(product) {
             $('#staticBackdrop').modal('show');
-            this.getWorker(thana_id);
-            this.modalData = service;
+            this.getTailor();
+            this.modalData = product;
             this.selectedTailor = null;
-            if (service.worker_id) {
+            if (product.tailor_id) {
                 this.selectedTailor = {
-                    id: service.worker_id,
-                    name: service.worker_name
+                    id: product.tailor_id,
+                    name: product.tailor.name
                 }
             }
         },
 
-        assignWork() {
+        assignTailor() {
             let filter = {
                 id: this.modalData.id,
-                worker_id: this.selectedTailor == null ? null : this.selectedTailor.id
+                tailor_id: this.selectedTailor == null ? null : this.selectedTailor.id
             }
-            axios.post("/admin/order/assign-worker", filter).then((res) => {
-                $.notify(res.data, "success");
+            axios.post("/clothing", filter).then((res) => {
+                this.$moshaToast(res.data.msg);
                 this.getOrder();
                 this.selectedTailor = null;
                 $('#staticBackdrop').modal('hide');

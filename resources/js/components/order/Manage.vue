@@ -14,7 +14,7 @@
                             <v-select :options="customers" v-model="selectCustomer" label="name" id="customer"></v-select>
                         </div>
 
-                        <div class="col-md-1 ps-0">
+                        <div class="col-md-2">
                             <select class="form-control shadow-none" v-model="detail" @change="DetailChange">
                                 <option value="without">Without Details</option>
                                 <option value="with">With Details</option>
@@ -26,7 +26,7 @@
                         <div class="col-md-2">
                             <input type="date" class="form-control shadow-none" v-model="dateTo">
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 p-0">
                             <button type="button" class="btn btn-silver" @click="getOrder">Search</button>
                         </div>
                     </div>

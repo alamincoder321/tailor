@@ -153,8 +153,13 @@ export default {
             })
         },
         saveData(event) {
+            if(parseFloat(this.customerpayment.amount) == 0 || this.tailorpayment.amount == ''){
+                alert('পেমেন্ট টাকা খালি রয়েছে।')
+                return;
+            }
+
             if (parseFloat(this.customerpayment.due) < parseFloat(this.customerpayment.amount)) {
-                alert('কাস্টমার বাঁকি এর থেকে পে টাকা বেশি হয়েছে।')
+                alert('কাস্টমার বাঁকি এর থেকে পেমেন্ট টাকা বেশি হয়েছে।')
                 return;
             }
             let formdata = new FormData(event.target);

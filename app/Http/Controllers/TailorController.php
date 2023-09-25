@@ -172,14 +172,15 @@ class TailorController extends Controller
 
         $result = DB::select("SELECT
                         'a' AS sequence,
-                        cl.date AS date,
-                        concat('Tailor Clothing Add') AS description,
-                        ct.total AS billAmount,
-                        0 AS paidAmount,
-                        0 AS dueAmount
-                        FROM clothing_items ct
-                        LEFT JOIN clothing cl ON cl.id = ct.clothing_id
-                        WHERE ct.tailor_id = '$request->id'
+                        date(od.updated_at) AS date,
+                        concat('Clothing assign on Tailor') AS description,
+                        od.tailor_total AS billAmount,
+                        od.paid AS paidAmount,
+                        od.due AS dueAmount
+                        FROM order_items od
+                        LEFT JOIN orders o ON o.id = od.order_id
+                        WHERE od.tailor_id = '$request->id'
+                        AND od.status = 'complete'
                         
                     UNION
                         SELECT
