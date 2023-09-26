@@ -71,6 +71,7 @@
 
 <script>
 import Swal from 'sweetalert2'
+import moment from 'moment'
 
 export default {
     data() {
@@ -85,7 +86,7 @@ export default {
             expense: {
                 id: '',
                 expense_code: '',
-                date: '',
+                date: moment().format('YYYY-MM-DD'),
                 description: '',
                 amount: '',
             },
@@ -148,7 +149,7 @@ export default {
             this.expense = {
                 id: '',
                 expense_code: this.expense.expense_code,
-                date: '',
+                date: moment().format('YYYY-MM-DD'),
                 description: '',
                 amount: '',
             };

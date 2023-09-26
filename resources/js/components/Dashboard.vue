@@ -35,9 +35,9 @@
             <div class="col-md-3 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
-                        <i class="fas fa-dollar-sign bg-danger" style="padding: 12px 17px;"></i>
+                        <i class="fas fa-dollar-sign bg-primary" style="padding: 12px 17px;"></i>
                     </div>
-                    <div class="box bg-danger text-center">
+                    <div class="box bg-primary text-center">
                         <h3 class="font-light text-white fontSize">Paid Amount</h3>
                         <h4 class="text-white">{{ dueAmount.reduce((acc, pre) => {
                             return acc + (parseFloat(pre.paidAmount) + parseFloat(pre.customerPaymentAmount))
@@ -50,9 +50,9 @@
             <div class="col-md-3 col-6">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center py-2 px-0">
-                        <i class="fas fa-dollar-sign bg-primary" style="padding: 12px 17px;"></i>
+                        <i class="fas fa-dollar-sign bg-danger" style="padding: 12px 17px;"></i>
                     </div>
-                    <div class="box bg-primary text-center">
+                    <div class="box bg-danger text-center">
                         <h3 class="font-light text-white fontSize">Due Amount</h3>
                         <h4 class="text-white">{{ dueAmount.reduce((acc, pre) => {
                             return acc +

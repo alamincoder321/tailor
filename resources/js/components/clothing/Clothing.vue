@@ -74,8 +74,7 @@
                                     <td class="text-center">{{ product.name }}</td>
                                     <td class="text-center">{{ product.quantity }}</td>
                                     <td class="text-center">{{ product.tailor_price }}</td>
-                                    <td class="text-center">{{ parseFloat(product.tailor_price * item.quantity).toFixed(2)}}</td>
-                                    <td class="text-center">{{ product.due }}</td>
+                                    <td class="text-center">{{ parseFloat(product.tailor_price * product.quantity).toFixed(2)}}</td>
                                     <td class="text-center">{{ product.tailor ? product.tailor.name : 'N/A' }}</td>
                                     <td class="text-center" v-html="statusText(product.status)"></td>
                                     <td>
