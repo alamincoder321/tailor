@@ -128,7 +128,7 @@ export default {
     methods: {
         getRole() {
             axios.get('/get-role').then(res => {
-                this.roles = res.data;
+                this.roles = res.data.filter(role => role.name != 'Tailor');
             })
         },
         getUser() {

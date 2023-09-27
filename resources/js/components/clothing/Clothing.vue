@@ -111,7 +111,7 @@
         <!-- modal for assign order -->
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content">
                     <div class="modal-header d-flex justify-content-between">
                         <h5 class="modal-title" id="staticBackdropLabel">Order Assign On Tailor</h5>
@@ -202,7 +202,7 @@ export default {
         },
         getOrder() {
             axios.post("/get-order", this.filter).then((res) => {
-                this.orders = res.data.orders.filter(order => order.status != 'cancel');
+                this.orders = res.data.orders.filter(order => order.status != 'cancel' && order.status != 'complete');
             });
         },
 
