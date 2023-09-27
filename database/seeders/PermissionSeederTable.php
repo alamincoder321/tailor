@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Permission;
 use App\Models\UserAccess;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PermissionSeederTable extends Seeder
 {
@@ -95,12 +94,6 @@ class PermissionSeederTable extends Seeder
                 ],
             ],
             [
-                "group_name" => "Role",
-                "permission" => [
-                    "roleEntry",
-                ],
-            ],
-            [
                 "group_name" => "Setting",
                 "permission" => [
                     "updateSetting",
@@ -117,6 +110,7 @@ class PermissionSeederTable extends Seeder
                 "permission" => [
                     "userEntry",
                     "userAccess",
+                    "roleEntry"
                 ],
             ],
         ];

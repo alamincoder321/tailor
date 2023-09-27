@@ -6,15 +6,7 @@
 <div class="row justify-content-center">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header card-header-primary
-                            d-flex justify-content-between py-1">
-                <h4 class="card-title m-0 pt-2">User Permission</h4>
-                <a href="{{ route('user.create') }}" class="btn btn-info shadow-none px-3">
-                    Users List
-                </a>
-            </div>
             <div class="card-body">
-
                 @if (session('message'))
                 <div class="alert alert-{{ session('type') }}">{{ session('message') }}</div>
                 @endif
@@ -22,9 +14,14 @@
                 <form action="{{ route('user.permissionStore') }}" method="POST">
                     @csrf
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-10">
                             <h4 class="text-center">User Name: <?= $user->name ?> | Role:
                                 <?= $user->role->name ?></label>
+                        </div>
+                        <div class="col-md-2 text-end">
+                            <a href="{{ route('user.create') }}" class="btn btn-info shadow-none px-3 text-white">
+                                Users List
+                            </a>
                         </div>
                     </div>
                     <input type="hidden" name="user_id" value="<?= $user->id ?>">
@@ -38,7 +35,7 @@
                         <tr class="border-bottom:1px solid gray;">
                             <td colspan="2">
                                 <div class="from-group" style="display: flex;align-items: center;gap: 5px;">
-                                    <input style="width:15px;height:15px;" type="checkbox" onchange="selectAll(event)" id="all" {{\App\Models\User::checkAll($access) ? 'checked' : ''}} >
+                                    <input style="width:15px;height:15px;" type="checkbox" onchange="selectAll(event)" id="all" {{\App\Models\User::checkAll($access) ? 'checked' : ''}}>
                                     <label for="all">All</label>
                                 </div>
                             </td>
@@ -84,8 +81,8 @@
     }
 
     function selectGroup(group) {
-        const checkbox = $('.role-'+group.group_name + ' input');
-        if ($('#role-'+group.group_name).is(':checked')) {
+        const checkbox = $('.role-' + group.group_name + ' input');
+        if ($('#role-' + group.group_name).is(':checked')) {
             checkbox.prop('checked', true);
         } else {
             checkbox.prop('checked', false);
@@ -94,22 +91,22 @@
         singlePermission(group)
     }
 
-    function singlePermission(group){
-        var totalCheck = $(".role-"+group.group_name+" input:checkbox:checked").length
-        var totalUnCheck = $(".role-"+group.group_name+" input:checkbox").length
-        
+    function singlePermission(group) {
+        var totalCheck = $(".role-" + group.group_name + " input:checkbox:checked").length
+        var totalUnCheck = $(".role-" + group.group_name + " input:checkbox").length
+
         if (totalCheck == totalUnCheck) {
-            $("#role-"+group.group_name).prop("checked", true);
-        }else{
-            $("#role-"+group.group_name).prop("checked", false);
+            $("#role-" + group.group_name).prop("checked", true);
+        } else {
+            $("#role-" + group.group_name).prop("checked", false);
         }
 
         var totalgroupcheck = $(".group input:checkbox:checked").length
         var totalgroupuncheck = $(".group input:checkbox").length
 
-        if(totalgroupcheck >= totalgroupuncheck){
+        if (totalgroupcheck >= totalgroupuncheck) {
             $("#all").prop("checked", true);
-        }else{
+        } else {
             $("#all").prop("checked", false);
         }
     }
