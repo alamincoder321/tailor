@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use App\Models\TailorPayment;
 use Illuminate\Support\Carbon;
@@ -24,6 +25,12 @@ class TailorPaymentController extends Controller
 
     public function create()
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("tailorPayment", $access)) {
+            return view("pages.unauthorize");
+        }
         return view("pages.tailorpayment.create");
     }
 
@@ -94,4 +101,3 @@ class TailorPaymentController extends Controller
         }
     }
 }
-

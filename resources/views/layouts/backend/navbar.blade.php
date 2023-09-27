@@ -5,28 +5,42 @@
     <!-- Sidebar Toggle-->
     <!-- <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button> -->
     <!-- Navbar-->
-
+    @php
+    $access = \App\Models\UserAccess::where('user_id', Auth::guard('web')->user()->id)
+    ->pluck('permissions')
+    ->toArray();
+    @endphp
     <ul class="navbarcustom form-inline me-0 me-md-3 my-2 my-md-0 d-flex">
+        @if(in_array("dashboardView", $access))
         <a class="nav-link d-flex flex-column align-items-center" href="{{url('/')}}">
             <i class="fa-light fa-house text-black text-2xl"></i>
             <span class="text-xs">হোম</span>
         </a>
-        <a class="nav-link d-flex flex-column align-items-center" href="">
+        @endif
+        @if(in_array("orderList", $access))
+        <a class="nav-link d-flex flex-column align-items-center" href="{{url('/manage-order')}}">
             <i class="fa-light fa-list-dropdown text-black text-2xl"></i>
             <span class="text-xs">রিপোর্ট</span>
         </a>
+        @endif
+        @if(in_array("orderEntry", $access))
         <a class="nav-link d-flex flex-column align-items-center" href="{{url('/order')}}">
             <i class="fa-light fa-circle-plus text-black text-2xl"></i>
             <span class="text-xs">অ্যাড অর্ডার</span>
         </a>
+        @endif
+        @if(in_array("customerPayment", $access))
         <a class="nav-link d-flex flex-column align-items-center" href="/customerpayment">
             <i class="fa-light fa-money-bill text-black text-2xl"></i>
             <span class="text-xs">ক্যাশ রিসিভ</span>
         </a>
+        @endif
+        @if(in_array("dashboardView", $access))
         <a class="nav-link d-flex flex-column align-items-center" href="">
             <i class="fa-light fa-clipboard-user text-black text-2xl"></i>
             <span class="text-xs">অ্যাটেনডেন্স</span>
         </a>
+        @endif
     </ul>
     <ul class="navbar-nav form-inline me-0 me-md-3 my-2 my-md-0">
         <li class="nav-item dropdown">

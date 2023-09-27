@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CustomerPayment;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Models\CustomerPayment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,6 +25,13 @@ class CustomerPaymentController extends Controller
 
     public function create()
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("customerPayment", $access)) {
+            return view("pages.unauthorize");
+        }
+        
         return view("pages.customerpayment.create");
     }
 

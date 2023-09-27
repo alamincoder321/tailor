@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Product;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +28,13 @@ class ProductController extends Controller
 
     public function create()
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("productEntry", $access)) {
+            return view("pages.unauthorize");
+        }
+        
         return view("pages.product.create");
     }
 

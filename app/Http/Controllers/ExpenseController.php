@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ExpenseController extends Controller
@@ -24,6 +26,13 @@ class ExpenseController extends Controller
 
     public function create()
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("expenseEntry", $access)) {
+            return view("pages.unauthorize");
+        }
+        
         return view("pages.expense.create");
     }
 

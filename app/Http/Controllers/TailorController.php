@@ -6,8 +6,10 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Tailor;
 use App\Models\ModelTable;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -21,6 +23,12 @@ class TailorController extends Controller
 
     public function create()
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("tailorEntry", $access)) {
+            return view("pages.unauthorize");
+        }
         return view("pages.tailor.create");
     }
 
@@ -114,7 +122,7 @@ class TailorController extends Controller
                 $user->image      = $this->imageUpload($request, 'image', 'uploads/user');
             }
             $user->update();
-            
+
             //=========== Tailor update ==================
             $data->name       = $request->name;
             $data->username   = $request->username;
@@ -163,6 +171,12 @@ class TailorController extends Controller
     // ledger
     public function tailorLedger()
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("tailorLedger", $access)) {
+            return view("pages.unauthorize");
+        }
         return view('pages.tailor.ledger');
     }
 
@@ -201,7 +215,7 @@ class TailorController extends Controller
 
         $preDue = $cusDue[0]->previousDue;
         if (count($ledger) > 0) {
-            foreach($ledger as $val){
+            foreach ($ledger as $val) {
                 $val->due += $preDue;
             }
         }
@@ -213,5 +227,4 @@ class TailorController extends Controller
 
         return ["ledger" => $ledger, "previousDue" => $previousDue];
     }
-    
 }

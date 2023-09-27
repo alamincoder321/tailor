@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Permission;
 use App\Models\UserAccess;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -20,6 +21,13 @@ class UserAccessController extends Controller
 
     public function create()
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("userEntry", $access)) {
+            return view("pages.unauthorize");
+        }
+
         return view("pages.user.create");
     }
 
@@ -127,10 +135,28 @@ class UserAccessController extends Controller
     public function permissionEdit($id)
     {
         $user = User::find($id);
+
+        if (empty($user)) {
+            return back();
+        } else if ($user->id == 1) {
+            return back();
+        }
+
+        $accesss = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("userAccess", $accesss)) {
+            return view("pages.unauthorize");
+        }
+
         $userAccess = UserAccess::where('user_id', $id)->pluck('permissions')->toArray();
-        $group_name = Permission::pluck('group_name')->unique();
-        $permissions = Permission::all();
-        return view('pages.user.useraccess', compact('user', 'userAccess', 'group_name', 'permissions'));
+        $access = UserAccess::where('user_id', $id)->get();
+        $groups = Permission::groupBy('group_name')->orderBy('id', 'asc')->get();
+        foreach ($groups as $key => $item) {
+            $item->permissionArr = Permission::where('group_name', $item->group_name)->get();
+        }
+
+        return view('pages.user.useraccess', compact('user', 'access', 'userAccess', 'groups'));
     }
 
     public function permissionStore(Request $request)

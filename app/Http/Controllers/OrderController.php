@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
 use App\Models\Jama;
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\Payjama;
+use App\Models\Customer;
+use App\Models\OrderItem;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -61,11 +62,24 @@ class OrderController extends Controller
 
     public function manage()
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("orderList", $access)) {
+            return view("pages.unauthorize");
+        }
         return view("pages.order.manage");
     }
 
     public function create($id = null)
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("orderEntry", $access)) {
+            return view("pages.unauthorize");
+        }
+
         return view("pages.order.create", compact('id'));
     }
 

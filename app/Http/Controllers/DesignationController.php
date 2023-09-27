@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Designation;
 use Carbon\Carbon;
+use App\Models\UserAccess;
+use App\Models\Designation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class DesignationController extends Controller
@@ -21,6 +23,13 @@ class DesignationController extends Controller
 
     public function create()
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("designationEntry", $access)) {
+            return view("pages.unauthorize");
+        }
+        
         return view("pages.designation.create");
     }
 

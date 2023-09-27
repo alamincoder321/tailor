@@ -22,9 +22,101 @@ class PermissionSeederTable extends Seeder
                 ],
             ],
             [
+                "group_name" => "AccountModule",
+                "permission" => [
+                    "customerPayment",
+                    "tailorPayment",
+                    "expenseEntry",
+                ],
+            ],
+            [
                 "group_name" => "Brand",
                 "permission" => [
-                    "brandView",
+                    "brandEntry",
+                ],
+            ],
+            [
+                "group_name" => "Category",
+                "permission" => [
+                    "categoryEntry",
+                ],
+            ],
+            [
+                "group_name" => "Category",
+                "permission" => [
+                    "categoryEntry",
+                ],
+            ],
+            [
+                "group_name" => "Clothing",
+                "permission" => [
+                    "clothingEntry",
+                    "clothingList",
+                ],
+            ],
+            [
+                "group_name" => "Customer",
+                "permission" => [
+                    "customerEntry",
+                    "customerSMS",
+                ],
+            ],
+            [
+                "group_name" => "Designation",
+                "permission" => [
+                    "designationEntry",
+                ],
+            ],
+            [
+                "group_name" => "Employee",
+                "permission" => [
+                    "employeeEntry",
+                    "employeeList",
+                ],
+            ],
+            [
+                "group_name" => "Order",
+                "permission" => [
+                    "orderEntry",
+                    "orderList",
+                ],
+            ],
+            [
+                "group_name" => "Product",
+                "permission" => [
+                    "productEntry",
+                ],
+            ],
+            [
+                "group_name" => "Report",
+                "permission" => [
+                    "customerLedger",
+                    "tailorLedger",
+                ],
+            ],
+            [
+                "group_name" => "Role",
+                "permission" => [
+                    "roleEntry",
+                ],
+            ],
+            [
+                "group_name" => "Setting",
+                "permission" => [
+                    "updateSetting",
+                ],
+            ],
+            [
+                "group_name" => "Tailor",
+                "permission" => [
+                    "tailorEntry",
+                ],
+            ],
+            [
+                "group_name" => "User",
+                "permission" => [
+                    "userEntry",
+                    "userAccess",
                 ],
             ],
         ];

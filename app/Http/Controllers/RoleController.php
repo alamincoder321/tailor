@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Role;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
@@ -21,6 +23,13 @@ class RoleController extends Controller
 
     public function create()
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("roleEntry", $access)) {
+            return view("pages.unauthorize");
+        }
+        
         return view("pages.role.create");
     }
 

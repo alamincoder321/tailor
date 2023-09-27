@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Tailor;
 use App\Models\Customer;
 use App\Models\ModelTable;
-use App\Models\Tailor;
-use App\Models\User;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +23,12 @@ class HomeController extends Controller
 
     public function index()
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("dashboardView", $access)) {
+            return view("pages.unauthorize");
+        }
         return view("dashboard");
     }
 

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\UserAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ClothingController extends Controller
 {
@@ -56,11 +58,25 @@ class ClothingController extends Controller
 
     public function create($id = null)
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("clothingEntry", $access)) {
+            return view("pages.unauthorize");
+        }
+        
         return view("pages.clothing.create", compact('id'));
     }
 
     public function manage()
     {
+        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+            ->pluck('permissions')
+            ->toArray();
+        if (!in_array("clothingList", $access)) {
+            return view("pages.unauthorize");
+        }
+
         return view("pages.clothing.manage");
     }
 
