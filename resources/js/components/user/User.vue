@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-md-12 mb-2">
+                            <div class="col-md-12 mb-2" v-if="user.id == '' && user.role_name != 'Tailor'">
                                 <div class="form-group">
                                     <label for="role_id">রোল</label>
                                     <div class="input-group">
@@ -114,6 +114,7 @@ export default {
                 password: '',
                 role_id: '',
                 image: '',
+                role_name: '',
             },
             users: [],
             roles: [],
@@ -146,6 +147,9 @@ export default {
             }
             let formdata = new FormData(event.target);
             formdata.append('id', this.user.id);
+            if(this.user.role_name == 'Tailor'){
+                formdata.append('role_id', this.user.role_id);
+            }
             formdata.append('image', this.user.image);
             let url;
             if (this.user.id == '') {
@@ -175,7 +179,8 @@ export default {
                 username: item.username,
                 email: item.email,
                 role_id: item.role_id,
-                image: item.image
+                image: item.image,
+                role_name: item.role.name
             };
             this.imageSrc = item.image == null ? '/noImage.png':'/'+item.image;
         },
