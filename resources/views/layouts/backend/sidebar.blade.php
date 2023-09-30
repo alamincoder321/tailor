@@ -90,12 +90,12 @@ $user = Auth::guard('web')->user();
             </div>
             @endif
             @if(in_array("customerLedger", $access) || in_array("tailorLedger", $access) || in_array("customerDueList", $access) || $user->role->name == 'SuperAdmin')
-            <a class="nav-link {{ Route::is('customer.customerLedger') || Route::is('tailor.tailorLedger') ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts3" aria-expanded="{{ Route::is('customer.customerLedger') || Route::is('tailor.tailorLedger') ? true : false }}" aria-controls="collapseLayouts3">
+            <a class="nav-link {{ Route::is('customer.customerLedger') || Route::is('tailor.tailorLedger') || Route::is('customer.dueList') ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts3" aria-expanded="{{ Route::is('customer.customerLedger') || Route::is('tailor.tailorLedger') || Route::is('customer.dueList') ? true : false }}" aria-controls="collapseLayouts3">
                 <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
                 রিপোর্ট
                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
             </a>
-            <div class="collapse {{ Route::is('customer.customerLedger') || Route::is('tailor.tailorLedger') ? 'show' : '' }}" id="collapseLayouts3" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+            <div class="collapse {{ Route::is('customer.customerLedger') || Route::is('tailor.tailorLedger') || Route::is('customer.dueList') ? 'show' : '' }}" id="collapseLayouts3" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                 <nav class="sb-sidenav-menu-nested nav">
                     @if(in_array("customerLedger", $access) || $user->role->name == 'SuperAdmin')
                     <a class="nav-link {{ Route::is('customer.customerLedger') ? 'active' : '' }}" href="{{url('/customer-ledger')}}">
