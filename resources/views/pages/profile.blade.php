@@ -97,7 +97,7 @@ User Profile - {{ Auth::user()->name }}
                             $("form").find("#old_password").val("")
                             $("form").find("#new_password").val("")
                             $("form").find("#confirm_password").val("")
-                            alert(res.msg)
+                            toastr.success(res.msg)
                         }
                     } else {
                         $.each(res.error, (index, value) => {
@@ -127,7 +127,7 @@ User Profile - {{ Auth::user()->name }}
                         document.querySelector('.imageShow').src = window.URL.createObjectURL(event.target
                             .files[0])
                         $("#image").val("")
-                        alert(res.msg)
+                        toastr.success(res.msg)
                     } else {
                         $.each(res.errors, (index, value) => {
                             $(".error-" + index).text(value)
