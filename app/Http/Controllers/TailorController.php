@@ -23,11 +23,13 @@ class TailorController extends Controller
 
     public function create()
     {
-        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("tailorEntry", $access)) {
-            return view("pages.unauthorize");
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("tailorEntry", $access)) {
+                return view("pages.unauthorize");
+            }
         }
         return view("pages.tailor.create");
     }
@@ -171,11 +173,13 @@ class TailorController extends Controller
     // ledger
     public function tailorLedger()
     {
-        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("tailorLedger", $access)) {
-            return view("pages.unauthorize");
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("tailorLedger", $access)) {
+                return view("pages.unauthorize");
+            }
         }
         return view('pages.tailor.ledger');
     }

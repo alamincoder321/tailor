@@ -26,13 +26,15 @@ class ExpenseController extends Controller
 
     public function create()
     {
-        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("expenseEntry", $access)) {
-            return view("pages.unauthorize");
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("expenseEntry", $access)) {
+                return view("pages.unauthorize");
+            }
         }
-        
+
         return view("pages.expense.create");
     }
 

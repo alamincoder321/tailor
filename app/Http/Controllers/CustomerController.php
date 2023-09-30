@@ -29,13 +29,15 @@ class CustomerController extends Controller
 
     public function create()
     {
-        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("customerEntry", $access)) {
-            return view("pages.unauthorize");
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("customerEntry", $access)) {
+                return view("pages.unauthorize");
+            }
         }
-        
+
         return view("pages.customer.create");
     }
 
@@ -123,6 +125,14 @@ class CustomerController extends Controller
 
     public function customerLedger()
     {
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("customerLedger", $access)) {
+                return view("pages.unauthorize");
+            }
+        }
         return view('pages.customer.ledger');
     }
 
@@ -160,7 +170,7 @@ class CustomerController extends Controller
 
         $preDue = $cusDue[0]->previousDue;
         if (count($ledger) > 0) {
-            foreach($ledger as $val){
+            foreach ($ledger as $val) {
                 $val->due += $preDue;
             }
         }
@@ -175,6 +185,15 @@ class CustomerController extends Controller
 
     public function dueList()
     {
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("customerDueList", $access)) {
+                return view("pages.unauthorize");
+            }
+        }
+
         return view('pages.customer.duelist');
     }
 }

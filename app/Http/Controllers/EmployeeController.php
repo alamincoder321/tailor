@@ -29,22 +29,26 @@ class EmployeeController extends Controller
 
     public function manage()
     {
-        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("employeeList", $access)) {
-            return view("pages.unauthorize");
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("employeeList", $access)) {
+                return view("pages.unauthorize");
+            }
         }
         return view("pages.employee.manage");
     }
 
     public function create($id = '')
     {
-        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("employeeEntry", $access)) {
-            return view("pages.unauthorize");
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("employeeEntry", $access)) {
+                return view("pages.unauthorize");
+            }
         }
 
         return view("pages.employee.create", compact('id'));

@@ -15,21 +15,22 @@ class UserSeederTable extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            "name"     => "Admin",
-            "username" => "admin",
-            "email"    => "admin@gmail.com",
-            "password" => Hash::make(1)
-        ]);
-
         Role::create([
-            'name' => 'Supper Admin'
+            'name' => 'SuperAdmin'
         ]);
         Role::create([
             'name' => 'Admin'
         ]);
         Role::create([
             'name' => 'Tailor'
+        ]);
+
+        User::create([
+            "name"     => "Super Admin",
+            "username" => "admin",
+            "role_id"  => 1,
+            "email"    => "admin@gmail.com",
+            "password" => Hash::make(1)
         ]);
     }
 }

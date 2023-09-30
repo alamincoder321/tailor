@@ -90,6 +90,7 @@ class PermissionSeederTable extends Seeder
                 "group_name" => "Report",
                 "permission" => [
                     "customerLedger",
+                    "customerDueList",
                     "tailorLedger",
                 ],
             ],
@@ -120,15 +121,6 @@ class PermissionSeederTable extends Seeder
             foreach ($permission['permission'] as $perm) {
                 Permission::create(["permission" => $perm, "group_name" => $group_name]);
             }
-        }
-
-        $allPermissions = Permission::all();
-        foreach ($allPermissions as $perm) {
-            UserAccess::create([
-                'user_id'    => 1,
-                'group_name'  => $perm->group_name,
-                'permissions' => $perm->permission,
-            ]);
         }
     }
 }

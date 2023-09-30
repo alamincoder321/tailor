@@ -50,9 +50,9 @@ class OrderController extends Controller
                     WHERE om.deleted_at IS NULL $clauses");
 
         // if ((isset($request->id) && $request->id != '') || isset($request->detail) && $request->detail == 'with') {
-            foreach ($orders as $key => $item) {
-                $item->orderItem = OrderItem::with('jama', 'payjama', 'product', 'tailor')->where('order_id', $item->id)->get();
-            }
+        foreach ($orders as $key => $item) {
+            $item->orderItem = OrderItem::with('jama', 'payjama', 'product', 'tailor')->where('order_id', $item->id)->get();
+        }
         // }
 
         $res['orders'] = $orders;
@@ -62,22 +62,26 @@ class OrderController extends Controller
 
     public function manage()
     {
-        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("orderList", $access)) {
-            return view("pages.unauthorize");
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("orderList", $access)) {
+                return view("pages.unauthorize");
+            }
         }
         return view("pages.order.manage");
     }
 
     public function create($id = null)
     {
-        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("orderEntry", $access)) {
-            return view("pages.unauthorize");
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("orderEntry", $access)) {
+                return view("pages.unauthorize");
+            }
         }
 
         return view("pages.order.create", compact('id'));
@@ -221,7 +225,7 @@ class OrderController extends Controller
             foreach ($oldItem as $item) {
                 if ($item->jama_id != 0) {
                     Jama::find($item->jama_id)->delete();
-                }else{
+                } else {
                     Payjama::find($item->payjama_id)->delete();
                 }
 
@@ -274,8 +278,8 @@ class OrderController extends Controller
                 $orderitem->retail_price = $item['retail_price'];
                 $orderitem->tailor_price = $item['tailor_price'];
                 $orderitem->total        = $item['total'];
-                $orderitem->jama_id      = $jamaId !=0 ? $jamaId : 0;
-                $orderitem->payjama_id   = $payjamaId !=0 ? $payjamaId : 0;
+                $orderitem->jama_id      = $jamaId != 0 ? $jamaId : 0;
+                $orderitem->payjama_id   = $payjamaId != 0 ? $payjamaId : 0;
                 $orderitem->save();
 
                 $jamaId = 0;

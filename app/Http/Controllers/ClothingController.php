@@ -58,23 +58,27 @@ class ClothingController extends Controller
 
     public function create($id = null)
     {
-        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("clothingEntry", $access)) {
-            return view("pages.unauthorize");
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("clothingEntry", $access)) {
+                return view("pages.unauthorize");
+            }
         }
-        
+
         return view("pages.clothing.create", compact('id'));
     }
 
     public function manage()
     {
-        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("clothingList", $access)) {
-            return view("pages.unauthorize");
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("clothingList", $access)) {
+                return view("pages.unauthorize");
+            }
         }
 
         return view("pages.clothing.manage");
@@ -98,7 +102,7 @@ class ClothingController extends Controller
         try {
             $data = OrderItem::where('id', $request->id)->first();
             $orderId = $data->order_id;
-            
+
             if ($request->status == 'complete') {
                 $data->tailor_total = $request->billAmount;
                 $data->paid         = $request->paidAmount;
@@ -121,7 +125,7 @@ class ClothingController extends Controller
                 $order->status = 'complete';
                 $order->update();
             }
-            
+
             return response()->json(['status' => false, 'msg' => $msg]);
         } catch (\Throwable $e) {
             return response()->json(['status' => false, 'msg' => $e->getMessage()]);

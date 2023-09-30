@@ -21,11 +21,13 @@ class UserAccessController extends Controller
 
     public function create()
     {
-        $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("userEntry", $access)) {
-            return view("pages.unauthorize");
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            $access = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("userEntry", $access)) {
+                return view("pages.unauthorize");
+            }
         }
 
         return view("pages.user.create");
@@ -136,17 +138,19 @@ class UserAccessController extends Controller
     {
         $user = User::find($id);
 
-        if (empty($user)) {
-            return back();
-        } else if ($user->id == 1) {
-            return back();
-        }
+        if (Auth::guard('web')->user()->role->name != 'SuperAdmin') {
+            if (empty($user)) {
+                return back();
+            } else if ($user->id == 1) {
+                return back();
+            }
 
-        $accesss = UserAccess::where('user_id', Auth::guard('web')->user()->id)
-            ->pluck('permissions')
-            ->toArray();
-        if (!in_array("userAccess", $accesss)) {
-            return view("pages.unauthorize");
+            $accesss = UserAccess::where('user_id', Auth::guard('web')->user()->id)
+                ->pluck('permissions')
+                ->toArray();
+            if (!in_array("userAccess", $accesss)) {
+                return view("pages.unauthorize");
+            }
         }
 
         $userAccess = UserAccess::where('user_id', $id)->pluck('permissions')->toArray();
