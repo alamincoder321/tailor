@@ -35,7 +35,11 @@ class UserAccessController extends Controller
 
     public function index()
     {
-        $data = User::where("id", "!=", 1)->with('role')->latest()->get();
+        if (Auth::user()->role->name == 'SuperAdmin') {
+            $data = User::where([["id", "!=", 1], ["id", "!=", Auth::user()->id]])->with('role')->latest()->get();
+        } else {
+            $data = User::where("id", "!=", 1)->with('role')->latest()->get();
+        }
         return $data;
     }
 
@@ -166,6 +170,11 @@ class UserAccessController extends Controller
     public function permissionStore(Request $request)
     {
         try {
+            $user = User::with('role')->find($request->user_id);
+            if ($user->role->name == 'SuperAdmin') {
+                return redirect('/user')->with('error', 'This user is Super Admin');
+            }
+
             UserAccess::where('user_id', $request->user_id)->delete();
             $permissions = Permission::all();
 
@@ -178,6 +187,7 @@ class UserAccessController extends Controller
                     ]);
                 }
             }
+            
             return redirect('/user')->with('success', 'Permissions added successfullly');
         } catch (\Throwable $e) {
             return redirect('/user');

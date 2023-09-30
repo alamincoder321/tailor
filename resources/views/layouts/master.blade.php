@@ -12,6 +12,7 @@
     <link rel="icon" href="{{asset('noImage.png')}}" type="image/gif" sizes="80x80">
     <link href="{{asset('backend')}}/css/styles.css" rel="stylesheet" />
     <link href="{{asset('backend')}}/css/custom.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <link rel="stylesheet" href="{{asset('font-awesome/css/all.css')}}" />
 
     @vite('resources/css/app.css')
@@ -60,6 +61,7 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @vite('resources/js/app.js')
     <script src="{{asset('backend')}}/js/scripts.js"></script>
     <script>

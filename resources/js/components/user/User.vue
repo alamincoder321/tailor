@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-md-12 mb-2" v-if="user.id == '' && user.role_name != 'Tailor'">
+                            <div class="col-md-12 mb-2" v-if="user.roleName != 'Tailor'">
                                 <div class="form-group">
                                     <label for="role_id">রোল</label>
                                     <div class="input-group">
@@ -77,12 +77,12 @@
             }" :search-options="{ enabled: true }" :line-numbers="true" styleClass="vgt-table condensed"
                 max-height="550px">
                 <template #table-row="props">
-                    <span class="d-flex" style="justify-content: space-around;" v-if="props.column.field == 'before'">
+                    <span class="d-flex justify-content-between" v-if="props.column.field == 'before'">
+                        <a v-if="props.row.role.name != 'SuperAdmin'" :href="`/useraccess/${props.row.id}`" title="User Access">
+                            <i class="fas fa-users text-warning"></i>
+                        </a>
                         <a href="" title="edit" @click.prevent="editData(props.row)">
                             <i class="fas fa-edit text-info"></i>
-                        </a>
-                        <a :href="`/useraccess/${props.row.id}`" title="access">
-                            <i class="fas fa-user-times text-warning"></i>
                         </a>
                         <a href="" title="delete" @click.prevent="deleteData(props.row.id)">
                             <i class="fas fa-trash text-danger"></i>
@@ -114,7 +114,7 @@ export default {
                 password: '',
                 role_id: '',
                 image: '',
-                role_name: '',
+                roleName: '',
             },
             users: [],
             roles: [],
@@ -147,7 +147,7 @@ export default {
             }
             let formdata = new FormData(event.target);
             formdata.append('id', this.user.id);
-            if(this.user.role_name == 'Tailor'){
+            if(this.user.roleName == 'Tailor'){
                 formdata.append('role_id', this.user.role_id);
             }
             formdata.append('image', this.user.image);
@@ -180,7 +180,7 @@ export default {
                 email: item.email,
                 role_id: item.role_id,
                 image: item.image,
-                role_name: item.role.name
+                roleName: item.role.name
             };
             this.imageSrc = item.image == null ? '/noImage.png':'/'+item.image;
         },

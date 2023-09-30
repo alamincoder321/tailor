@@ -9,33 +9,34 @@
     $access = \App\Models\UserAccess::where('user_id', Auth::guard('web')->user()->id)
     ->pluck('permissions')
     ->toArray();
+    $user = Auth::guard('web')->user();
     @endphp
     <ul class="navbarcustom form-inline me-0 me-md-3 my-2 my-md-0 d-flex">
-        @if(in_array("dashboardView", $access))
+        @if(in_array("dashboardView", $access) || $user->role->name == 'SuperAdmin')
         <a class="nav-link d-flex flex-column align-items-center" href="{{url('/')}}">
             <i class="fa-light fa-house text-black text-2xl"></i>
             <span class="text-xs">হোম</span>
         </a>
         @endif
-        @if(in_array("orderList", $access))
+        @if(in_array("orderList", $access) || $user->role->name == 'SuperAdmin')
         <a class="nav-link d-flex flex-column align-items-center" href="{{url('/manage-order')}}">
             <i class="fa-light fa-list-dropdown text-black text-2xl"></i>
             <span class="text-xs">রিপোর্ট</span>
         </a>
         @endif
-        @if(in_array("orderEntry", $access))
+        @if(in_array("orderEntry", $access) || $user->role->name == 'SuperAdmin')
         <a class="nav-link d-flex flex-column align-items-center" href="{{url('/order')}}">
             <i class="fa-light fa-circle-plus text-black text-2xl"></i>
             <span class="text-xs">অ্যাড অর্ডার</span>
         </a>
         @endif
-        @if(in_array("customerPayment", $access))
+        @if(in_array("customerPayment", $access) || $user->role->name == 'SuperAdmin')
         <a class="nav-link d-flex flex-column align-items-center" href="/customerpayment">
             <i class="fa-light fa-money-bill text-black text-2xl"></i>
             <span class="text-xs">ক্যাশ রিসিভ</span>
         </a>
         @endif
-        @if(in_array("dashboardView", $access))
+        @if(in_array("dashboardView", $access) || $user->role->name == 'SuperAdmin')
         <a class="nav-link d-flex flex-column align-items-center" href="">
             <i class="fa-light fa-clipboard-user text-black text-2xl"></i>
             <span class="text-xs">অ্যাটেনডেন্স</span>
