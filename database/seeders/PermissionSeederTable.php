@@ -41,12 +41,6 @@ class PermissionSeederTable extends Seeder
                 ],
             ],
             [
-                "group_name" => "Category",
-                "permission" => [
-                    "categoryEntry",
-                ],
-            ],
-            [
                 "group_name" => "Clothing",
                 "permission" => [
                     "clothingEntry",
