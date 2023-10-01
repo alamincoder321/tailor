@@ -105,6 +105,10 @@ class UserAccessController extends Controller
             $data->username = $request->username;
             $data->email    = $request->email;
             $data->role_id     = $request->role_id;
+            if ($request->role_id == 1) {
+                UserAccess::where('user_id', $request->id)->delete();
+            }
+
             if (!empty($request->password)) {
                 $data->password = Hash::make($request->password);
             }
@@ -187,7 +191,7 @@ class UserAccessController extends Controller
                     ]);
                 }
             }
-            
+
             return redirect('/user')->with('success', 'Permissions added successfullly');
         } catch (\Throwable $e) {
             return redirect('/user');
