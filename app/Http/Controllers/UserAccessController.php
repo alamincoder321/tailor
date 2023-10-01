@@ -180,8 +180,11 @@ class UserAccessController extends Controller
             }
 
             UserAccess::where('user_id', $request->user_id)->delete();
-            $permissions = Permission::all();
+            if (empty($request->permissions)) {
+                return redirect('/user')->with('error', 'Permission all remove');
+            }
 
+            $permissions = Permission::all();
             foreach ($permissions as $value) {
                 if (in_array($value->id, $request->permissions)) {
                     UserAccess::create([
