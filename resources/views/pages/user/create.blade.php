@@ -3,7 +3,7 @@
 @section("title", "User Create")
 @section("bread_crum", "User Create")
 @section("content")
-<user></user>
+<user user_id="{{Auth::user()->id}}"></user>
 @endsection
 
 @push('js')

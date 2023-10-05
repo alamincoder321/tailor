@@ -81,10 +81,10 @@
                         <a v-if="props.row.role.name != 'SuperAdmin'" :href="`/useraccess/${props.row.id}`" title="User Access">
                             <i class="fas fa-users text-warning"></i>
                         </a>
-                        <a href="" title="edit" @click.prevent="editData(props.row)">
+                        <a href="" v-if="props.row.role.name != 'SuperAdmin' || userId == 1" title="edit" @click.prevent="editData(props.row)">
                             <i class="fas fa-edit text-info"></i>
                         </a>
-                        <a href="" title="delete" @click.prevent="deleteData(props.row.id)">
+                        <a href="" v-if="props.row.role.name != 'SuperAdmin'" title="delete" @click.prevent="deleteData(props.row.id)">
                             <i class="fas fa-trash text-danger"></i>
                         </a>
                     </span>
@@ -99,6 +99,7 @@ import Swal from 'sweetalert2'
 export default {
     data() {
         return {
+            props:['user_id'],
             columns: [
                 { label: 'Name', field: 'name' },
                 { label: 'User Name', field: 'username' },
@@ -119,11 +120,13 @@ export default {
             users: [],
             roles: [],
             imageSrc: "/noImage.png",
+            userId:"",
         }
     },
     created() {
         this.getUser();
         this.getRole();
+        this.userId = this.$attrs.user_id
     },
     methods: {
         getRole() {
